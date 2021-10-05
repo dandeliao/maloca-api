@@ -12,7 +12,8 @@ const pessoas = [
     {
         id: 0,
         nome: "dani",
-        comunidades: ["radio-maloca", "filmes"]
+        comunidades: ["radio-maloca", "filmes"],
+        html: "<h1 style='font-size:32px'>Oi! Sou Dani :)</h1><marquee>bem-vinde à minha página pessoal</marquee>"
     }
 ];
 
