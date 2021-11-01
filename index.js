@@ -343,6 +343,73 @@ app.delete('/api/pessoas/:nome', (req, res) => {
 
 });
 
+// routing => comunidades
+
+app.get('/api/comunidades', (req, res) => {
+    res.send(comunidades);
+});
+
+app.get('/api/comunidades/:nome', (req, res) => {
+    const comunidade = comunidades.find((c) => c.nome == req.params.nome);
+    if (!comunidade) return res.status(404).send(`A comunidade chamada ${req.params.nome} não foi encontrada`);
+    res.send(comunidade);
+});
+
+app.put('/api/comunidades/:nome', (req, res) => {
+    const comunidade = comunidades.find((c) => c.nome == req.params.nome);
+    if (!comunidade) return res.status(404).send(`A comunidade chamada ${req.params.nome} não foi encontrada`);
+
+    const { error } = validaComunidade(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    Object.keys(comunidade).forEach((chave) => {
+        if (req.body[chave]) {
+            comunidade[chave] = req.body[chave];
+        }
+    });
+    res.send(comunidade);
+});
+
+// routing => instancias
+
+app.get('/api/instancias', (req, res) => {
+    res.send(instancias);
+});
+
+app.get('/api/instancias/:nome', (req, res) => {
+    const instancia = instancias.find((i) => i.nome == req.params.nome);
+    if (!instancia) return res.status(404).send(`A instância chamada ${req.params.nome} não foi encontrada`);
+    res.send(instancia);
+});
+
+app.put('/api/instancias/:nome', (req, res) => {
+    const instancia = instancias.find((i) => i.nome == req.params.nome);
+    if (!instancia) return res.status(404).send(`A instância chamada ${req.params.nome} não foi encontrada`);
+
+    const { error } = validaInstancia(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    Object.keys(instancia).forEach((chave) => {
+        if (req.body[chave]) {
+            instancia[chave] = req.body[chave];
+        }
+    });
+    res.send(instancia);
+});
+
+
+// routing => pecinhas
+
+app.get('/api/pecinhas', (req, res) => {
+    res.send(pecinhas);
+});
+
+app.get('/api/pecinhas/:nome', (req, res) => {
+    const pecinha = pecinhas.find((p) => p.nome == req.params.nome);
+    if (!pecinha) return res.status(404).send(`A pecinha chamada ${req.params.nome} não foi encontrada`);
+    res.send(); // rever Eloquent JavaScript (cap. 21) para servir arquivos estáticos
+});
+
 
 // inicia servidor
 // ---
@@ -363,4 +430,22 @@ function validaPessoa(pessoa) {
         html: Joi.string().default("<h1>Seu nome</h1><p>descrição</p>")
     });
     return esquema.validate(pessoa);
+}
+
+function validaComunidade(comunidade) {
+    const esquema = Joi.object({
+        id: Joi.number(),
+        nome: Joi.string().min(3).required(),
+        html: Joi.string().default("<h1>Comunidade</h1><p>descrição</p>")
+    });
+    return esquema.validate(comunidade);
+}
+
+function validaInstancia(instancia) {
+    const esquema = Joi.object({
+        id: Joi.number().required(),
+        nome: Joi.string().min(3).required(),
+        html: Joi.string().default("<h1>Instância</h1><p>descrição</p>")
+    });
+    return esquema.validate(instancia);
 }
