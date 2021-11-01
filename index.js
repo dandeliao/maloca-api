@@ -1,16 +1,20 @@
 const express = require('express');
+const path = require('path');
 const Joi = require('joi');
 const cors = require('cors');
 
 const app = express();
 
 // middleware
-app.use(express.static('public'));
+// ---
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
-app.use(cors())
+app.use(cors());
+app.options('*', cors());
 
 
 // dados
+// ---
 const pessoas = [
     {
         id: 0,
@@ -22,7 +26,11 @@ const pessoas = [
 
 
 // routing
+// ---
+
 app.get('/', (req, res) => res.send('está vivo!'));
+
+// routing => pessoas
 
 app.get('/api/pessoas', (req, res) => {
     res.send(pessoas);
@@ -77,14 +85,19 @@ app.delete('/api/pessoas/:nome', (req, res) => {
 
 
 // inicia servidor
+// ---
 const port = process.env.port || 4000;
 app.listen(port, () => {
     console.log(`Escutando atentamente na porta ${port}...`);
 });
 
+// funções auxiliares
+// ---
+
 // validação
 function validaPessoa(pessoa) {
     const esquema = Joi.object({
+        id: Joi.number(),
         nome: Joi.string().min(3).required(),
         comunidades: Joi.array().items(Joi.string()).default([]),
         html: Joi.string().default("<h1>Seu nome</h1><p>descrição</p>")
