@@ -1,0 +1,59 @@
+<m-container style="
+    --background-image: linear-gradient(lightpink, #a7f3d0);
+    --container-background: rgba(256, 256, 256, 0.3);
+    ">
+    <m-card style="
+        --box-shadow: none;
+        --background: transparent;
+        ">
+        <div class="info">
+            <div>
+                <h1>Oi, maloqueire!</h1>
+                <p>seja bem-vinde à nossa cabana comunitária</p>
+            </div>
+        </div>
+    </m-card>
+    <m-card style="
+        --background: khaki;
+        --border-radius: 0;
+        --border-style: dotted;
+        --box-shadow: none;
+        ">
+        <h3>Mural de avisos</h3>
+        <p>---</p>
+    </m-card>
+    <div id="cardao">
+        <m-card class="cardim">
+            <h3>Comunidades</h3>
+            <p>(...)</p>
+        </m-card>
+        <m-card class="cardim">
+            <h3>Chat</h3>
+            <p>(...)</p>
+        </m-card>
+    </div>
+</m-container>
+<style>
+    .info {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+    }
+    .info > img {
+        max-width: 200px;
+        width: 100%;
+        height: auto;
+        border-radius: 100%;
+        margin-right: 2rem;
+    }
+    #cardao {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        gap: 1em;
+    }
+    .cardim {
+        flex-grow: 1;
+    }
+</style>

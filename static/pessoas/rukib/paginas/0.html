@@ -1,0 +1,91 @@
+<m-container style="
+    --background-image: url('https://upload.wikimedia.org/wikipedia/commons/c/c0/Gray_background.gif');
+    --container-background: transparent;
+    ">
+    <m-card>
+        <div class="info-perfil">
+            <img src="http://localhost:4000/pessoas/rukib/avatar.png">
+            <div style="width: 100%">
+                <h1>rukib</h1>
+                <p>Perfil modelo. Gosta de fotografia, de livros, de música e de ser clonado para outros perfis.</p>
+                <br>
+                <p><b>pronomes:</b> ele/ela/elu</p>
+                <p><b>itens:</b> 🛼 🎃 🐞 🍉 🧸</p>
+            </div>
+        </div>
+    </m-card>
+    <m-card>
+        <h3>Coleção de links</h3>
+        <br>
+        <a href="https://www.myabandonware.com/">Jogos velhos</a> /
+        <a href="https://radio4000.com/map">Rádios do mundo todo</a> /
+        <a href="https://curtadoc.tv/">Documentários latino-americanos</a> /
+        <a href="https://lelivros.love">E-books em português</a> /
+    </m-card>
+    <m-card>
+        <h3>Coleção de fotos</h3>
+        <div id="cardao">
+            <div class="coluna">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Terrace_field_yunnan_china_denoised.jpg/640px-Terrace_field_yunnan_china_denoised.jpg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Ceramicagrottagliese.jpg/640px-Ceramicagrottagliese.jpg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Kumpulanpuro_culvert.jpg/511px-Kumpulanpuro_culvert.jpg">
+
+            </div>
+            <div class="coluna">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Reiher_im_Starkwind.jpg/639px-Reiher_im_Starkwind.jpg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Bienenweide.jpg/568px-Bienenweide.jpg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Mt._Ararat_via_Khor_Virap%2C_Armenia.jpg/640px-Mt._Ararat_via_Khor_Virap%2C_Armenia.jpg">
+
+            </div>
+            <div class="coluna">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Sancerre%2C_Rue_Saint-Jean.jpg/583px-Sancerre%2C_Rue_Saint-Jean.jpg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Northsea-eckwarderh%C3%B6rne_hg.jpg/640px-Northsea-eckwarderh%C3%B6rne_hg.jpg">
+            </div>
+        </div>
+    </m-card>
+</m-container>
+<style>
+    .info-perfil {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+    }
+    .info-perfil > img {
+        max-width: 200px;
+        width: 100%;
+        height: auto;
+        border-radius: 100%;
+        margin-right: 2rem;
+    }
+    #cardao {
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 0.3rem 0;
+    }
+    .coluna {
+        flex: 33%;
+        max-width: 33%;
+        padding: 0 0.3rem;
+    }
+    .coluna img {
+        margin: 0.3rem 0;
+        vertical-align: middle;
+        width: 100%;
+        border-radius: 3px;
+    }
+    
+    @media screen and (max-width: 800px) {
+        .coluna {
+            flex: 50%;
+            max-width: 50%;
+        }
+    }
+    @media screen and (max-width: 500px) {
+        .coluna {
+            flex: 100%;
+            max-width: 100%;
+        }
+    }
+</style>
