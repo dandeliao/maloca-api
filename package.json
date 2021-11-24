@@ -12,7 +12,9 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "joi": "^17.4.2"
+    "formidable": "^2.0.1",
+    "joi": "^17.4.2",
+    "mv": "^2.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.14"

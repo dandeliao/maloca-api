@@ -1,15 +1,16 @@
 <m-container style="
-    --background-image: url('https://upload.wikimedia.org/wikipedia/commons/c/c0/Gray_background.gif');
     --container-background: transparent;
     ">
     <m-card>
         <div class="info-perfil">
-            <img src="http://localhost:4000/pessoas/rukib/avatar.png">
+            <m-avatar tamanho="g"></m-avatar>
             <div style="width: 100%">
                 <h1>rukib</h1>
-                <p>Perfil modelo. Gosta de fotografia, de livros, de música e de ser clonado para outros perfis.</p>
+                <m-descricao></m-descricao>
                 <br>
-                <p><b>pronomes:</b> ele/ela/elu</p>
+                <br>
+                <p><b>conjunto de linguagem:</b> <m-conjunto-de-linguagem></m-conjunto-de-linguagem></p>
+                <br>
                 <p><b>itens:</b> 🛼 🎃 🐞 🍉 🧸</p>
             </div>
         </div>
@@ -49,6 +50,7 @@
         display: flex;
         flex-direction: row;
         justify-content: start;
+        gap: 2em;
     }
     .info-perfil > img {
         max-width: 200px;

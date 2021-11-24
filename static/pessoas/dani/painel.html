@@ -1,0 +1,59 @@
+<m-container class="painel" flutuante style="
+    --background-image: linear-gradient(lightpink, #a7f3d0);
+    --container-background: transparent;
+    ">
+    <m-card>
+        <div class="perfil">
+            <img class="avatar" src="http://localhost:4000/pessoas/rukib/avatar.png">
+            <a href="/pessoa/rukib" data-link>Rukib</a>
+        </div>
+    </m-card>
+    <m-card>
+        <h3>Minhas Comunidades:</h3>
+        <div class="minicard comunidade">
+            <img class="avatar" src="http://localhost:4000/comunidades/radio-maloca/avatar.png">
+            <a href="/radio-maloca" data-link>Rádio Maloca</a>
+            <span> - comunidade para ouvir e compartilhar música</span>
+        </div>
+        <button class="btn ver-mais">Ver Mais</button>
+    </m-card>
+</m-container>
+<style>
+    .painel .minicard {
+        padding: 0.5em;
+        margin-bottom: 1em;
+        border-radius: 0.3em;
+        border: 1px solid black;
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        gap: 0.5em;
+    }
+
+    .painel .perfil {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5em;
+        font-style: bold;
+        font-size: 1.4em;
+    }
+    .painel .avatar {
+        height: 3em;
+        width: 3em;
+        border-radius: 100%;
+    }
+
+    .painel .ver-mais {
+        box-sizing: border-box;
+        padding: 0.5em;
+        width: 100%;
+        background: transparent;
+        border: 1px solid;
+        border-radius: 0.3em;
+        cursor:pointer;
+    }
+
+</style>

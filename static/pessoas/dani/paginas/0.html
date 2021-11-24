@@ -1,47 +1,13 @@
-<m-container style="
-    --background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/88/Tile_n_728.png');
-    --container-background: rgba(256, 256, 256, 0.3);
-    ">
+<m-container style="--container-background: transparent">
     <m-card>
-        <div class="info-perfil">
-            <img src="http://localhost:4000/pessoas/dani/avatar.png">
-            <div>
-                <h1>Oi! Sou Dani :B</h1>
-                <br>
-                <ul>
-                    <li>desde 1990</li>
-                    <li>70% algodão</li> 
-                    <li>feito pra durar</li>
-                    <li>às vezes dá tilt</li>
-                </ul>
-            </div>
-        </div>
-        <marquee>bem-vinde à minha página pessoal</marquee>
-    </m-card>
-    <m-card>
-        <h3>Aqui posso colocar comunidades que gosto, links, fotos...</h3>
-        <p>(...)</p>
-    </m-card>
-    <m-card>
-        <p>posso inserir quantos cards quiser :B</p>
+        <m-avatar></m-avatar>
+        <h2><m-nome></m-nome></h2>
         <br>
-        <button title="javascript não pode :X só executa o que já vem embutido em elementos como o card">injetar script</button>
+        <m-descricao></m-descricao>
+        <br>
+        <m-conjunto-de-linguagem></m-conjunto-de-linguagem>
+        <br>
+        <br>
+        <marquee>- desde 1990 - 70% algodão - às vezes dá tilt -</marquee>
     </m-card>
 </m-container>
-<style>
-    .info-perfil {
-        display: flex;
-        flex-direction: row;
-        justify-content: start;
-    }
-    .info-perfil > img {
-        max-width: 200px;
-        width: 100%;
-        height: auto;
-        border-radius: 100%;
-        margin-right: 2rem;
-    }
-    ul {
-        margin-left: 2rem;
-    }
-</style>
