@@ -7,6 +7,7 @@ const {readFile} = require('fs');
 const {writeFile} = require('fs');
 const formidable = require('formidable');
 const mv = require('mv');
+const util = require('util');
 
 const app = express();
 
@@ -23,59 +24,23 @@ app.use(express.json());
 
 // dados
 // ---
-var pessoas = [
-    {
-        id: 0,
-        tipo: "pessoa",
-        nome: "dani",
-        comunidades: ["radio-maloca", "filmes"],
-        descricao: "a palavra pessoa hoje não soa bem",
-        conjuntoDeLinguagem: {artigo: ["-", "e", "o"], pronome: ["elu", "ele"], flexao: ["-e", "-o"]},
-        avatar: "/api/pessoas/dani/avatar.png",
-        fundo: "/api/pessoas/dani/fundo.png"
-    },
-    {
-        id: 1,
-        tipo: "pessoa",
-        nome: "rukib",
-        comunidades: [],
-        descricao: "Perfil modelo. Gosta de fotografia, de livros, de música e de ser clonado para outros perfis.",
-        conjuntoDeLinguagem: {artigo: ["e", "o", "a"], pronome: ["elu", "ele", "ela"], flexao: ["-e", "-o", "-a"]},
-        avatar: "/api/pessoas/rukib/avatar.png",
-        fundo: "/api/pessoas/rukib/fundo.gif"
-    }
-];
-var comunidades = [
-    {
-        id: 0,
-        tipo: "comunidade",
-        nome: "radio-maloca",
-        descricao: "comunidade para ouvir e compartilhar música",
-        conjuntoDeLinguagem: {artigo: ["a"], pronome: ["ela"], flexao: ["-a"]},
-        avatar: "/api/comunidades/radio-maloca/avatar.png",
-        fundo: "/api/comunidades/radio-maloca/fundo.jpg"
-    }
-];
+let dados = JSON.parse(fs.readFileSync('dados.json'));
+var pessoas = dados.pessoas;
+var comunidades = dados.comunidades;
+var instancias = dados.instancias;
 
-var instancias = [
-    {
-        id: 0,
-        tipo: "instancia",
-        nome: "maloca",
-        descricao: "cabana comunitária",
-        conjuntoDeLinguagem: {artigo: ["a"], pronome: ["ela"], flexao: ["-a"]},
-        avatar: "/api/instancias/maloca/avatar.png",
-        fundo: "/api/instancias/maloca/fundo.jpg"
+function armazenaDados(dadinhos) {
+    if (!util.isDeepStrictEqual(dadinhos, JSON.parse(fs.readFileSync('dados.json')))) {
+        let dadosString = JSON.stringify(dadinhos);
+        fs.writeFileSync('dados.json', dadosString);
+        console.log("novos dados foram armazenados");
+    } else {
+        console.log("sem mudanças nos dados");
     }
-];
+}
 
-var pecinhas = [
-    {
-        id: 0,
-        nome: "m-card",
-        js: './pecinhas/m-card.js'
-    }
-];
+setInterval(armazenaDados, 5000, dados);
+
 
 // routing
 // ---
@@ -85,11 +50,11 @@ app.get('/', (req, res) => res.send('está vivo!'));
 // routing => pessoas
 
 app.get('/api/pessoas', (req, res) => {
-    res.send(pessoas);
+    res.send(dados.pessoas);
 });
 
 app.get('/api/pessoas/:nome', (req, res) => {
-    const pessoa = pessoas.find((p) => p.nome == req.params.nome);
+    const pessoa = dados.pessoas.find((p) => p.nome == req.params.nome);
     if (!pessoa) return res.status(404).send(`A pessoa chamada ${req.params.nome} não foi encontrada`);
     readFile(`static/pessoas/${req.params.nome}/paginas/0.html`, "utf8", (error, texto) => {
         if (error) throw error;
@@ -103,18 +68,43 @@ app.post('/api/pessoas', (req, res) => {
     const validacao = validaPessoa(req.body);
     if (validacao.error) return res.status(400).send(validacao.error.details[0].message);
 
-    const pessoa = {
-        id: pessoas.length,
+    let pessoa = {
+        id: dados.pessoas.length,
+        tipo: validacao.value.tipo,
         nome: validacao.value.nome,
+        descricao: validacao.value.descricao,
+        conjuntoDeLinguagem: validacao.value.conjuntoDeLinguagem,
         comunidades: validacao.value.comunidades,
-        html: validacao.value.html
+        avatar: `/api/pessoas/${validacao.value.nome}/avatar.png`,
+        fundo: `/api/pessoas/${validacao.value.nome}/fundo.png`
     };
-    pessoas.push(pessoa);
-    res.send(pessoa);
+    dados.pessoas.push(pessoa);
+
+    // cria diretório em static para armazenar arquivos da nova pessoa
+    let pasta = path.join(__dirname, "static", "pessoas", pessoa.nome);
+    if (!fs.existsSync(pasta)){
+        fs.mkdirSync(pasta);
+        fs.mkdirSync(path.join(pasta, "paginas"));
+    }
+
+    fs.copyFile('static/avatar-pessoa.png', `static/pessoas/${pessoa.nome}/avatar.png`, (err) => {
+        if (err) throw err;
+        console.log('avatar padrão copiado com sucesso para nova pessoa');
+    });
+    fs.copyFile('static/fundo-pessoa.png', `static/pessoas/${pessoa.nome}/fundo.png`, (err) => {
+        if (err) throw err;
+        console.log('fundo padrão copiado com sucesso para nova pessoa');
+    });
+
+    writeFile(`static/pessoas/${pessoa.nome}/paginas/0.html`, req.body.html, err => {
+        if (err) console.log(`Failed to write file: ${err}`);
+        else console.log("File written.");
+        res.send(pessoa);
+    });
 });
 
 app.put('/api/pessoas/:nome', (req, res) => {
-    const pessoa = pessoas.find((p) => p.nome == req.params.nome);
+    const pessoa = dados.pessoas.find((p) => p.nome == req.params.nome);
     if (!pessoa) return res.status(404).send(`A pessoa chamada ${req.params.nome} não foi encontrada`);
 
     const { error } = validaPessoa(req.body);
@@ -135,11 +125,11 @@ app.put('/api/pessoas/:nome', (req, res) => {
 });
 
 app.delete('/api/pessoas/:nome', (req, res) => {
-    const pessoa = pessoas.find((p) => p.nome == req.params.nome);
+    const pessoa = dados.pessoas.find((p) => p.nome == req.params.nome);
     if (!pessoa) return res.status(404).send(`A pessoa chamada ${req.params.nome} não foi encontrada`);
 
-    const indice = pessoas.indexOf(pessoa);
-    pessoas.splice(indice, 1);
+    const indice = dados.pessoas.indexOf(pessoa);
+    dados.pessoas.splice(indice, 1);
 
     res.send(pessoa);
 
@@ -148,11 +138,50 @@ app.delete('/api/pessoas/:nome', (req, res) => {
 // routing => comunidades
 
 app.get('/api/comunidades', (req, res) => {
-    res.send(comunidades);
+    res.send(dados.comunidades);
+});
+
+app.post('/api/comunidades', (req, res) => {
+
+    const validacao = validaComunidade(req.body);
+    if (validacao.error) return res.status(400).send(validacao.error.details[0].message);
+
+    let comuna = {
+        id: dados.comunidades.length,
+        tipo: validacao.value.tipo,
+        nome: validacao.value.nome,
+        descricao: validacao.value.descricao,
+        conjuntoDeLinguagem: validacao.value.conjuntoDeLinguagem,
+        avatar: `/api/comunidades/${validacao.value.nome}/avatar.png`,
+        fundo: `/api/comunidades/${validacao.value.nome}/fundo.png`
+    };
+    dados.comunidades.push(comuna);
+
+    // cria diretório em static para armazenar arquivos da nova comunidade
+    let pasta = path.join(__dirname, "static", "comunidades", comuna.nome);
+    if (!fs.existsSync(pasta)){
+        fs.mkdirSync(pasta);
+        fs.mkdirSync(path.join(pasta, "paginas"));
+    }
+
+    fs.copyFile('static/avatar-comunidade.png', `static/comunidades/${comuna.nome}/avatar.png`, (err) => {
+        if (err) throw err;
+        console.log('avatar padrão copiado com sucesso para nova comunidade');
+    });
+    fs.copyFile('static/fundo-comunidade.png', `static/comunidades/${comuna.nome}/fundo.png`, (err) => {
+        if (err) throw err;
+        console.log('fundo padrão copiado com sucesso para nova comunidade');
+    });
+
+    writeFile(`static/comunidades/${comuna.nome}/paginas/0.html`, req.body.html, err => {
+        if (err) console.log(`Failed to write file: ${err}`);
+        else console.log("File written.");
+        res.send(comuna);
+    });
 });
 
 app.get('/api/comunidades/:nome', (req, res) => {
-    const comunidade = comunidades.find((c) => c.nome == req.params.nome);
+    const comunidade = dados.comunidades.find((c) => c.nome == req.params.nome);
     if (!comunidade) return res.status(404).send(`A comunidade chamada ${req.params.nome} não foi encontrada`);
     readFile(`static/comunidades/${req.params.nome}/paginas/0.html`, "utf8", (error, texto) => {
         if (error) throw error;
@@ -162,7 +191,7 @@ app.get('/api/comunidades/:nome', (req, res) => {
 });
 
 app.put('/api/comunidades/:nome', (req, res) => {
-    const comunidade = comunidades.find((c) => c.nome == req.params.nome);
+    const comunidade = dados.comunidades.find((c) => c.nome == req.params.nome);
     if (!comunidade) return res.status(404).send(`A comunidade chamada ${req.params.nome} não foi encontrada`);
 
     const { error } = validaComunidade(req.body);
@@ -185,11 +214,11 @@ app.put('/api/comunidades/:nome', (req, res) => {
 // routing => instancias
 
 app.get('/api/instancias', (req, res) => {
-    res.send(instancias);
+    res.send(dados.instancias);
 });
 
 app.get('/api/instancias/:nome', (req, res) => {
-    const instancia = instancias.find((i) => i.nome == req.params.nome);
+    const instancia = dados.instancias.find((i) => i.nome == req.params.nome);
     if (!instancia) return res.status(404).send(`A instância chamada ${req.params.nome} não foi encontrada`);
     if (req.params.nome === "maloca") {
         readFile(`static/instancias/${req.params.nome}/paginas/0.html`, "utf8", (error, texto) => {
@@ -203,7 +232,7 @@ app.get('/api/instancias/:nome', (req, res) => {
 });
 
 app.get('/api/instancias/:nome/painel', (req, res) => {
-    const instancia = instancias.find((i) => i.nome == req.params.nome);
+    const instancia = dados.instancias.find((i) => i.nome == req.params.nome);
     if (!instancia) return res.status(404).send(`A instância chamada ${req.params.nome} não foi encontrada`);
     if (req.params.nome === "maloca") {
         readFile(`static/instancias/${req.params.nome}/paginas/painel.html`, "utf8", (error, texto) => {
@@ -217,7 +246,7 @@ app.get('/api/instancias/:nome/painel', (req, res) => {
 });
 
 app.put('/api/instancias/:nome', (req, res) => {
-    const instancia = instancias.find((i) => i.nome == req.params.nome);
+    const instancia = dados.instancias.find((i) => i.nome == req.params.nome);
     if (!instancia) return res.status(404).send(`A instância chamada ${req.params.nome} não foi encontrada`);
 
     const { error } = validaInstancia(req.body);
@@ -270,11 +299,11 @@ app.post('/api/bota', (req, res) => {
             // define quem é o sujeito (qual pessoa, comunidade ou instância)
             let sujeito = new Object();
             if (fields.tipo == "pessoa") {
-                sujeito = pessoas.find(p => p.nome === fields.nome);
+                sujeito = dados.pessoas.find(p => p.nome === fields.nome);
             } else if (fields.tipo == "comunidade") {
-                sujeito = comunidades.find(c => c.nome === fields.nome);
+                sujeito = dados.comunidades.find(c => c.nome === fields.nome);
             } else if (fields.tipo == "instancia") {
-                sujeito = instancias.find(i => i.nome === fields.nome);
+                sujeito = dados.instancias.find(i => i.nome === fields.nome);
             } else {
                 console.log("tipo de recurso desconhecido (não é pessoa, comunidade ou instância)")
             }
