@@ -17,17 +17,11 @@ app.use(cors());
 app.options('*', cors());
 app.use('/api', express.static(path.join(__dirname, 'static')));
 app.use(express.json());
-/* app.use(express.urlencoded({
-    extended: true
-})); */
 
 
 // dados
 // ---
 let dados = JSON.parse(fs.readFileSync('dados.json'));
-var pessoas = dados.pessoas;
-var comunidades = dados.comunidades;
-var instancias = dados.instancias;
 
 function armazenaDados(dadinhos) {
     if (!util.isDeepStrictEqual(dadinhos, JSON.parse(fs.readFileSync('dados.json')))) {
@@ -39,7 +33,7 @@ function armazenaDados(dadinhos) {
     }
 }
 
-setInterval(armazenaDados, 5000, dados);
+setInterval(armazenaDados, 10000, dados);
 
 
 // routing
@@ -54,7 +48,7 @@ app.get('/api/pessoas', (req, res) => {
 });
 
 app.get('/api/pessoas/:nome', (req, res) => {
-    const pessoa = dados.pessoas.find((p) => p.nome == req.params.nome);
+    let pessoa = JSON.parse(JSON.stringify(dados.pessoas.find((p) => p.nome == req.params.nome)));
     if (!pessoa) return res.status(404).send(`A pessoa chamada ${req.params.nome} não foi encontrada`);
     readFile(`static/pessoas/${req.params.nome}/paginas/0.html`, "utf8", (error, texto) => {
         if (error) throw error;
@@ -104,7 +98,7 @@ app.post('/api/pessoas', (req, res) => {
 });
 
 app.put('/api/pessoas/:nome', (req, res) => {
-    const pessoa = dados.pessoas.find((p) => p.nome == req.params.nome);
+    let pessoa = dados.pessoas.find((p) => p.nome == req.params.nome);
     if (!pessoa) return res.status(404).send(`A pessoa chamada ${req.params.nome} não foi encontrada`);
 
     const { error } = validaPessoa(req.body);
@@ -125,7 +119,7 @@ app.put('/api/pessoas/:nome', (req, res) => {
 });
 
 app.delete('/api/pessoas/:nome', (req, res) => {
-    const pessoa = dados.pessoas.find((p) => p.nome == req.params.nome);
+    let pessoa = dados.pessoas.find((p) => p.nome == req.params.nome);
     if (!pessoa) return res.status(404).send(`A pessoa chamada ${req.params.nome} não foi encontrada`);
 
     const indice = dados.pessoas.indexOf(pessoa);
@@ -181,7 +175,7 @@ app.post('/api/comunidades', (req, res) => {
 });
 
 app.get('/api/comunidades/:nome', (req, res) => {
-    const comunidade = dados.comunidades.find((c) => c.nome == req.params.nome);
+    let comunidade = JSON.parse(JSON.stringify(dados.comunidades.find((c) => c.nome == req.params.nome)));
     if (!comunidade) return res.status(404).send(`A comunidade chamada ${req.params.nome} não foi encontrada`);
     readFile(`static/comunidades/${req.params.nome}/paginas/0.html`, "utf8", (error, texto) => {
         if (error) throw error;
@@ -191,7 +185,7 @@ app.get('/api/comunidades/:nome', (req, res) => {
 });
 
 app.put('/api/comunidades/:nome', (req, res) => {
-    const comunidade = dados.comunidades.find((c) => c.nome == req.params.nome);
+    let comunidade = dados.comunidades.find((c) => c.nome == req.params.nome);
     if (!comunidade) return res.status(404).send(`A comunidade chamada ${req.params.nome} não foi encontrada`);
 
     const { error } = validaComunidade(req.body);
@@ -218,7 +212,7 @@ app.get('/api/instancias', (req, res) => {
 });
 
 app.get('/api/instancias/:nome', (req, res) => {
-    const instancia = dados.instancias.find((i) => i.nome == req.params.nome);
+    let instancia = JSON.parse(JSON.stringify(dados.instancias.find((i) => i.nome == req.params.nome)));
     if (!instancia) return res.status(404).send(`A instância chamada ${req.params.nome} não foi encontrada`);
     if (req.params.nome === "maloca") {
         readFile(`static/instancias/${req.params.nome}/paginas/0.html`, "utf8", (error, texto) => {
@@ -232,7 +226,7 @@ app.get('/api/instancias/:nome', (req, res) => {
 });
 
 app.get('/api/instancias/:nome/painel', (req, res) => {
-    const instancia = dados.instancias.find((i) => i.nome == req.params.nome);
+    const instancia = JSON.parse(JSON.stringify(dados.instancias.find((i) => i.nome == req.params.nome)));
     if (!instancia) return res.status(404).send(`A instância chamada ${req.params.nome} não foi encontrada`);
     if (req.params.nome === "maloca") {
         readFile(`static/instancias/${req.params.nome}/paginas/painel.html`, "utf8", (error, texto) => {
@@ -268,19 +262,6 @@ app.put('/api/instancias/:nome', (req, res) => {
     } else {
         console.log("solicitou instância externa");
     }
-});
-
-
-// routing => pecinhas
-
-app.get('/api/pecinhas', (req, res) => {
-    res.send(pecinhas);
-});
-
-app.get('/api/pecinhas/:nome', (req, res) => {
-    const pecinha = pecinhas.find((p) => p.nome == req.params.nome);
-    if (!pecinha) return res.status(404).send(`A pecinha chamada ${req.params.nome} não foi encontrada`);
-    res.send(); // rever Eloquent JavaScript (cap. 21) para servir arquivos estáticos
 });
 
 
