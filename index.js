@@ -73,6 +73,9 @@ app.post('/api/pessoas', (req, res) => {
         fundo: `/api/pessoas/${validacao.value.nome}/fundo.png`
     };
     dados.pessoas.push(pessoa);
+    // armazena dados da pessoa na maloca. Substituir por query no banco de dados
+    let maloquinha = dados.instancias.find(i => i.nome === 'maloca');
+    maloquinha.pessoas.push(pessoa.nome);
 
     // cria diretório em static para armazenar arquivos da nova pessoa
     let pasta = path.join(__dirname, "static", "pessoas", pessoa.nome);
@@ -150,6 +153,9 @@ app.post('/api/comunidades', (req, res) => {
         fundo: `/api/comunidades/${validacao.value.nome}/fundo.png`
     };
     dados.comunidades.push(comuna);
+    // armazena dados da comunidade na maloca. Substituir por query no banco de dados
+    let maloquinha = dados.instancias.find(i => i.nome === 'maloca');
+    maloquinha.comunidades.push(comuna.nome);
 
     // cria diretório em static para armazenar arquivos da nova comunidade
     let pasta = path.join(__dirname, "static", "comunidades", comuna.nome);
@@ -414,6 +420,8 @@ function validaInstancia(instancia) {
         conjuntoDeLinguagem: Joi.object().default({artigo: ["e"], pronome: ["elu"], flexao: ["e"]}),
         avatar: Joi.string(),
         fundo: Joi.string().default("linear-gradient(lightpink, #a7f3d0)"),
+        comunidades: Joi.array(),
+        pessoas: Joi.array(),
         html: Joi.string()
     });
     return esquema.validate(instancia);
