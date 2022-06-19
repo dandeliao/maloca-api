@@ -11,10 +11,12 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
     "express": "^4.17.1",
     "formidable": "^2.0.1",
     "joi": "^17.4.2",
-    "mv": "^2.1.1"
+    "mv": "^2.1.1",
+    "pg": "^8.7.3"
   },
   "devDependencies": {
     "eslint": "^8.18.0",
