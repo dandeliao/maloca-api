@@ -4,15 +4,16 @@ const servicePessoas = require('../services/servicePessoas');
 
 router.get('/pessoas', async (req, res) => {
     const pessoas = await servicePessoas.getPessoas();
-    res.json(pessoas.rows);
+    res.json(pessoas);
 });
 
 router.get('/pessoas/:arroba', async (req, res) => {
-
+    const pessoa = await servicePessoas.getPessoa(req.params.arroba);
+    res.json(pessoa);
 });
 
 router.post('/pessoas', async (req, res) => {
-
+    
 });
 
 router.put('/pessoas', async (req, res) => {

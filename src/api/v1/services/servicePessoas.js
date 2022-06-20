@@ -1,7 +1,17 @@
 const gatePessoas = require('../gates/gatePessoas');
 
-function getPessoas() {
+exports.getPessoas = function () {
     return gatePessoas.getPessoas();
 }
 
-exports.getPessoas = getPessoas;
+exports.getPessoa = function (pessoaId) {
+    return gatePessoas.getPessoa(pessoaId);
+}
+
+exports.postPessoa = function (pessoa) {
+    return gatePessoas.postPessoa(pessoa);
+}
+
+exports.deletePessoa = function (pessoaId) {
+    return gatePessoas.deletePessoa(pessoaId);
+}
