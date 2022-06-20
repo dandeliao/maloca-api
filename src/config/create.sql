@@ -5,8 +5,7 @@ CREATE TABLE pessoas(
     nome            VARCHAR(64) NOT NULL,
     avatar          VARCHAR(255) DEFAULT 'avatar.jpg',
     fundo           VARCHAR(255) DEFAULT 'fundo.jpg',
-    data_ingresso   TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    indicada_por    VARCHAR(32) REFERENCES pessoas(pessoa_id)
+    data_ingresso   TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE autenticacao(
