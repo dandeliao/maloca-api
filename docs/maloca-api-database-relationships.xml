@@ -38,7 +38,7 @@
 		<type label="Bit" length="0" sql="bit" quote=""/>
 	</group>
 </datatypes><table x="1106" y="337" name="pessoa">
-<row name="arroba_pessoa" null="1" autoincrement="0">
+<row name="pessoa_id" null="1" autoincrement="0">
 <datatype>VARCHAR(32)</datatype>
 <default>NULL</default></row>
 <row name="nome" null="1" autoincrement="0">
@@ -50,21 +50,17 @@
 <row name="fundo" null="1" autoincrement="0">
 <datatype>VARCHAR(255)</datatype>
 <default>NULL</default></row>
-<row name="ingresso" null="1" autoincrement="0">
+<row name="data_ingresso" null="1" autoincrement="0">
 <datatype>TIMESTAMP</datatype>
 <default>NULL</default></row>
-<row name="indicada_por" null="1" autoincrement="0">
-<datatype>VARCHAR(32)</datatype>
-<default>NULL</default><relation table="pessoa" row="arroba_pessoa" />
-</row>
 <key type="PRIMARY" name="">
-<part>arroba_pessoa</part>
+<part>pessoa_id</part>
 </key>
 </table>
 <table x="870" y="570" name="pessoa_comunidade">
-<row name="arroba_pessoa" null="1" autoincrement="1">
+<row name="pessoa_id" null="1" autoincrement="1">
 <datatype>VARCHAR(32)</datatype>
-<default>NULL</default><relation table="pessoa" row="arroba_pessoa" />
+<default>NULL</default><relation table="pessoa" row="pessoa_id" />
 </row>
 <row name="comunidade_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -83,7 +79,7 @@
 <datatype>bit</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
-<part>arroba_pessoa</part>
+<part>pessoa_id</part>
 <part>comunidade_id</part>
 </key>
 </table>
@@ -153,9 +149,9 @@
 <row name="comentario_id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="arroba_pessoa" null="1" autoincrement="0">
+<row name="pessoa_id" null="1" autoincrement="0">
 <datatype>VARCHAR(32)</datatype>
-<default>NULL</default><relation table="pessoa" row="arroba_pessoa" />
+<default>NULL</default><relation table="pessoa" row="pessoa_id" />
 </row>
 <row name="proposta_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -171,14 +167,14 @@
 <part>comentario_id</part>
 </key>
 </table>
-<table x="1052" y="129" name="pagina_pessoal">
+<table x="1063" y="126" name="pagina_pessoal">
+<row name="pessoa_id" null="1" autoincrement="0">
+<datatype>VARCHAR(32)</datatype>
+<default>NULL</default><relation table="pessoa" row="pessoa_id" />
+</row>
 <row name="pagina_pessoal_id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="arroba_pessoa" null="1" autoincrement="0">
-<datatype>VARCHAR(32)</datatype>
-<default>NULL</default><relation table="pessoa" row="arroba_pessoa" />
-</row>
 <row name="arquivo_html" null="1" autoincrement="0">
 <datatype>VARCHAR(255)</datatype>
 <default>NULL</default></row>
@@ -193,9 +189,10 @@
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>pagina_pessoal_id</part>
+<part>pessoa_id</part>
 </key>
 </table>
-<table x="94" y="140" name="componente">
+<table x="95" y="127" name="componente">
 <row name="componente_id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -235,9 +232,9 @@
 <row name="proposta_id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="arroba_pessoa" null="1" autoincrement="0">
+<row name="pessoa_id" null="1" autoincrement="0">
 <datatype>VARCHAR(32)</datatype>
-<default>NULL</default><relation table="pessoa" row="arroba_pessoa" />
+<default>NULL</default><relation table="pessoa" row="pessoa_id" />
 </row>
 <row name="anterior_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -260,9 +257,9 @@
 </key>
 </table>
 <table x="529" y="397" name="consenso">
-<row name="arroba_pessoa" null="1" autoincrement="1">
+<row name="pessoa_id" null="1" autoincrement="1">
 <datatype>VARCHAR(32)</datatype>
-<default>NULL</default><relation table="pessoa" row="arroba_pessoa" />
+<default>NULL</default><relation table="pessoa" row="pessoa_id" />
 </row>
 <row name="proposta_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -275,12 +272,12 @@
 <datatype>VARCHAR(512)</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
-<part>arroba_pessoa</part>
+<part>pessoa_id</part>
 <part>proposta_id</part>
 </key>
 <comment>bloqueio precisa fechar proposta atual e criar uma nova com o atributo anterior_id = proposta_id (atual)</comment>
 </table>
-<table x="751" y="115" name="componente_pagina_pessoal">
+<table x="750" y="102" name="componente_pagina_pessoal">
 <row name="componente_pagina_pessoal_id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -310,17 +307,17 @@
 <part>comunidade_id</part>
 </key>
 </table>
-<table x="1300" y="503" name="conversa">
+<table x="1313" y="508" name="conversa">
 <row name="conversa_id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="arroba_pessoa" null="1" autoincrement="0">
+<row name="pessoa_id" null="1" autoincrement="0">
 <datatype>VARCHAR(32)</datatype>
-<default>NULL</default><relation table="pessoa" row="arroba_pessoa" />
+<default>NULL</default><relation table="pessoa" row="pessoa_id" />
 </row>
-<row name="arroba_pessoa_2" null="1" autoincrement="0">
+<row name="pessoa_id_2" null="1" autoincrement="0">
 <datatype>VARCHAR(32)</datatype>
-<default>NULL</default><relation table="pessoa" row="arroba_pessoa" />
+<default>NULL</default><relation table="pessoa" row="pessoa_id" />
 </row>
 <row name="assunto" null="1" autoincrement="0">
 <datatype>VARCHAR(512)</datatype>
@@ -332,13 +329,13 @@
 <part>conversa_id</part>
 </key>
 </table>
-<table x="1440" y="374" name="mensagem_particular">
+<table x="1458" y="368" name="mensagem_particular">
 <row name="mensagem_particular_id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="arroba_pessoa" null="1" autoincrement="0">
+<row name="pessoa_id" null="1" autoincrement="0">
 <datatype>VARCHAR(32)</datatype>
-<default>NULL</default><relation table="pessoa" row="arroba_pessoa" />
+<default>NULL</default><relation table="pessoa" row="pessoa_id" />
 </row>
 <row name="conversa_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -360,11 +357,11 @@
 <default>NULL</default></row>
 <row name="bloqueante_id" null="1" autoincrement="0">
 <datatype>VARCHAR(32)</datatype>
-<default>NULL</default><relation table="pessoa" row="arroba_pessoa" />
+<default>NULL</default><relation table="pessoa" row="pessoa_id" />
 </row>
 <row name="bloqueada_id" null="1" autoincrement="0">
 <datatype>VARCHAR(32)</datatype>
-<default>NULL</default><relation table="pessoa" row="arroba_pessoa" />
+<default>NULL</default><relation table="pessoa" row="pessoa_id" />
 </row>
 <row name="nota" null="1" autoincrement="0">
 <datatype>VARCHAR(512)</datatype>
@@ -376,10 +373,10 @@
 <part>bloqueio_id</part>
 </key>
 </table>
-<table x="1105" y="574" name="autenticacao">
-<row name="arroba_pessoa" null="1" autoincrement="1">
+<table x="1110" y="555" name="autenticacao">
+<row name="pessoa_id" null="1" autoincrement="1">
 <datatype>VARCHAR(32)</datatype>
-<default>NULL</default><relation table="pessoa" row="arroba_pessoa" />
+<default>NULL</default><relation table="pessoa" row="pessoa_id" />
 </row>
 <row name="email" null="1" autoincrement="0">
 <datatype>VARCHAR</datatype>
@@ -391,7 +388,7 @@
 <datatype>VARCHAR</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
-<part>arroba_pessoa</part>
+<part>pessoa_id</part>
 </key>
 </table>
 </sql>
