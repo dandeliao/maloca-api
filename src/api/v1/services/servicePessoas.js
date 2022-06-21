@@ -1,4 +1,4 @@
-const basePessoas = require('../bases/basePessoas');
+const basePessoas = require('../controllers/controllerPessoas');
 
 exports.getPessoas = function () {
 	return basePessoas.getPessoas();
