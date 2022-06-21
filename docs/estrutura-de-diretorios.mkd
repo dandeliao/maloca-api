@@ -9,7 +9,7 @@
                 - **/middlewares**: middlewares personalizados
                 - **/routes**: rotas de acesso à API
                 - **/services**: lógica de negócios (intermediário entre /routes e /base)
-                - **/utils**: módulos personalizados de uso geral
+                - **/utils**: módulos auxiliares
                 - **/validations**: validação de dados
                 - *index.js*: execução do servidor
         - **/config**: configuração do banco de dados
