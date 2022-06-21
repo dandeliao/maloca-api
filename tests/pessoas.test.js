@@ -28,13 +28,13 @@ test('esperado: get pessoas', async () => {
 	console.log('pessoas:', pessoas);
 
 	expect(pessoas).toHaveLength(3);
-	servicePessoas.deletePessoa(p1.pessoa_id);
-	servicePessoas.deletePessoa(p2.pessoa_id);
-	servicePessoas.deletePessoa(p3.pessoa_id);
+	await servicePessoas.deletePessoa(p1.pessoa_id);
+	await servicePessoas.deletePessoa(p2.pessoa_id);
+	await servicePessoas.deletePessoa(p3.pessoa_id);
 
 });
 
-test('esperado: get pessoa (específica)', async () => {
+test.only('esperado: get pessoa (específica)', async () => {
 
 	const pessoa1 = geraPessoa();
 	const p = await servicePessoas.postPessoa(pessoa1);
@@ -45,6 +45,22 @@ test('esperado: get pessoa (específica)', async () => {
 	console.log('pessoa:', pessoa);
 
 	expect(pessoa.pessoa_id).toBe(p.pessoa_id);
-	servicePessoas.deletePessoa(p.pessoa_id);
+	await servicePessoas.deletePessoa(p.pessoa_id);
+
+});
+
+test.only('esperado: cria nova pessoa', async () => {
+
+	const dados = geraPessoa();
+	
+	const responsePost = await request('/pessoas', 'post', dados);
+	const { pessoa_id } = responsePost.data;
+
+	const responseGet = await request(`/pessoas/${pessoa_id}`, 'get');
+	const pessoa = responseGet.data;
+	console.log('pessoa:', pessoa);
+	expect(pessoa.pessoa_id).toBe(dados.pessoaId);
+	expect(pessoa.nome).toBe(dados.nome);
+	await servicePessoas.deletePessoa(pessoa.pessoa_id);
 
 });
