@@ -12,11 +12,15 @@ router.get('/pessoas/:arroba', async (req, res) => {
 	res.json(pessoa);
 });
 
-/*
+
 router.post('/pessoas', async (req, res) => {
-    
+	const pessoa = req.body;
+	const novaPessoa = await servicePessoas.postPessoa(pessoa);
+	res.json(novaPessoa);
 });
 
+
+/*
 router.put('/pessoas', async (req, res) => {
     
 });

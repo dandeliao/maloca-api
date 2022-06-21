@@ -1,26 +1,23 @@
 const pool = require('../../../config/database');
 
-async function getPessoas() {
-	const p = await pool.query(
+function getPessoas() {
+	return pool.query(
 		'SELECT * FROM pessoas'
 	);
-	return p.rows;
 }
 
-async function getPessoa(pessoaId) {
-	const p = await pool.query(
+function getPessoa(pessoaId) {
+	return pool.query(
 		'SELECT * FROM pessoas WHERE pessoa_id = $1',
 		[pessoaId]
 	);
-	return p.rows[0];
 }
 
-async function postPessoa(pessoa) {
-	const p = await pool.query(
+function postPessoa(pessoa) {
+	return pool.query(
 		'INSERT INTO pessoas (pessoa_id, nome) VALUES ($1, $2) RETURNING pessoa_id',
 		[pessoa.pessoaId, pessoa.nome]
 	);
-	return p.rows[0];
 }
 
 function deletePessoa(pessoaId) {
