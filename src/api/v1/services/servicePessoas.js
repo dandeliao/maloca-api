@@ -1,17 +1,17 @@
 const basePessoas = require('../bases/basePessoas');
 
 exports.getPessoas = function () {
-    return basePessoas.getPessoas();
-}
+	return basePessoas.getPessoas();
+};
 
 exports.getPessoa = function (pessoaId) {
-    return basePessoas.getPessoa(pessoaId);
-}
+	return basePessoas.getPessoa(pessoaId);
+};
 
 exports.postPessoa = function (pessoa) {
-    return basePessoas.postPessoa(pessoa);
-}
+	return basePessoas.postPessoa(pessoa);
+};
 
 exports.deletePessoa = function (pessoaId) {
-    return basePessoas.deletePessoa(pessoaId);
-}
+	return basePessoas.deletePessoa(pessoaId);
+};
