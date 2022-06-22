@@ -4,9 +4,9 @@ const servicePessoas = require('../src/api/v1/services/servicePessoas');
 const geraString = require('../src/api/v1/utils/utilGenString');
 
 function geraPessoa() {
-	let pessoaId = geraString(1, 32, 'simples');
+	let pessoa_id = geraString(1, 32, 'simples');
 	let nome = geraString(1, 64, 'completo');
-	return { pessoaId, nome };
+	return { pessoa_id, nome };
 }
 
 async function request(caminho, method, data) {
@@ -14,7 +14,7 @@ async function request(caminho, method, data) {
 	return await axios({ url, method, data });
 }
 
-test('esperado: get pessoas', async () => {
+test('esperado: obtém (get) pessoas', async () => {
 
 	const pessoa1 = geraPessoa();
 	const pessoa2 = geraPessoa();
@@ -25,7 +25,6 @@ test('esperado: get pessoas', async () => {
 
 	const response = await request('/pessoas', 'get');
 	const pessoas = response.data;
-	console.log('pessoas:', pessoas);
 
 	expect(pessoas).toHaveLength(3);
 	await servicePessoas.deletePessoa(p1.pessoa_id);
@@ -34,22 +33,20 @@ test('esperado: get pessoas', async () => {
 
 });
 
-test.only('esperado: get pessoa (específica)', async () => {
+test('esperado: obtém (get) pessoa específica', async () => {
 
 	const pessoa1 = geraPessoa();
 	const p = await servicePessoas.postPessoa(pessoa1);
-	console.log('p (1):', p);
 
 	const response = await request(`/pessoas/${p.pessoa_id}`, 'get');
 	const pessoa = response.data;
-	console.log('pessoa:', pessoa);
 
 	expect(pessoa.pessoa_id).toBe(p.pessoa_id);
 	await servicePessoas.deletePessoa(p.pessoa_id);
 
 });
 
-test.only('esperado: cria nova pessoa', async () => {
+test('esperado: cria (post) nova pessoa', async () => {
 
 	const dados = geraPessoa();
 	
@@ -58,9 +55,34 @@ test.only('esperado: cria nova pessoa', async () => {
 
 	const responseGet = await request(`/pessoas/${pessoa_id}`, 'get');
 	const pessoa = responseGet.data;
-	console.log('pessoa:', pessoa);
-	expect(pessoa.pessoa_id).toBe(dados.pessoaId);
+	expect(pessoa.pessoa_id).toBe(dados.pessoa_id);
 	expect(pessoa.nome).toBe(dados.nome);
 	await servicePessoas.deletePessoa(pessoa.pessoa_id);
 
+});
+
+test('esperado: modifica (put) pessoa', async () => {
+	const pessoa = geraPessoa();
+	const p = await servicePessoas.postPessoa(pessoa);
+	
+	const novaPessoa = geraPessoa();
+	await request(`/pessoas/${p.pessoa_id}`, 'put', novaPessoa);
+	
+	const pessoaAtualizada = await servicePessoas.getPessoa(novaPessoa.pessoa_id);
+	expect(pessoaAtualizada.pessoa_id).toBe(novaPessoa.pessoa_id);
+	expect(pessoaAtualizada.nome).toBe(novaPessoa.nome);
+	await servicePessoas.deletePessoa(pessoaAtualizada.pessoa_id);
+
+});
+
+test('esperado: deleta pessoa', async () => {
+
+	const pessoa = geraPessoa();
+	const { pessoa_id } = await servicePessoas.postPessoa(pessoa);
+
+	const response = await request(`/pessoas/${pessoa_id}`, 'delete');
+	const pessoas = await servicePessoas.getPessoas();
+	expect(pessoas).toHaveLength(0);
+	expect(response.data).toBe('sucesso');
+	
 });
