@@ -19,16 +19,17 @@ router.post('/pessoas', async (req, res) => {
 	res.json(novaPessoa);
 });
 
-
-/*
-router.put('/pessoas', async (req, res) => {
-    
+router.put('/pessoas/:arroba', async (req, res) => {
+	const pessoa = req.body;
+	const pessoaAtualizada = await servicePessoas.putPessoa(req.params.arroba, pessoa);
+	res.json(pessoaAtualizada);
 });
 
 router.delete('/pessoas/:arroba', async (req, res) => {
-
+	const pessoaId = req.params.arroba;
+	const resultado = await servicePessoas.deletePessoa(pessoaId);
+	res.send(resultado);
 });
-*/
 
 
 /*

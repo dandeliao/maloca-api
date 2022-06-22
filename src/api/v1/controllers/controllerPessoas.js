@@ -16,7 +16,14 @@ function getPessoa(pessoaId) {
 function postPessoa(pessoa) {
 	return pool.query(
 		'INSERT INTO pessoas (pessoa_id, nome) VALUES ($1, $2) RETURNING pessoa_id',
-		[pessoa.pessoaId, pessoa.nome]
+		[pessoa.pessoa_id, pessoa.nome]
+	);
+}
+
+function putPessoa(pessoaId, pessoa) {
+	return pool.query(
+		'UPDATE pessoas SET pessoa_id = $1, nome = $2 WHERE pessoa_id = $3 RETURNING *',
+		[pessoa.pessoa_id, pessoa.nome, pessoaId]
 	);
 }
 
@@ -31,3 +38,4 @@ exports.getPessoas = getPessoas;
 exports.postPessoa = postPessoa;
 exports.deletePessoa = deletePessoa;
 exports.getPessoa = getPessoa;
+exports.putPessoa = putPessoa;
