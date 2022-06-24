@@ -8,27 +8,45 @@ router.get('/pessoas', async (req, res) => {
 });
 
 router.get('/pessoas/:arroba', async (req, res) => {
-	const pessoa = await servicePessoas.getPessoa(req.params.arroba);
-	res.json(pessoa);
+	try {
+		const pessoa = await servicePessoas.getPessoa(req.params.arroba);
+		res.json(pessoa);
+	} catch (erro) {
+		res.status(404).send(erro.message);
+	}
+	
 });
 
-
 router.post('/pessoas', async (req, res) => {
-	const pessoa = req.body;
-	const novaPessoa = await servicePessoas.postPessoa(pessoa);
-	res.json(novaPessoa);
+	try {
+		const pessoa = req.body;
+		const novaPessoa = await servicePessoas.postPessoa(pessoa);
+		res.status(201).json(novaPessoa);
+	} catch (erro) {
+		res.status(409).send(erro.message);
+	}
 });
 
 router.put('/pessoas/:arroba', async (req, res) => {
-	const pessoa = req.body;
-	const pessoaAtualizada = await servicePessoas.putPessoa(req.params.arroba, pessoa);
-	res.json(pessoaAtualizada);
+	try {
+		const pessoa = req.body;
+		await servicePessoas.putPessoa(req.params.arroba, pessoa);
+		res.status(204).end();
+	} catch (erro) {
+		res.status(404).send(erro.message);
+	}
+	
 });
 
 router.delete('/pessoas/:arroba', async (req, res) => {
-	const pessoaId = req.params.arroba;
-	const resultado = await servicePessoas.deletePessoa(pessoaId);
-	res.send(resultado);
+	try {
+		const pessoaId = req.params.arroba;
+		await servicePessoas.deletePessoa(pessoaId);
+		res.status(204).end();
+	} catch (erro) {
+		res.status(404).send(erro.message);
+	}
+	
 });
 
 

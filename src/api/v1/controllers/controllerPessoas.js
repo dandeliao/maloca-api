@@ -15,7 +15,7 @@ function getPessoa(pessoaId) {
 
 function postPessoa(pessoa) {
 	return pool.query(
-		'INSERT INTO pessoas (pessoa_id, nome) VALUES ($1, $2) RETURNING pessoa_id',
+		'INSERT INTO pessoas (pessoa_id, nome) VALUES ($1, $2) RETURNING *',
 		[pessoa.pessoa_id, pessoa.nome]
 	);
 }
