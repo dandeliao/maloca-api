@@ -24,3 +24,11 @@ CREATE TABLE paginas_pessoais(
     criacao             TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(pessoa_id, pagina_pessoal_id)
 );
+
+CREATE TABLE sessoes (
+    sid VARCHAR COLLATE "default",
+    sess json NOT NULL,
+    expire timestamp(6) NOT NULL,
+    CONSTRAINT "session_pkey" PRIMARY KEY ("sid")
+);
+CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON sessoes ("expire");

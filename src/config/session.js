@@ -1,21 +1,24 @@
-let session = require('express-session');
-const pool = require('./database');
-const PostgreSqlStore = require('connect-pg-simple')(session);
+/* const pool = require('./database');
+const PostgreSqlStore = require('connect-pg-simple')(session); */
 
-const sessionStore = new PostgreSqlStore({
+require('dotenv').config();
+
+// indica tabela no banco de dados para guardar sessões
+/* const sessionStore = new PostgreSqlStore({
 	pool: pool,
 	tableName: 'sessoes'
-});
+}); */
 
-session({
+// objeto de configuração das sessões
+const sessionConfig = {
 	// eslint-disable-next-line no-undef
 	secret: process.env.SESSION_SECRET,
 	resave: false,
 	saveUninitialized: true,
-	store: sessionStore,
+	//store: sessionStore,
 	cookie: {
 		maxAge: 1000 * 60 * 60 * 24 * 14 // 14 dias
 	}
-});
+};
 
-module.exports = session;
+module.exports = sessionConfig;
