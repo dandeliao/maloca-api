@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const axios = require('axios');
 const servicePessoas = require('../src/api/v1/services/servicePessoas');
-const geraString = require('../src/api/v1/utils/utilGenString');
+const geraString = require('../src/utils/utilGenString');
 
 // ---
 // auxiliares
