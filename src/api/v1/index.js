@@ -2,13 +2,13 @@ const express = require('express');
 const rotas = require('./routes/routePessoas');
 const errorHandler = require('./middlewares/errorHandler');
 const session = require('express-session');
-const sessionConfig = require('../../config/session');
-const PostgreSqlStore = require('connect-pg-simple')(session); // deve ser movido para /src/config/session.js
-const pool = require('../../config/database'); // deve ser movido para /src/config/session.js
+const sessionConfig = require('../../config/session'); // objeto com configurações de sessão
+const PostgreSqlStore = require('connect-pg-simple')(session); // para armazenamento de sessão
+const pool = require('../../config/database'); // para armazenamento de sesssão
 
 const app = express();
 
-// --- este trecho (sessionStore e sessionConfig.store) deve ser movido para /src/config/session.js
+// armazenamento de sessão
 const sessionStore = new PostgreSqlStore({
 	pool: pool,
 	tableName: 'sessoes'
@@ -22,4 +22,5 @@ app.use(session(sessionConfig));
 app.use('/', rotas);
 app.use(errorHandler);
 
+// roda servidor
 app.listen(4000);

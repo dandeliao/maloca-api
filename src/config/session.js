@@ -1,23 +1,16 @@
-/* const pool = require('./database');
-const PostgreSqlStore = require('connect-pg-simple')(session); */
-
+/* eslint-disable no-undef */
 require('dotenv').config();
 
-// indica tabela no banco de dados para guardar sessões
-/* const sessionStore = new PostgreSqlStore({
-	pool: pool,
-	tableName: 'sessoes'
-}); */
-
-// objeto de configuração das sessões
+// objeto de configuração das sessões, para uso com express-session
 const sessionConfig = {
-	// eslint-disable-next-line no-undef
 	secret: process.env.SESSION_SECRET,
 	resave: false,
 	saveUninitialized: true,
-	//store: sessionStore,
+	//store: é definido no index.js
 	cookie: {
-		maxAge: 1000 * 60 * 60 * 24 * 14 // 14 dias
+		maxAge: 1000 * 60 * 60 * 24 * 14, // 14 dias
+		sameSite: true,
+		secure: false // habilitar quando ativar https
 	}
 };
 
