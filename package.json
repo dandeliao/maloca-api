@@ -20,6 +20,8 @@
     "jest": "^28.1.1",
     "joi": "^17.4.2",
     "mv": "^2.1.1",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
     "pg": "^8.7.3"
   },
   "devDependencies": {

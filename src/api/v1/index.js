@@ -5,6 +5,8 @@ const session = require('express-session');
 const sessionConfig = require('../../config/session'); // objeto com configurações de sessão
 const PostgreSqlStore = require('connect-pg-simple')(session); // para armazenamento de sessão
 const pool = require('../../config/database'); // para armazenamento de sesssão
+const passport = require('passport');
+require('../../config/passport');
 
 const app = express();
 
@@ -19,6 +21,8 @@ sessionConfig.store = sessionStore;
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(session(sessionConfig));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/', rotas);
 app.use(errorHandler);
 
