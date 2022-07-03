@@ -36,7 +36,7 @@ function geraSenha() {
 }
 
 function geraEmail() {
-	let email = geraString(1, 10, 'simples');
+	let email = geraString(1, 10, 'simples') + '@' + geraString(3, 6, 'simples') + '.' + geraString(2, 3, 'simples');
 	return email;
 }
 
