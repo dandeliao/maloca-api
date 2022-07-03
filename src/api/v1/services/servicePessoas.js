@@ -1,4 +1,5 @@
 const dataPessoas = require('../data/dataPessoas');
+const dataAutenticacao = require('../data/dataAutenticacao');
 
 exports.getPessoas = async function () {
 	const objetoPessoas = await dataPessoas.getPessoas();
@@ -11,13 +12,6 @@ exports.getPessoa = async function (pessoaId) {
 	return objetoPessoa.rows[0];
 };
 
-exports.postPessoa = async function (pessoa) {
-	const pessoaExistente = await dataPessoas.getPessoa(pessoa.pessoa_id);
-	if (pessoaExistente.rowCount !== 0) throw new Error('pessoa já existe');
-	const objetoPessoaId = await dataPessoas.postPessoa(pessoa);
-	return objetoPessoaId.rows[0];
-};
-
 exports.putPessoa = async function (pessoaId, pessoa) {
 	const objetoPessoa = await dataPessoas.putPessoa(pessoaId, pessoa);
 	if (objetoPessoa.rowCount === 0) throw new Error('pessoa não encontrada');
@@ -25,7 +19,9 @@ exports.putPessoa = async function (pessoaId, pessoa) {
 };
 
 exports.deletePessoa = async function (pessoaId) {
-	const veredito = await dataPessoas.deletePessoa(pessoaId);
-	if (veredito.rowCount === 0) throw new Error('pessoa não encontrada');
-	return veredito.rowCount;
+	const vereditoSegredos = await dataAutenticacao.deleteSegredos(pessoaId);
+	const vereditoPessoas = await dataPessoas.deletePessoa(pessoaId);
+	if (vereditoPessoas.rowCount === 0) throw new Error('pessoa não encontrada');
+	if (vereditoSegredos.rowCount === 0) throw new Error('dados de email e senha não encontrados');
+	return vereditoPessoas.rowCount;
 };

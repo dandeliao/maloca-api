@@ -1,5 +1,6 @@
 const express = require('express');
-const rotas = require('./routes/routePessoas');
+const rotasPessoas = require('./routes/routePessoas');
+const rotasAutenticacao = require('./routes/routeAutenticacao');
 const errorHandler = require('./middlewares/errorHandler');
 const session = require('express-session');
 const sessionConfig = require('../../config/session'); // objeto com configurações de sessão
@@ -23,7 +24,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/', rotas);
+app.use('/pessoas', rotasPessoas);
+app.use('/autenticacao', rotasAutenticacao);
 app.use(errorHandler);
 
 // roda servidor
