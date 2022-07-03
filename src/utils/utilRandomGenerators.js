@@ -24,4 +24,25 @@ function geraString(tamanhoMin, tamanhoMax, tipo) {
 
 }
 
-module.exports = geraString;
+function geraPessoa() {
+	let pessoa_id = geraString(1, 32, 'simples');
+	let nome = geraString(1, 64, 'completo');
+	return { pessoa_id, nome };
+}
+
+function geraSenha() {
+	let senha = geraString(6, 15, 'simples');
+	return senha;
+}
+
+function geraEmail() {
+	let email = geraString(1, 10, 'simples');
+	return email;
+}
+
+module.exports = {
+	geraString,
+	geraPessoa,
+	geraSenha,
+	geraEmail
+};
