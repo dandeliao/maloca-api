@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const serviceAutenticacao = require('../services/serviceAutenticacao');
+const passport = require('passport');
 
 router.post('/registro', async (req, res, next) => {
 	try {
@@ -18,6 +19,25 @@ router.post('/registro', async (req, res, next) => {
 	} catch (erro) {
 		next(erro);
 	}
+});
+
+router.post('/login', passport.authenticate('local', {
+	failureRedirect: '/autenticacao/login-fracasso',
+	successRedirect: '/autenticacao/login-sucesso'
+}));
+
+router.get('/login-sucesso', (req, res, next) => {
+	res.status(200).json({
+		mensagem: 'login realizado com sucesso',
+		autenticade: true
+	});
+});
+
+router.get('/login-fracasso', (req, res, next) => {
+	res.status(401).json({
+		mensagem: 'pessoa ou senha não correspondem aos registros',
+		autenticade: false
+	});
 });
 
 module.exports = router;

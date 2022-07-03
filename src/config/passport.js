@@ -13,18 +13,18 @@ const customFields = {
 passport.use(new LocalStrategy(customFields,
 	async function(username, password, pronto) {
 		try {
-			const pessoa = await pool.query(
+			const segredos = await pool.query(
 				// esta query deve ter os dados validados antes.
 				// 		além disso, deve ser feita pela camada 'data'(?).
 				//		reavaliar estrutura de diretórios do projeto.
-				'SELECT * FROM pessoas WHERE pessoa_id=$1',
+				'SELECT * FROM autenticacao WHERE pessoa_id=$1',
 				[username]
 			);
-			if(pessoa.rows.length >0) {
-				const p = pessoa.rows[0];
-				const isValid = validaSenha(password, p.hash, p.salt);
+			if(segredos.rows.length > 0) {
+				const segr = segredos.rows[0];
+				const isValid = validaSenha(password, segr.hash, segr.salt);
 				if (isValid) {
-					return pronto(null, p);
+					return pronto(null, segr);
 				} else {
 					return pronto(null, false);
 				}

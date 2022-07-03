@@ -41,6 +41,34 @@ test('esperado: não cria nova pessoa (409: conflito)', async () => {
 
 });
 
+// rota login
+
+test('esperado: login realizado com sucesso (200)', async () => {
+
+	const pessoa = geraPessoa();
+	pessoa.email = geraEmail();
+	pessoa.senha = geraSenha();
+	const segredos = await serviceAutenticacao.postRegistro(pessoa);
+
+	const response = await request('/autenticacao/login', 'post', pessoa);
+
+	expect(response.status).toBe(200);
+	await servicePessoas.deletePessoa(segredos.pessoa_id);
+
+});
+
+test('esperado: login falhou (401)', async () => {
+
+	const pessoa = geraPessoa();
+	pessoa.email = geraEmail();
+	pessoa.senha = geraSenha();
+
+	const response = await request('/autenticacao/login', 'post', pessoa);
+
+	expect(response.status).toBe(401);
+
+});
+
 // rotas não permitidas sem autenticação
 
 test('esperado: não obtém pessoas, acesso negado (401)', async () => {
