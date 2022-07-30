@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const rotasPessoas = require('./routes/routePessoas');
 const rotasAutenticacao = require('./routes/routeAutenticacao');
 const errorHandler = require('./middlewares/errorHandler');
@@ -21,6 +22,10 @@ sessionConfig.store = sessionStore;
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cors({
+	origin: 'http://localhost:4200',
+	credentials: true
+}));
 app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
