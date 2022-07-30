@@ -40,4 +40,19 @@ router.get('/login-fracasso', (req, res, next) => {
 	});
 });
 
+router.get('/logout', (req, res, next) => {
+	req.logout(err => {
+		if (err) {
+			res.status(500).json({
+				mensagem: 'erro ao fazer o logout'
+			});
+		} else {
+			res.status(200).json({
+				mensagem: 'logout realizado com sucesso',
+				autenticade: false
+			});
+		}
+	});
+});
+
 module.exports = router;
