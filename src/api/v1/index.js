@@ -33,5 +33,14 @@ app.use('/pessoas', rotasPessoas);
 app.use('/autenticacao', rotasAutenticacao);
 app.use(errorHandler);
 
+// rota padrão fornece informações sobre pessoa logada
+app.get('/', async (req, res, next) => {
+	try {
+		res.json(req.user);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
 // roda servidor
 app.listen(4000);
