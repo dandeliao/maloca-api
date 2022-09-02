@@ -18,8 +18,7 @@ CREATE TABLE autenticacao(
 CREATE TABLE paginas_pessoais(
     pessoa_id           VARCHAR(32) REFERENCES pessoas(pessoa_id),
     pagina_pessoal_id   BIGSERIAL,
-    arquivo_html        VARCHAR(255),
-    nome                VARCHAR(64),
+    titulo              VARCHAR(64),
     publica             BOOLEAN DEFAULT false,
     criacao             TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(pessoa_id, pagina_pessoal_id)
