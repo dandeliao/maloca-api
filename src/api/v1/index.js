@@ -36,7 +36,15 @@ app.use(errorHandler);
 // rota padrão fornece informações sobre pessoa logada
 app.get('/', async (req, res, next) => {
 	try {
-		res.json(req.user);
+		if (req.user) {
+			req.user.logade = true;
+			res.json(req.user);
+		} else {
+			res.json({
+				logade: false,
+			});
+		}
+		
 	} catch (erro) {
 		next(erro);
 	}
