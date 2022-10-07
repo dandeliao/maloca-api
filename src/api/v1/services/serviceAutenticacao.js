@@ -19,6 +19,7 @@ exports.postRegistro = async function (dados) {
 	};
 	const arrayNovaPessoa = await dataPessoas.postPessoa(pessoa);
 	await dataAutenticacao.postSegredos(arrayNovaPessoa.rows[0].pessoa_id, segredos);
+	// cria pastas pessoais
 	const pastaPessoal = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', `${dados.pessoa_id}`);
 	if (!fs.existsSync(pastaPessoal)){
 		fs.mkdirSync(pastaPessoal);
@@ -29,5 +30,8 @@ exports.postRegistro = async function (dados) {
 	if (!fs.existsSync(path.join(pastaPessoal, 'paginas'))){
 		fs.mkdirSync(path.join(pastaPessoal, 'paginas'));
 	}
+	// copia avatar padrão para pasta pessoal / imagens
+	const pastaDefault = path.join(path.resolve(__dirname, '../../../../static'), 'default');
+	fs.copyFileSync(path.join(pastaDefault, 'avatar.jpg'), path.join(pastaPessoal, 'imagens', 'avatar.jpg'));
 	return arrayNovaPessoa.rows[0];
 };
