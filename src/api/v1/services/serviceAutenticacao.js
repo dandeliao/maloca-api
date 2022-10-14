@@ -30,8 +30,10 @@ exports.postRegistro = async function (dados) {
 	if (!fs.existsSync(path.join(pastaPessoal, 'paginas'))){
 		fs.mkdirSync(path.join(pastaPessoal, 'paginas'));
 	}
-	// copia avatar padrão para pasta pessoal / imagens
-	const pastaDefault = path.join(path.resolve(__dirname, '../../../../static'), 'default');
-	fs.copyFileSync(path.join(pastaDefault, 'avatar.jpg'), path.join(pastaPessoal, 'imagens', 'avatar.jpg'));
+	// sorteia e copia avatar padrão para pasta pessoal / imagens
+	const pastaDefault = path.join(path.resolve(__dirname, '../../../../static'), 'default', 'avatarPessoas');
+	const numArquivos = fs.readdirSync(pastaDefault).length;
+	const sorteio = Math.floor(Math.random() * (numArquivos - 1));
+	fs.copyFileSync(path.join(pastaDefault, `${sorteio}.jpg`), path.join(pastaPessoal, 'imagens', 'avatar.jpg'));
 	return arrayNovaPessoa.rows[0];
 };
