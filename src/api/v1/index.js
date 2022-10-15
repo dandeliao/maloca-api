@@ -1,8 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+
 const rotasPessoas = require('./routes/routePessoas');
 const rotasAutenticacao = require('./routes/routeAutenticacao');
+const rotasComunidades = require('./routes/routeComunidades');
+
 const errorHandler = require('./middlewares/errorHandler');
+
 const session = require('express-session');
 const sessionConfig = require('../../config/session'); // objeto com configurações de sessão
 const PostgreSqlStore = require('connect-pg-simple')(session); // para armazenamento de sessão
@@ -29,6 +33,7 @@ app.use(cors({
 app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use('/comunidades', rotasComunidades);
 app.use('/pessoas', rotasPessoas);
 app.use('/autenticacao', rotasAutenticacao);
 app.use(errorHandler);

@@ -2,19 +2,19 @@ const express = require('express');
 const router = express.Router();
 const taAutenticade = require('../middlewares/authentication');
 const path = require('path');
-const servicePessoas = require('../services/servicePessoas');
-const servicePaginasPessoais = require('../services/servicePaginasPessoais');
-const serviceObjetosPessoais = require('../services/serviceObjetosPessoais');
+const serviceComunidades = require('../services/serviceComunidades');
+const servicePaginasComunitarias = require('../services/servicePaginasComunitarias');
+//const serviceObjetosPessoais = require('../services/serviceObjetosPessoais');
 
 router.use(taAutenticade);
 
 // ---
-// dados gerais das pessoas
+// dados gerais das comunidades
 
 router.get('/', async (req, res, next) => {
 	try {
-		const pessoas = await servicePessoas.getPessoas();
-		res.json(pessoas);
+		const comunidades = await serviceComunidades.getComunidades();
+		res.json(comunidades);
 	} catch (erro) {
 		next(erro);
 	}
@@ -23,8 +23,8 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:arroba', async (req, res, next) => {
 	try {
-		const pessoa = await servicePessoas.getPessoa(req.params.arroba);
-		res.json(pessoa);
+		const comunidade = await serviceComunidades.getComunidade(req.params.arroba);
+		res.json(comunidade);
 	} catch (erro) {
 		next(erro);
 	}
@@ -33,8 +33,9 @@ router.get('/:arroba', async (req, res, next) => {
 
 router.put('/:arroba', async (req, res, next) => {
 	try {
-		const pessoa = req.body;
-		await servicePessoas.putPessoa(req.params.arroba, pessoa);
+		const dados = req.body;
+		const pessoaId = req.user.pessoa_id;
+		await serviceComunidades.putComunidade(dados, pessoaId);
 		res.status(204).end();
 	} catch (erro) {
 		next(erro);
@@ -42,10 +43,21 @@ router.put('/:arroba', async (req, res, next) => {
 	
 });
 
+router.post('/', async (req, res, next) => {
+	try {
+		const dados = req.body;
+		const pessoaId = req.user.pessoa_id;
+		const comunidade = await serviceComunidades.postComunidade(dados, pessoaId);
+		res.status(201).json(comunidade);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
 router.delete('/:arroba', async (req, res, next) => {
 	try {
-		const pessoaId = req.params.arroba;
-		await servicePessoas.deletePessoa(pessoaId);
+		const comunidadeId = req.params.arroba;
+		await serviceComunidades.deleteComunidade(comunidadeId, req.user.pessoa_id);
 		res.status(204).end();
 	} catch (erro) {
 		next(erro);
@@ -54,11 +66,12 @@ router.delete('/:arroba', async (req, res, next) => {
 });
 
 // ---
-// páginas pessoais
+// páginas comunitárias
 
 router.get('/:arroba/paginas', async (req, res, next) => {
 	try {
-		const paginas = await servicePaginasPessoais.getPaginasPessoais(req.params.arroba);
+		console.log('req.user:', req.user);
+		const paginas = await servicePaginasComunitarias.getPaginasComunitarias(req.params.arroba, req.user.pessoa_id);
 		res.json(paginas);
 	} catch (erro) {
 		next(erro);
@@ -68,8 +81,7 @@ router.get('/:arroba/paginas', async (req, res, next) => {
 
 router.get('/:arroba/:pagina', async (req, res, next) => {
 	try {
-		// falta middleware (ou usar o service) para verificar autorização (páginas públicas podem ser vistas por todes, páginas privadas só por quem criou)
-		const caminhoDoArquivo = await servicePaginasPessoais.getPaginaPessoal(req.params.arroba, req.params.pagina);
+		const caminhoDoArquivo = await servicePaginasComunitarias.getPaginaComunitaria(req.params.arroba, req.params.pagina, req.user.pessoa_id);
 		res.sendFile(caminhoDoArquivo);
 	} catch (erro) {
 		next(erro);
@@ -79,15 +91,15 @@ router.get('/:arroba/:pagina', async (req, res, next) => {
 router.post('/:arroba/paginas', async (req, res, next) => {
 	try {
 		const dados = {
-			pessoa_id: req.params.arroba,
+			comunidade_id: req.params.arroba,
 			titulo: req.body.titulo,
 			publica: req.body.publica,
 			html: req.body.html
 		};
 
-		// falta verificar autorização (com base na pessoa autenticada), validar dados e sanitizar o html
+		// falta validar dados e sanitizar o html
 
-		const dadosCriados = await servicePaginasPessoais.createPaginaPessoal(dados);
+		const dadosCriados = await servicePaginasComunitarias.createPaginaComunitaria(dados, req.user.pessoa_id);
 		res.status(201).json(dadosCriados);
 
 	} catch (erro) {
@@ -98,16 +110,16 @@ router.post('/:arroba/paginas', async (req, res, next) => {
 router.put('/:arroba/:pagina', async (req, res, next) => {
 	try {
 		const dados = {
-			pessoa_id: req.params.arroba,
-			pagina_pessoal_id: req.params.pagina,
+			comunidade_id: req.params.arroba,
+			pagina_comunitaria_id: req.params.pagina,
 			titulo: req.body.titulo,
 			publica: req.body.publica,
 			html: req.body.html
 		};
 
-		// falta verificar autorização (com base na pessoa autenticada), validar dados e sanitizar o html
+		// falta validar dados e sanitizar o html
 
-		const dadosModificados = await servicePaginasPessoais.editPaginaPessoal(dados);
+		const dadosModificados = await servicePaginasComunitarias.editPaginaComunitaria(dados, req.user.pessoa_id);
 		res.status(200).json(dadosModificados);
 
 	} catch (erro) {
@@ -118,13 +130,11 @@ router.put('/:arroba/:pagina', async (req, res, next) => {
 router.delete('/:arroba/:pagina', async (req, res, next) => {
 	try {
 		const dados = {
-			pessoa_id: req.params.arroba,
-			pagina_pessoal_id: req.params.pagina
+			comunidade_id: req.params.arroba,
+			pagina_comunitaria_id: req.params.pagina
 		};
 
-		// falta verificar autorização (com base na pessoa autenticada) e validar dados
-
-		await servicePaginasPessoais.deletePaginaPessoal(dados);
+		await servicePaginasComunitarias.deletePaginaComunitaria(dados, req.user.pessoa_id);
 		res.status(204).end();
 
 	} catch (erro) {
@@ -133,23 +143,22 @@ router.delete('/:arroba/:pagina', async (req, res, next) => {
 });
 
 // ---
-// objetos pessoais
+// objetos comunitários
 
 router.get('/:arroba/objetos/avatar', async (req, res, next) => {
 	try {
-		const dadosDaPessoa = await servicePessoas.getPessoa(req.params.arroba);
-		const nomeDoArquivo = dadosDaPessoa.avatar;
-		console.log('nomeDoArquivo:', nomeDoArquivo);
-		const caminhoDoArquivo = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', req.params.arroba, 'imagens', nomeDoArquivo);
+		const dadosDaComunidade = await serviceComunidades.getComunidade(req.params.arroba);
+		const nomeDoArquivo = dadosDaComunidade.avatar;
+		const caminhoDoArquivo = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', req.params.arroba, 'imagens', nomeDoArquivo);
 		res.sendFile(caminhoDoArquivo);
 	} catch (erro) {
 		next(erro);
 	}
 });
 
-router.get('/:arroba/objetos/comunidades', async (req, res, next) => {
+/* router.get('/:arroba/objetos/pessoas', async (req, res, next) => {
 	try {
-		const comunidades = await serviceObjetosPessoais.getComunidadesPessoais(req.params.arroba);
+		const comunidades = await servicePessoas.getComunidadesPessoais(req.params.arroba);
 		res.json(comunidades); 
 	} catch (erro) {
 		next(erro);
@@ -173,6 +182,6 @@ router.put('/:arroba/objetos/comunidades/:comunidadeId'), async (req, res, next)
 	} catch (erro) {
 		next(erro);
 	}
-};
+}; */
 
 module.exports = router;
