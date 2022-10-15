@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const rotasPessoas = require('./routes/routePessoas');
 const rotasAutenticacao = require('./routes/routeAutenticacao');
-const rotasObjetosPessoais = require('./routes/routeObjetosPessoais');
 const errorHandler = require('./middlewares/errorHandler');
 const session = require('express-session');
 const sessionConfig = require('../../config/session'); // objeto com configurações de sessão
@@ -32,7 +31,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/pessoas', rotasPessoas);
 app.use('/autenticacao', rotasAutenticacao);
-app.use('/pessoas/objetos', rotasObjetosPessoais);
 app.use(errorHandler);
 
 // rota padrão fornece informações sobre pessoa logada
