@@ -5,7 +5,6 @@ const fs = require('fs');
 
 exports.getPaginasComunitarias = async function (comunidadeId, pessoaId) {
 	const dadosPessoaComunidade = await dataPessoasComunidades.getPessoaComunidade(pessoaId, comunidadeId);
-	console.log('dadosPessoaComunidade', dadosPessoaComunidade);
 	if (dadosPessoaComunidade.rows[0].ver) {
 		const objetoPaginas = await dataPaginasComunitarias.getPaginasComunitarias(comunidadeId);
 		return objetoPaginas.rows;
@@ -46,6 +45,7 @@ exports.editPaginaComunitaria = async function (dados, pessoaId) {
 	if (dadosPessoaComunidade.rows[0].editar) {
 		const dataResponse = await dataPaginasComunitarias.editPaginaComunitaria(dados);
 		const paginaId = dataResponse.rows[0].pagina_comunitaria_id;
+		const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${dados.comunidade_id}`, 'paginas', `${paginaId}.html`);
 		const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${dados.coumunidade_id}`, 'paginas', `${paginaId}.html`);
 		fs.writeFile(caminho, dados.html, erro => {
 			if (erro) {

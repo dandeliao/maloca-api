@@ -70,7 +70,6 @@ router.delete('/:arroba', async (req, res, next) => {
 
 router.get('/:arroba/paginas', async (req, res, next) => {
 	try {
-		console.log('req.user:', req.user);
 		const paginas = await servicePaginasComunitarias.getPaginasComunitarias(req.params.arroba, req.user.pessoa_id);
 		res.json(paginas);
 	} catch (erro) {
