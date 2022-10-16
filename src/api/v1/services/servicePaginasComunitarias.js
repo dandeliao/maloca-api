@@ -46,7 +46,7 @@ exports.editPaginaComunitaria = async function (dados, pessoaId) {
 		const dataResponse = await dataPaginasComunitarias.editPaginaComunitaria(dados);
 		const paginaId = dataResponse.rows[0].pagina_comunitaria_id;
 		const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${dados.comunidade_id}`, 'paginas', `${paginaId}.html`);
-		const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${dados.coumunidade_id}`, 'paginas', `${paginaId}.html`);
+		console.log('caminho:', caminho);
 		fs.writeFile(caminho, dados.html, erro => {
 			if (erro) {
 				throw erro;
