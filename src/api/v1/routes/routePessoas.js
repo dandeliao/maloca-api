@@ -156,9 +156,10 @@ router.get('/:arroba/objetos/comunidades', async (req, res, next) => {
 	}
 });
 
-router.get('/:arroba/objetos/comunidades/:comunidadeId'), async (req, res, next) => {
+router.get('/:arroba/objetos/comunidades?id=valor'), async (req, res, next) => {
 	try {
-		const pessoaComunidade = await serviceObjetosPessoais.getComunidadePessoal(req.params.arroba, req.params.comunidadeId);
+		console.log('entrou na rota pessoacomunidade');
+		const pessoaComunidade = await serviceObjetosPessoais.getComunidadePessoal(req.params.arroba, req.query.id);
 		res.json(pessoaComunidade);
 	} catch (erro) {
 		next(erro);

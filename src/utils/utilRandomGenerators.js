@@ -40,9 +40,24 @@ function geraEmail() {
 	return email;
 }
 
+function geraBenJor() {
+	let benjores = [
+		'Por que é proibido pisar na grama?',
+		'Vem que eu quero ver você sambar',
+		'Os alquimistas estão chegando',
+		'O que está no alto é como o que está embaixo',
+		'Errare humanum est',
+		'Seriam os deuses astronautas?',
+		'Mas que nada, sai da minha frente que eu quero passar'
+	];
+	let sorteio = Math.floor(Math.random() * (benjores.length));
+	return benjores[sorteio];
+}
+
 module.exports = {
 	geraString,
 	geraPessoa,
 	geraSenha,
-	geraEmail
+	geraEmail,
+	geraBenJor
 };

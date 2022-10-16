@@ -8,8 +8,6 @@ router.post('/registro', async (req, res, next) => {
 		// falta fazer validação dos dados antes
 		// (qual a camada responsável por chamar a validação?)
 		
-		// falta criar uma página pessoal padrão
-
 		const pessoa = {
 			pessoa_id: req.body.pessoa_id,
 			nome: req.body.nome,
