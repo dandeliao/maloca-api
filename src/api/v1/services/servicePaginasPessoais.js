@@ -4,7 +4,10 @@ const fs = require('fs');
 
 exports.getPaginasPessoais = async function (pessoaId) {
 	const objetoPaginas = await dataPaginasPessoais.getPaginasPessoais(pessoaId);
-	return objetoPaginas.rows;
+	const sortedPaginas = await objetoPaginas.rows.sort((a, b) => {
+		return a.pagina_pessoal_id - b.pagina_pessoal_id;
+	});
+	return sortedPaginas;
 };
 
 exports.getPaginaPessoal = async function (pessoaId, paginaId) {

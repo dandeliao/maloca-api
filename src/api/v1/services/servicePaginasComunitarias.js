@@ -7,7 +7,11 @@ exports.getPaginasComunitarias = async function (comunidadeId, pessoaId) {
 	const dadosPessoaComunidade = await dataPessoasComunidades.getPessoaComunidade(pessoaId, comunidadeId);
 	if (dadosPessoaComunidade.rows[0].ver) {
 		const objetoPaginas = await dataPaginasComunitarias.getPaginasComunitarias(comunidadeId);
-		return objetoPaginas.rows;
+		const sortedPaginas = await objetoPaginas.rows.sort((a, b) => {
+			return a.pagina_comunitaria_id - b.pagina_comunitaria_id;
+		});
+		console.log('sortedPaginas:', sortedPaginas);
+		return sortedPaginas;
 	} else {
 		throw new Error ('pessoa não tem habilidade para acessar este recurso');
 	}
