@@ -1,6 +1,7 @@
 const dataComunidades = require('../data/dataComunidades');
 const dataPessoasComunidades = require('../data/dataPessoasComunidades');
 const serviceObjetosPessoais = require('./serviceObjetosPessoais');
+const servicePaginasComunitarias = require('./servicePaginasComunitarias');
 const fs = require('fs');
 const path = require('path');
 
@@ -16,10 +17,11 @@ exports.getComunidade = async function (comunidadeId) {
 };
 
 exports.postComunidade = async function (dados, pessoaId) {
-	
+
 	// verifica habilidade de participar no servidor
 	const superHabilidades = await serviceObjetosPessoais.getComunidadePessoal(pessoaId, 'maloca');
 	if (superHabilidades.participar) {
+	if (superHabilidades[0].participar) {
 
 		// verifica se comunidade com esse id já existe
 		const comunidadeExistente = await dataComunidades.getComunidade(dados.comunidade_id);
