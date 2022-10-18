@@ -45,7 +45,7 @@ exports.postComunidade = async function (dados, pessoaId) {
 		await dataPessoasComunidades.postPessoaComunidade(pessoaId, arrayNovaComunidade.rows[0].comunidade_id, habilidades);
 		
 		// cria pastas comunitárias
-		const pastaComunitaria = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${dados.comunidade_id}`);
+		const pastaComunitaria = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${arrayNovaComunidade.rows[0].comunidade_id}`);
 		if (!fs.existsSync(pastaComunitaria)){
 			fs.mkdirSync(pastaComunitaria);
 		}
@@ -56,9 +56,82 @@ exports.postComunidade = async function (dados, pessoaId) {
 			fs.mkdirSync(path.join(pastaComunitaria, 'paginas'));
 		}
 		
-		// copia avatar padrão para pasta comunitária / imagens
-		const pastaDefault = path.join(path.resolve(__dirname, '../../../../static'), 'default');
-		fs.copyFileSync(path.join(pastaDefault, 'avatar_comum.jpg'), path.join(pastaComunitaria, 'imagens', 'avatar_comum.jpg'));
+		// sorteia e copia avatar padrão para pasta comunitária / imagens
+		const pastaDefault = path.join(path.resolve(__dirname, '../../../../static'), 'default', 'avatarComunidades');
+		const numArquivos = fs.readdirSync(pastaDefault).length;
+		const sorteio = Math.floor(Math.random() * (numArquivos));
+		fs.copyFileSync(path.join(pastaDefault, `${sorteio}.jpg`), path.join(pastaComunitaria, 'imagens', 'avatar_comum.jpg'));
+
+		// sorteia e copia fundo padrão para pasta comunitária / imagens
+		// >> a fazer <<
+
+		// cria página comunitária padrão
+		const dadosPaginaPadrao = {
+			comunidade_id: arrayNovaComunidade.rows[0].comunidade_id,
+			titulo: 'início',
+			publica: true,
+			html: `
+			<div id="container">
+
+			<header>
+			<img id="avatar" src="http://localhost:4000/comunidades/${dados.comunidade_id}/objetos/avatar">
+			<div>
+			<h1>${dados.nome}</h1>
+			<p>comunidade aberta</p>
+			</div>
+			</header>
+
+			<br>
+
+			<p>Em construção...</p>
+
+			<m-bloco>
+			<h2>Pessoas:</h2>
+			<m-pessoas></m-pessoas>
+			</m-bloco>
+
+			</div>
+
+
+			<style>
+			h1 {
+			margin: 1.3rem;
+			margin-bottom: 0.3rem;
+			}
+
+			h2 {
+			margin-top: 0.5rem;
+			margin-bottom: 1.5rem;
+
+			}
+
+
+			p {
+			margin: 0.5rem 1.3rem;
+
+			}
+
+
+			#container {
+			display: block;
+			max-width: 720px;
+			margin: 0 auto;
+			text-align: center;
+			}
+			header {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			}
+			#avatar {
+			border-radius: 100%;
+			max-width: 7rem;
+			max-height: 7rem;
+			}
+			</style>
+			`
+		};
+		await servicePaginasComunitarias.createPaginaComunitaria(dadosPaginaPadrao, pessoaId);
 
 		return arrayNovaComunidade.rows[0];
 	} else {
