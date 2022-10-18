@@ -4,7 +4,7 @@ const taAutenticade = require('../middlewares/authentication');
 const path = require('path');
 const serviceComunidades = require('../services/serviceComunidades');
 const servicePaginasComunitarias = require('../services/servicePaginasComunitarias');
-//const serviceObjetosPessoais = require('../services/serviceObjetosPessoais');
+const serviceObjetosComunitarios = require('../services/serviceObjetosComunitarios');
 
 router.use(taAutenticade);
 
@@ -155,15 +155,16 @@ router.get('/:arroba/objetos/avatar', async (req, res, next) => {
 	}
 });
 
-/* router.get('/:arroba/objetos/pessoas', async (req, res, next) => {
+router.get('/:arroba/objetos/pessoas', async (req, res, next) => {
 	try {
-		const comunidades = await servicePessoas.getComunidadesPessoais(req.params.arroba);
-		res.json(comunidades); 
+		const pessoas = await serviceObjetosComunitarios.getPessoasNaComunidade(req.params.arroba);
+		res.json(pessoas); 
 	} catch (erro) {
 		next(erro);
 	}
 });
 
+/*
 router.get('/:arroba/objetos/comunidades/:comunidadeId'), async (req, res, next) => {
 	try {
 		const pessoaComunidade = await serviceObjetosPessoais.getComunidadePessoal(req.params.arroba, req.params.comunidadeId);
