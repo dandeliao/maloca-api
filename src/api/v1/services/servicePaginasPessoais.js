@@ -4,8 +4,8 @@ const fs = require('fs');
 
 exports.getPaginasPessoais = async function (pessoaId) {
 	const objetoPaginas = await dataPaginasPessoais.getPaginasPessoais(pessoaId);
-	const sortedPaginas = await objetoPaginas.rows.sort((a, b) => {
-		return a.pagina_pessoal_id - b.pagina_pessoal_id;
+	const sortedPaginas = objetoPaginas.rows.sort((a, b) => {
+		return a.ordem - b.ordem;
 	});
 	return sortedPaginas;
 };
