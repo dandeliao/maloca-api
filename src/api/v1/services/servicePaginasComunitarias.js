@@ -3,28 +3,19 @@ const dataPessoasComunidades = require('../data/dataPessoasComunidades');
 const path = require('path');
 const fs = require('fs');
 
-exports.getPaginasComunitarias = async function (comunidadeId, pessoaId) {
-	const dadosPessoaComunidade = await dataPessoasComunidades.getPessoaComunidade(pessoaId, comunidadeId);
-	if (dadosPessoaComunidade.rows[0].ver) {
-		const objetoPaginas = await dataPaginasComunitarias.getPaginasComunitarias(comunidadeId);
-		const sortedPaginas = await objetoPaginas.rows.sort((a, b) => {
-			return a.pagina_comunitaria_id - b.pagina_comunitaria_id;
-		});
-		console.log('sortedPaginas:', sortedPaginas);
-		return sortedPaginas;
-	} else {
-		throw new Error ('pessoa não tem habilidade para acessar este recurso');
-	}
+exports.getPaginasComunitarias = async function (comunidadeId) {
+	const objetoPaginas = await dataPaginasComunitarias.getPaginasComunitarias(comunidadeId);
+	const sortedPaginas = await objetoPaginas.rows.sort((a, b) => {
+		return a.pagina_comunitaria_id - b.pagina_comunitaria_id;
+	});
+	console.log('sortedPaginas:', sortedPaginas);
+	return sortedPaginas;
 };
 
-exports.getPaginaComunitaria = async function (comunidadeId, paginaId, pessoaId) {
-	const dadosPessoaComunidade = await dataPessoasComunidades.getPessoaComunidade(pessoaId, comunidadeId);
-	if (dadosPessoaComunidade.rows[0].ver) {
-		const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${comunidadeId}`, 'paginas', `${paginaId}.html`);
-		return caminho;
-	} else {
-		throw new Error ('pessoa não tem habilidade para acessar este recurso');
-	}
+exports.getPaginaComunitaria = async function (comunidadeId, paginaId) {
+	const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${comunidadeId}`, 'paginas', `${paginaId}.html`);
+	return caminho;
+
 };
 
 exports.createPaginaComunitaria = async function (dados, pessoaId) {
