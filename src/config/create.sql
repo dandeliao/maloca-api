@@ -4,7 +4,7 @@ CREATE TABLE pessoas(
     pessoa_id       VARCHAR(32) PRIMARY KEY NOT NULL,
     nome            VARCHAR(64) NOT NULL,
     avatar          VARCHAR(255) DEFAULT 'avatar.jpg',
-    fundo           VARCHAR(255) DEFAULT 'fundo.jpg'
+    fundo           VARCHAR(255) DEFAULT 'fundo.jpg',
     data_ingresso   TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -16,12 +16,12 @@ CREATE TABLE autenticacao(
 );
 
 CREATE TABLE paginas_pessoais(
-    pessoa_id           VARCHAR(32) REFERENCES pessoas(pessoa_id),
-    pagina_pessoal_id   BIGSERIAL,
+    pagina_pessoal_id   BIGSERIAL PRIMARY KEY NOT NULL,
+    pessoa_id           VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
+    ordem               SERIAL NOT NULL,
     titulo              VARCHAR(64),
     publica             BOOLEAN DEFAULT false,
-    criacao             TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(pessoa_id, pagina_pessoal_id)
+    criacao             TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE sessoes (
@@ -36,15 +36,14 @@ CREATE TABLE comunidades(
     comunidade_id   VARCHAR(32) PRIMARY KEY NOT NULL,
     nome            VARCHAR(64) NOT NULL,
     avatar          VARCHAR(255) DEFAULT 'avatar_comum.jpg',
-    fundo           VARCHAR(255) DEFAULT 'fundo_comum.jpg'
+    fundo           VARCHAR(255) DEFAULT 'fundo_comum.jpg',
     aberta          BOOLEAN DEFAULT true,
     criacao         TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE pessoas_comunidades(
-    pessoa_id       VARCHAR(32) REFERENCES pessoas(pessoa_id),
-    comunidade_id   VARCHAR(32) REFERENCES comunidades(comunidade_id),
-    ver             BOOLEAN DEFAULT true,
+    pessoa_id       VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
+    comunidade_id   VARCHAR(32) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
     participar      BOOLEAN DEFAULT true,
     editar          BOOLEAN DEFAULT false,
     moderar         BOOLEAN DEFAULT false,
@@ -52,10 +51,14 @@ CREATE TABLE pessoas_comunidades(
 );
 
 CREATE TABLE paginas_comunitarias(
-    comunidade_id           VARCHAR(32) REFERENCES comunidades(comunidade_id),
-    pagina_comunitaria_id   BIGSERIAL,
+    pagina_comunitaria_id   SERIAL PRIMARY KEY NOT NULL,
+    comunidade_id           VARCHAR(32) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
+    ordem                   SERIAL NOT NULL,
     titulo                  VARCHAR(64),
     publica                 BOOLEAN DEFAULT false,
+    criacao                 TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
     criacao                 TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(comunidade_id, pagina_comunitaria_id)
 );
