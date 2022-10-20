@@ -59,6 +59,26 @@ CREATE TABLE paginas_comunitarias(
     criacao                 TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-    criacao                 TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(comunidade_id, pagina_comunitaria_id)
+CREATE TABLE blocos(
+    bloco_id            VARCHAR(32) PRIMARY KEY NOT NULL,
+    descricao           VARCHAR(500) NOT NULL,
+    pessoal             BOOLEAN DEFAULT false,
+    comunitario         BOOLEAN DEFAULT true,
+    armazena_arquivos   BOOLEAN DEFAULT false,
+    armazena_dados      BOOLEAN DEFAULT false,
+    criacao             TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE blocos_paginas_pessoais(
+    bloco_pagina_pessoal_id     SERIAL PRIMARY KEY,
+    bloco_id                    VARCHAR(32) REFERENCES blocos(bloco_id) ON DELETE SET NULL,
+    pagina_pessoal_id           SERIAL REFERENCES paginas_pessoais(pagina_pessoal_id) ON DELETE CASCADE,
+    pessoa_id                   VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE
+);
+
+CREATE TABLE blocos_paginas_comunitarias(
+    bloco_pagina_comunitaria_id     SERIAL PRIMARY KEY,
+    bloco_id                        VARCHAR(32) REFERENCES blocos(bloco_id) ON DELETE SET NULL,
+    pagina_comunitaria_id           SERIAL REFERENCES paginas_comunitarias(pagina_comunitaria_id) ON DELETE CASCADE,
+    comunidade_id                   VARCHAR(32) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE
 );
