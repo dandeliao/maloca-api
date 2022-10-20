@@ -24,15 +24,15 @@ function getPessoaComunidade(pessoaId, comunidadeId) {
 function postPessoaComunidade(pessoaId, comunidadeId, habilidades) {
 	console.log('editar:', habilidades.editar);
 	return pool.query(
-		'INSERT INTO pessoas_comunidades (pessoa_id, comunidade_id, ver, participar, editar, moderar, cuidar) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-		[pessoaId, comunidadeId, habilidades.ver, habilidades.participar, habilidades.editar, habilidades.moderar, habilidades.cuidar]
+		'INSERT INTO pessoas_comunidades (pessoa_id, comunidade_id, participar, editar, moderar, cuidar) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+		[pessoaId, comunidadeId, habilidades.participar, habilidades.editar, habilidades.moderar, habilidades.cuidar]
 	);
 }
 
 function putPessoaComunidade(pessoaId, comunidadeId, habilidades) {
 	return pool.query(
-		'UPDATE pessoas_comunidades SET ver = $1, participar = $2, editar = $3, moderar = $4, cuidar = $5 WHERE pessoa_id = $6 AND comunidade_id = $7 RETURNING *',
-		[habilidades.ver, habilidades.participar, habilidades.editar, habilidades.moderar, habilidades.cuidar, pessoaId, comunidadeId]
+		'UPDATE pessoas_comunidades SET participar = $1, editar = $2, moderar = $3, cuidar = $4 WHERE pessoa_id = $5 AND comunidade_id = $6 RETURNING *',
+		[habilidades.participar, habilidades.editar, habilidades.moderar, habilidades.cuidar, pessoaId, comunidadeId]
 	);
 }
 

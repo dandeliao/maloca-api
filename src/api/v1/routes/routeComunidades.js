@@ -70,7 +70,7 @@ router.delete('/:arroba', async (req, res, next) => {
 
 router.get('/:arroba/paginas', async (req, res, next) => {
 	try {
-		const paginas = await servicePaginasComunitarias.getPaginasComunitarias(req.params.arroba, req.user.pessoa_id);
+		const paginas = await servicePaginasComunitarias.getPaginasComunitarias(req.params.arroba);
 		res.json(paginas);
 	} catch (erro) {
 		next(erro);
@@ -80,7 +80,7 @@ router.get('/:arroba/paginas', async (req, res, next) => {
 
 router.get('/:arroba/:pagina', async (req, res, next) => {
 	try {
-		const caminhoDoArquivo = await servicePaginasComunitarias.getPaginaComunitaria(req.params.arroba, req.params.pagina, req.user.pessoa_id);
+		const caminhoDoArquivo = await servicePaginasComunitarias.getPaginaComunitaria(req.params.arroba, req.params.pagina);
 		res.sendFile(caminhoDoArquivo);
 	} catch (erro) {
 		next(erro);
