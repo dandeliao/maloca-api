@@ -1,5 +1,6 @@
 const dataPaginasComunitarias = require('../data/dataPaginasComunitarias');
 const dataPessoasComunidades = require('../data/dataPessoasComunidades');
+const dataBlocosPaginasComunitarias = require('../data/dataBlocosPaginasComunitarias');
 const path = require('path');
 const fs = require('fs');
 
@@ -22,9 +23,14 @@ exports.createPaginaComunitaria = async function (dados, pessoaId) {
 	const dadosPessoaComunidade = await dataPessoasComunidades.getPessoaComunidade(pessoaId, dados.comunidade_id);
 	if (dadosPessoaComunidade.rows[0].editar) {
 		const dataResponse = await dataPaginasComunitarias.createPaginaComunitaria(dados);
+		console.log('dataResponse:', dataResponse.rows[0]);
 		const paginaId = dataResponse.rows[0].pagina_comunitaria_id;
+
+		let blocos = await updateBlocosPaginaComunitaria(dados.html, paginaId);
+		let html = await updateHtmlBlocos(dados.html, blocos);	
+
 		const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${dados.comunidade_id}`, 'paginas', `${paginaId}.html`);
-		fs.writeFile(caminho, dados.html, erro => {
+		fs.writeFile(caminho, html, erro => {
 			if (erro) {
 				throw erro;
 			}
@@ -40,9 +46,13 @@ exports.editPaginaComunitaria = async function (dados, pessoaId) {
 	if (dadosPessoaComunidade.rows[0].editar) {
 		const dataResponse = await dataPaginasComunitarias.editPaginaComunitaria(dados);
 		const paginaId = dataResponse.rows[0].pagina_comunitaria_id;
+
+		let blocos = await updateBlocosPaginaComunitaria(dados.html, paginaId);
+		let html = await updateHtmlBlocos(dados.html, blocos);	
+
 		const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${dados.comunidade_id}`, 'paginas', `${paginaId}.html`);
 		console.log('caminho:', caminho);
-		fs.writeFile(caminho, dados.html, erro => {
+		fs.writeFile(caminho, html, erro => {
 			if (erro) {
 				throw erro;
 			}
@@ -70,3 +80,102 @@ exports.deletePaginaComunitaria = async function (dados, pessoaId) {
 		throw new Error ('pessoa não tem habilidade para acessar este recurso');
 	}
 };
+
+// ---
+// Funções auxiliares
+
+async function updateBlocosPaginaComunitaria (html, pagina_comunitaria_id) {
+
+	// html já deve chegar validado e sem comentários
+
+	// lê html e captura lista de blocos com seus bloco_id (do nome da tag) e bloco_pagina_comunitaria_id (do atributo "m_id")
+	const blocoRegex = /<(m-(?:\w+-*))+(?:\s+(?:\w+="(?:\s*\w*(?:-\w*)*\s*(?::*(?:\s*\w+)+;)?)*")*)*>/g; // regex captura formatos <m-nome-do-bloco> e <m-nome-do-bloco prop1="valor" style="margin: 0 auto; font-family: monospace">
+	let blocos = html.matchAll(blocoRegex);
+	let arrayBlocos = [];
+	for (const bloco of blocos) {
+		arrayBlocos.push({tag: bloco[0], bloco_id: bloco[1], index: bloco['index']});
+	}
+	const idRegex = /m_id="(\d*)"/g; // regex captura atributo m_id
+	arrayBlocos.forEach(b => {
+		//let idMatch = idRegex.exec(b.tag);
+		let idMatchAll = b.tag.matchAll(idRegex);
+		let idMatch;
+		for (const bzim of idMatchAll) {
+			idMatch = bzim;
+		}
+
+		if (idMatch) {
+			b.bloco_pagina_comunitaria_id = idMatch[1] ? parseInt(idMatch[1]) : null;
+		} else {
+			b.bloco_pagina_comunitaria_id = null;
+		}
+	});
+			
+	// verifica se o bloco tem correspondente na tabela blocos_paginas_comunitarias e cria registro se não houver
+	let dataBlocos = (await dataBlocosPaginasComunitarias.getBlocosPaginaComunitaria(pagina_comunitaria_id)).rows;
+	if (arrayBlocos.length > 0) {
+		for (let i = 0; i < arrayBlocos.length; i++) {
+			let b = arrayBlocos[i];
+			if (dataBlocos.length > 0) {
+				for (let j = 0; j < dataBlocos.length; j++) {
+					let d = dataBlocos[j];
+					if (b.bloco_pagina_comunitaria_id === d.bloco_pagina_comunitaria_id) {
+						b.jaTem = true;
+					}
+				}
+			}
+			if (b.jaTem !== true) {
+				b.jaTem = false;
+				b.pagina_comunitaria_id = pagina_comunitaria_id;
+				let response = await dataBlocosPaginasComunitarias.createBlocoPaginaComunitaria(b);
+				b.bloco_pagina_comunitaria_id = await response.rows[0].bloco_pagina_comunitaria_id;
+			}
+		}
+	}
+
+	// verifica os blocos que tem registro na tabela blocos_paginas_comunitarias mas não estão mais no html e apaga esses registros
+	console.log('---------------------------')
+	if (dataBlocos.length > 0) {
+		console.log('dataBlocos.length é maior que 0');
+		for (let i = 0; i < dataBlocos.length; i++) {
+			let d = dataBlocos[i];
+			if (arrayBlocos.length > 0) {
+				console.log('arrayBlocos.length é maior que 0');
+				arrayBlocos.forEach(b => {
+					console.log('b.id:', b.bloco_pagina_comunitaria_id);
+					console.log('d.id', d.bloco_pagina_comunitaria_id);
+					if (b.bloco_pagina_comunitaria_id === d.bloco_pagina_comunitaria_id) {
+						d.jaTem = true;
+					}
+				});
+			}
+			if (!d.jaTem) {
+				console.log('!!!!!!!!!!! DELETED !!!!!!!!!1', d);
+				let response = await dataBlocosPaginasComunitarias.deleteBlocoPaginaComunitaria(d);
+				console.log('response:', response.rows);
+			}
+		}
+	}
+
+		
+	return arrayBlocos;
+}
+
+// edita html e adiciona propriedade m_id="${bloco_pagina_comunitaria_id}" para cada bloco que não a tem
+async function updateHtmlBlocos(html, blocos) {
+	let aumentoDaString = 0;
+	let novoHtml = html;
+	for (let i = 0; i < blocos.length; i++) {
+		let b = blocos[i];
+		let primeiraParte = novoHtml.slice(0, b.index + aumentoDaString);
+		let ultimaParte = novoHtml.slice(b.index + b.tag.length + aumentoDaString);
+		let oldBTagLength = b.tag.length;
+		if (b.jaTem === false || null || undefined) {
+			b.tag = b.tag.replace(`${b.bloco_id}`,`${b.bloco_id} m_id="${b.bloco_pagina_comunitaria_id}"`);
+		}
+		novoHtml = `${primeiraParte}${b.tag}${ultimaParte}`;
+		aumentoDaString += b.tag.length - oldBTagLength;
+	}
+
+	return novoHtml;
+}

@@ -72,13 +72,11 @@ CREATE TABLE blocos(
 CREATE TABLE blocos_paginas_pessoais(
     bloco_pagina_pessoal_id     SERIAL PRIMARY KEY,
     bloco_id                    VARCHAR(32) REFERENCES blocos(bloco_id) ON DELETE SET NULL,
-    pagina_pessoal_id           SERIAL REFERENCES paginas_pessoais(pagina_pessoal_id) ON DELETE CASCADE,
-    pessoa_id                   VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE
+    pagina_pessoal_id           SERIAL REFERENCES paginas_pessoais(pagina_pessoal_id) ON DELETE CASCADE
 );
 
 CREATE TABLE blocos_paginas_comunitarias(
     bloco_pagina_comunitaria_id     SERIAL PRIMARY KEY,
     bloco_id                        VARCHAR(32) REFERENCES blocos(bloco_id) ON DELETE SET NULL,
-    pagina_comunitaria_id           SERIAL REFERENCES paginas_comunitarias(pagina_comunitaria_id) ON DELETE CASCADE,
-    comunidade_id                   VARCHAR(32) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE
+    pagina_comunitaria_id           SERIAL REFERENCES paginas_comunitarias(pagina_comunitaria_id) ON DELETE CASCADE
 );
