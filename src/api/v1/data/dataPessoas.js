@@ -15,15 +15,15 @@ function getPessoa(pessoaId) {
 
 function postPessoa(pessoa) {
 	return pool.query(
-		'INSERT INTO pessoas (pessoa_id, nome) VALUES ($1, $2) RETURNING *',
-		[pessoa.pessoa_id, pessoa.nome]
+		'INSERT INTO pessoas (pessoa_id, nome, descricao) VALUES ($1, $2, $3) RETURNING *',
+		[pessoa.pessoa_id, pessoa.nome, pessoa.descricao]
 	);
 }
 
 function putPessoa(pessoaId, pessoa) {
 	return pool.query(
-		'UPDATE pessoas SET pessoa_id = $1, nome = $2 WHERE pessoa_id = $3 RETURNING *',
-		[pessoa.pessoa_id, pessoa.nome, pessoaId]
+		'UPDATE pessoas SET pessoa_id = $1, nome = $2, descricao = $3 WHERE pessoa_id = $4 RETURNING *',
+		[pessoa.pessoa_id, pessoa.nome, pessoa.descricao, pessoaId]
 	);
 }
 

@@ -12,7 +12,8 @@ exports.postRegistro = async function (dados) {
 	if (pessoaExistente.rowCount !== 0) throw new Error('pessoa já existe');
 	const pessoa = {
 		pessoa_id: dados.pessoa_id,
-		nome: dados.nome
+		nome: dados.nome,
+		descricao: dados.descricao ? dados.descricao : 'Oi! Acabei de chegar na maloca!'
 	};
 	const saltHash = geraHashESalt(dados.senha);
 	const segredos = {

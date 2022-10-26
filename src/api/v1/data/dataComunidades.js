@@ -15,15 +15,15 @@ function getComunidade(comunidadeId) {
 
 function postComunidade(comunidade) {
 	return pool.query(
-		'INSERT INTO comunidades (comunidade_id, nome) VALUES ($1, $2) RETURNING *',
-		[comunidade.comunidade_id, comunidade.nome]
+		'INSERT INTO comunidades (comunidade_id, nome, descricao) VALUES ($1, $2, $3) RETURNING *',
+		[comunidade.comunidade_id, comunidade.nome, comunidade.descricao]
 	);
 }
 
 function putComunidade(comunidade) {
 	return pool.query(
-		'UPDATE comunidades SET nome = $1, aberta = $2 WHERE comunidade_id = $3 RETURNING *',
-		[comunidade.nome, comunidade.aberta, comunidade.comunidade_id]
+		'UPDATE comunidades SET nome = $1, descricao = $2 aberta = $3 WHERE comunidade_id = $4 RETURNING *',
+		[comunidade.nome, comunidade.descricao, comunidade.aberta, comunidade.comunidade_id]
 	);
 }
 

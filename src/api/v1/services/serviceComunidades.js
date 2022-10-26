@@ -29,7 +29,8 @@ exports.postComunidade = async function (dados, pessoaId) {
 		// cria comunidade
 		const comunidade = {
 			comunidade_id: dados.comunidade_id,
-			nome: dados.nome
+			nome: dados.nome,
+			descricao: dados.descricao ? dados.descricao : 'Comunidade nova :B'
 		};
 		const arrayNovaComunidade = await dataComunidades.postComunidade(comunidade);
 		
