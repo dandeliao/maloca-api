@@ -1,0 +1,23 @@
+# Reiniciar banco de dados
+
+DROP TABLE blocos_paginas_comunitarias, blocos_paginas_pessoais, blocos, paginas_comunitarias, pessoas_comunidades, comunidades, sessoes, paginas_pessoais, autenticacao, pessoas;
+
+- rodar comandos de create.sql, menos o primeiro (create database maloca) pois o banco de dados não foi deletado
+
+INSERT INTO comunidades (comunidade_id, nome, descricao) VALUES ('maloca', 'Maloca', 'cabana comunitária');
+
+INSERT INTO paginas_comunitarias (comunidade_id, titulo, publica) VALUES('maloca', 'início', true);
+
+- criar usuário *seu_nome* pela interface da maloca
+
+UPDATE pessoas_comunidades SET editar = true, moderar = true, cuidar = true WHERE pessoa_id = 'seu_nome';
+
+INSERT INTO blocos (bloco_id, descricao, pessoal) VALUES ('m-bloco', 'bloco simples, cria uma caixa sombreada para receber qualquer conteúdo', true);
+
+INSERT INTO blocos (bloco_id, descricao, pessoal) VALUES ('m-comunidades', 'exibe lista de comunidades conforme o contexto', true);
+
+INSERT INTO blocos (bloco_id, descricao, pessoal) VALUES ('m-pessoas', 'exibe lista de pessoas conforme o contexto', true);
+
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario, armazena_arquivos, armazena_dados) VALUES ('m-criar-comunidade', 'botão que permite criar uma nova comunidade', true, true, false, false);
+
+- inserir outros blocos que tenham sido criados
