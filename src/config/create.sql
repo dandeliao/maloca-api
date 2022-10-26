@@ -3,6 +3,7 @@ CREATE DATABASE maloca
 CREATE TABLE pessoas(
     pessoa_id       VARCHAR(32) PRIMARY KEY NOT NULL,
     nome            VARCHAR(64) NOT NULL,
+    descricao       VARCHAR(150) NOT NULL,
     avatar          VARCHAR(255) DEFAULT 'avatar.jpg',
     fundo           VARCHAR(255) DEFAULT 'fundo.jpg',
     data_ingresso   TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -35,6 +36,7 @@ CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON sessoes ("expire");
 CREATE TABLE comunidades(
     comunidade_id   VARCHAR(32) PRIMARY KEY NOT NULL,
     nome            VARCHAR(64) NOT NULL,
+    descricao       VARCHAR(150) NOT NULL,
     avatar          VARCHAR(255) DEFAULT 'avatar_comum.jpg',
     fundo           VARCHAR(255) DEFAULT 'fundo_comum.jpg',
     aberta          BOOLEAN DEFAULT true,
