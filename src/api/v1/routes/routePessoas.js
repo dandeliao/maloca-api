@@ -147,6 +147,18 @@ router.get('/:arroba/objetos/avatar', async (req, res, next) => {
 	}
 });
 
+router.get('/:arroba/objetos/fundo', async (req, res, next) => {
+	try {
+		const dadosDaPessoa = await servicePessoas.getPessoa(req.params.arroba);
+		const nomeDoArquivo = dadosDaPessoa.fundo;
+		console.log('nomeDoArquivo:', nomeDoArquivo);
+		const caminhoDoArquivo = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', req.params.arroba, 'imagens', nomeDoArquivo);
+		res.sendFile(caminhoDoArquivo);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
 router.get('/:arroba/objetos/comunidades', async (req, res, next) => {
 	try {
 		const comunidades = await serviceObjetosPessoais.getComunidadesPessoais(req.params.arroba);

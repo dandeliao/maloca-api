@@ -56,13 +56,16 @@ exports.postComunidade = async function (dados, pessoaId) {
 		}
 		
 		// sorteia e copia avatar padrão para pasta comunitária / imagens
-		const pastaDefault = path.join(path.resolve(__dirname, '../../../../static'), 'default', 'avatarComunidades');
-		const numArquivos = fs.readdirSync(pastaDefault).length;
-		const sorteio = Math.floor(Math.random() * (numArquivos));
+		let pastaDefault = path.join(path.resolve(__dirname, '../../../../static'), 'default', 'avatarComunidades');
+		let numArquivos = fs.readdirSync(pastaDefault).length;
+		let sorteio = Math.floor(Math.random() * (numArquivos));
 		fs.copyFileSync(path.join(pastaDefault, `${sorteio}.jpg`), path.join(pastaComunitaria, 'imagens', 'avatar_comum.jpg'));
 
 		// sorteia e copia fundo padrão para pasta comunitária / imagens
-		// >> a fazer <<
+		pastaDefault = path.join(path.resolve(__dirname, '../../../../static'), 'default', 'fundoComunidades');
+		numArquivos = fs.readdirSync(pastaDefault).length;
+		sorteio = Math.floor(Math.random() * (numArquivos));
+		fs.copyFileSync(path.join(pastaDefault, `${sorteio}.jpg`), path.join(pastaComunitaria, 'imagens', 'fundo_comum.jpg'));
 
 		// cria página comunitária padrão
 		const dadosPaginaPadrao = {
@@ -110,12 +113,20 @@ exports.postComunidade = async function (dados, pessoaId) {
 
 			}
 
-
+			main {
+			background-image: url("http://localhost:4000/comunidades/${dados.comunidade_id}/objetos/fundo");
+			background-repeat: repeat;
+			min-height: 60rem;
+			/* padding: 1rem 0; */
+			}
 			#container {
+			background-color: #F6F5F4;
 			display: block;
 			max-width: 720px;
 			margin: 0 auto;
 			text-align: center;
+			min-height: 50rem;
+			padding: 1rem;
 			}
 			header {
 			display: flex;

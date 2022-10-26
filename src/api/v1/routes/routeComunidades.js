@@ -155,6 +155,17 @@ router.get('/:arroba/objetos/avatar', async (req, res, next) => {
 	}
 });
 
+router.get('/:arroba/objetos/fundo', async (req, res, next) => {
+	try {
+		const dadosDaComunidade = await serviceComunidades.getComunidade(req.params.arroba);
+		const nomeDoArquivo = dadosDaComunidade.fundo;
+		const caminhoDoArquivo = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', req.params.arroba, 'imagens', 'fundo_comum.jpg');
+		res.sendFile(caminhoDoArquivo);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
 router.get('/:arroba/objetos/pessoas', async (req, res, next) => {
 	try {
 		const pessoas = await serviceObjetosComunitarios.getPessoasNaComunidade(req.params.arroba);
