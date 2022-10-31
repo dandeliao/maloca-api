@@ -4,7 +4,11 @@ const path = require('path');
 const fs = require('fs');
 
 exports.getPaginasPessoais = async function (pessoaId) {
-	const objetoPaginas = await dataPaginasPessoais.getPaginasPessoais(pessoaId);
+	let objetoPaginas = await dataPaginasPessoais.getPaginasPessoais(pessoaId);
+	for (let i = 0; i < objetoPaginas.rows.length; i++) {
+		let objetoBlocosPagina = await dataBlocosPaginasPessoais.getBlocosPaginaPessoal(objetoPaginas.rows[i].pagina_pessoal_id);
+		objetoPaginas.rows[i].blocos = objetoBlocosPagina.rows;
+	}
 	const sortedPaginas = objetoPaginas.rows.sort((a, b) => {
 		return a.ordem - b.ordem;
 	});
@@ -14,6 +18,11 @@ exports.getPaginasPessoais = async function (pessoaId) {
 exports.getPaginaPessoal = async function (pessoaId, paginaId) {
 	const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', `${pessoaId}`, 'paginas', `${paginaId}.html`);
 	return caminho;
+};
+
+exports.getBlocosPaginaPessoal = async function (paginaId) {
+	let objetoBlocosPagina = await dataBlocosPaginasPessoais.getBlocosPaginaPessoal(paginaId);
+	return objetoBlocosPagina;
 };
 
 exports.createPaginaPessoal = async function (dados) {
@@ -69,12 +78,13 @@ async function updateBlocosPaginaPessoal (html, pagina_pessoal_id) {
 	// html já deve chegar validado e sem comentários
 
 	// lê html e captura lista de blocos com seus bloco_id (do nome da tag) e bloco_pagina_pessoal_id (do atributo "m_id")
-	const blocoRegex = /<(m-(?:\w+-*))+(?:\s+(?:\w+="(?:\s*\w*(?:-\w*)*\s*(?::*(?:\s*\w+)+;)?)*")*)*>/g; // regex captura formatos <m-nome-do-bloco> e <m-nome-do-bloco prop1="valor" style="margin: 0 auto; font-family: monospace">
+	const blocoRegex = /<(m-(?:\w+-*)+)(?:\s+(?:\w+="(?:\s*\w*(?:-\w*)*\s*(?::*(?:\s*\w+)+;)?)*")*)*>/g; // regex captura formatos <m-nome-do-bloco> e <m-nome-do-bloco prop1="valor" style="margin: 0 auto; font-family: monospace">
 	let blocos = html.matchAll(blocoRegex);
 	let arrayBlocos = [];
 	for (const bloco of blocos) {
 		arrayBlocos.push({tag: bloco[0], bloco_id: bloco[1], index: bloco['index']});
 	}
+	console.log('arrayBlocos:', arrayBlocos);
 	const idRegex = /m_id="(\d*)"/g; // regex captura atributo m_id
 	arrayBlocos.forEach(b => {
 		//let idMatch = idRegex.exec(b.tag);
@@ -114,25 +124,18 @@ async function updateBlocosPaginaPessoal (html, pagina_pessoal_id) {
 	}
 
 	// verifica os blocos que tem registro na tabela blocos_paginas_pessoais mas não estão mais no html e apaga esses registros
-	console.log('---------------------------')
 	if (dataBlocos.length > 0) {
-		console.log('dataBlocos.length é maior que 0');
 		for (let i = 0; i < dataBlocos.length; i++) {
 			let d = dataBlocos[i];
 			if (arrayBlocos.length > 0) {
-				console.log('arrayBlocos.length é maior que 0');
 				arrayBlocos.forEach(b => {
-					console.log('b.id:', b.bloco_pagina_pessoal_id);
-					console.log('d.id', d.bloco_pagina_pessoal_id);
 					if (b.bloco_pagina_pessoal_id === d.bloco_pagina_pessoal_id) {
 						d.jaTem = true;
 					}
 				});
 			}
 			if (!d.jaTem) {
-				console.log('!!!!!!!!!!! DELETED !!!!!!!!!1', d);
 				let response = await dataBlocosPaginasPessoais.deleteBlocoPaginaPessoal(d);
-				console.log('response:', response.rows);
 			}
 		}
 	}

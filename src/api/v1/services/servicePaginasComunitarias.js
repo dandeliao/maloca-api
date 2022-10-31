@@ -5,11 +5,14 @@ const path = require('path');
 const fs = require('fs');
 
 exports.getPaginasComunitarias = async function (comunidadeId) {
-	const objetoPaginas = await dataPaginasComunitarias.getPaginasComunitarias(comunidadeId);
-	const sortedPaginas = await objetoPaginas.rows.sort((a, b) => {
+	let objetoPaginas = await dataPaginasComunitarias.getPaginasComunitarias(comunidadeId);
+	/* objetoPaginas.rows.forEach(async row => {
+		let objetoBlocosPagina = await dataBlocosPaginasComunitarias.getBlocosPaginaComunitaria(row.pagina_comunitaria_id);
+		row.blocos = objetoBlocosPagina.rows;
+	}); */
+	const sortedPaginas = objetoPaginas.rows.sort((a, b) => {
 		return a.pagina_comunitaria_id - b.pagina_comunitaria_id;
 	});
-	console.log('sortedPaginas:', sortedPaginas);
 	return sortedPaginas;
 };
 
@@ -19,11 +22,15 @@ exports.getPaginaComunitaria = async function (comunidadeId, paginaId) {
 
 };
 
+exports.getBlocosPaginaComunitaria = async function (paginaId) {
+	let objetoBlocosPagina = await dataBlocosPaginasComunitarias.getBlocosPaginaComunitaria(paginaId);
+	return objetoBlocosPagina;
+};
+
 exports.createPaginaComunitaria = async function (dados, pessoaId) {
 	const dadosPessoaComunidade = await dataPessoasComunidades.getPessoaComunidade(pessoaId, dados.comunidade_id);
 	if (dadosPessoaComunidade.rows[0].editar) {
 		const dataResponse = await dataPaginasComunitarias.createPaginaComunitaria(dados);
-		console.log('dataResponse:', dataResponse.rows[0]);
 		const paginaId = dataResponse.rows[0].pagina_comunitaria_id;
 
 		let blocos = await updateBlocosPaginaComunitaria(dados.html, paginaId);
@@ -51,7 +58,6 @@ exports.editPaginaComunitaria = async function (dados, pessoaId) {
 		let html = await updateHtmlBlocos(dados.html, blocos);	
 
 		const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${dados.comunidade_id}`, 'paginas', `${paginaId}.html`);
-		console.log('caminho:', caminho);
 		fs.writeFile(caminho, html, erro => {
 			if (erro) {
 				throw erro;
@@ -95,6 +101,7 @@ async function updateBlocosPaginaComunitaria (html, pagina_comunitaria_id) {
 	for (const bloco of blocos) {
 		arrayBlocos.push({tag: bloco[0], bloco_id: bloco[1], index: bloco['index']});
 	}
+	console.log('arrayBlocos:', arrayBlocos);
 	const idRegex = /m_id="(\d*)"/g; // regex captura atributo m_id
 	arrayBlocos.forEach(b => {
 		//let idMatch = idRegex.exec(b.tag);
@@ -134,25 +141,18 @@ async function updateBlocosPaginaComunitaria (html, pagina_comunitaria_id) {
 	}
 
 	// verifica os blocos que tem registro na tabela blocos_paginas_comunitarias mas não estão mais no html e apaga esses registros
-	console.log('---------------------------')
 	if (dataBlocos.length > 0) {
-		console.log('dataBlocos.length é maior que 0');
 		for (let i = 0; i < dataBlocos.length; i++) {
 			let d = dataBlocos[i];
 			if (arrayBlocos.length > 0) {
-				console.log('arrayBlocos.length é maior que 0');
 				arrayBlocos.forEach(b => {
-					console.log('b.id:', b.bloco_pagina_comunitaria_id);
-					console.log('d.id', d.bloco_pagina_comunitaria_id);
 					if (b.bloco_pagina_comunitaria_id === d.bloco_pagina_comunitaria_id) {
 						d.jaTem = true;
 					}
 				});
 			}
 			if (!d.jaTem) {
-				console.log('!!!!!!!!!!! DELETED !!!!!!!!!1', d);
 				let response = await dataBlocosPaginasComunitarias.deleteBlocoPaginaComunitaria(d);
-				console.log('response:', response.rows);
 			}
 		}
 	}
