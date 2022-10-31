@@ -12,12 +12,20 @@ INSERT INTO paginas_comunitarias (comunidade_id, titulo, publica) VALUES('maloca
 
 UPDATE pessoas_comunidades SET editar = true, moderar = true, cuidar = true WHERE pessoa_id = 'seu_nome';
 
-INSERT INTO blocos (bloco_id, descricao, pessoal) VALUES ('m-bloco', 'bloco simples, cria uma caixa sombreada para receber qualquer conteúdo', true);
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-bloco', 'bloco simples, cria uma caixa sombreada para receber qualquer conteúdo', true, true);
 
-INSERT INTO blocos (bloco_id, descricao, pessoal) VALUES ('m-comunidades', 'exibe lista de comunidades conforme o contexto', true);
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-avatar', 'exibe avatar de pessoa ou comunidade', true, true);
 
-INSERT INTO blocos (bloco_id, descricao, pessoal) VALUES ('m-pessoas', 'exibe lista de pessoas conforme o contexto', true);
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-nome', 'exibe nome de pessoa ou comunidade', true, true);
 
-INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario, armazena_arquivos, armazena_dados) VALUES ('m-criar-comunidade', 'botão que permite criar uma nova comunidade', true, true, false, false);
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-descricao', 'exibe descricao de pessoa ou comunidade', true, true);
+
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-cartao-de-visita', 'cabeçalho para páginas pessoais ou comunitárias', true, true);
+
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-comunidades', 'exibe lista de comunidades conforme o contexto', true, false);
+
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-pessoas', 'exibe lista de pessoas conforme o contexto', false, true);
+
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-criar-comunidade', 'botão que permite criar uma nova comunidade', true, true);
 
 - inserir outros blocos que tenham sido criados
