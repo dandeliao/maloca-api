@@ -87,6 +87,15 @@ router.get('/:arroba/:pagina', async (req, res, next) => {
 	}
 });
 
+router.get('/:arroba/:pagina/blocos', async (req, res, next) => {
+	try {
+		const blocos = await servicePaginasComunitarias.getBlocosPaginaComunitaria(req.params.pagina);
+		res.json(blocos);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
 router.post('/:arroba/paginas', async (req, res, next) => {
 	try {
 		const dados = {
@@ -159,7 +168,7 @@ router.get('/:arroba/objetos/fundo', async (req, res, next) => {
 	try {
 		const dadosDaComunidade = await serviceComunidades.getComunidade(req.params.arroba);
 		const nomeDoArquivo = dadosDaComunidade.fundo;
-		const caminhoDoArquivo = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', req.params.arroba, 'imagens', 'fundo_comum.jpg');
+		const caminhoDoArquivo = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', req.params.arroba, 'imagens', nomeDoArquivo);
 		res.sendFile(caminhoDoArquivo);
 	} catch (erro) {
 		next(erro);

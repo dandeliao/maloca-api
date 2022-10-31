@@ -76,6 +76,16 @@ router.get('/:arroba/:pagina', async (req, res, next) => {
 	}
 });
 
+router.get('/:arroba/:pagina/blocos', async (req, res, next) => {
+	try {
+		const blocos = await servicePaginasPessoais.getBlocosPaginaPessoal(req.params.pagina);
+		res.json(blocos);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+
 router.post('/:arroba/paginas', async (req, res, next) => {
 	try {
 		const dados = {
