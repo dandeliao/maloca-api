@@ -39,13 +39,16 @@ exports.postRegistro = async function (dados) {
 	}
 	
 	// sorteia e copia avatar padrão para pasta pessoal / imagens
-	const pastaDefault = path.join(path.resolve(__dirname, '../../../../static'), 'default', 'avatarPessoas');
-	const numArquivos = fs.readdirSync(pastaDefault).length;
-	const sorteio = Math.floor(Math.random() * (numArquivos));
+	let pastaDefault = path.join(path.resolve(__dirname, '../../../../static'), 'default', 'avatarPessoas');
+	let numArquivos = fs.readdirSync(pastaDefault).length;
+	let sorteio = Math.floor(Math.random() * (numArquivos));
 	fs.copyFileSync(path.join(pastaDefault, `${sorteio}.jpg`), path.join(pastaPessoal, 'imagens', 'avatar.jpg'));
 
 	// sorteia e copia fundo padrão para pasta pessoal / imagens
-	// >> a fazer <<
+	pastaDefault = path.join(path.resolve(__dirname, '../../../../static'), 'default', 'fundoPessoas');
+	numArquivos = fs.readdirSync(pastaDefault).length;
+	sorteio = Math.floor(Math.random() * (numArquivos));
+	fs.copyFileSync(path.join(pastaDefault, `${sorteio}.jpg`), path.join(pastaPessoal, 'imagens', 'fundo.jpg'));
 
 	// cria página pessoal padrão
 	let benjor = utilRandomGenerator.geraBenJor();
