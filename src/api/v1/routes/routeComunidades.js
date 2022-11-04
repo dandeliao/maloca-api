@@ -184,24 +184,4 @@ router.get('/:arroba/objetos/pessoas', async (req, res, next) => {
 	}
 });
 
-/*
-router.get('/:arroba/objetos/comunidades/:comunidadeId'), async (req, res, next) => {
-	try {
-		const pessoaComunidade = await serviceObjetosPessoais.getComunidadePessoal(req.params.arroba, req.params.comunidadeId);
-		res.json(pessoaComunidade);
-	} catch (erro) {
-		next(erro);
-	}
-};
-
-router.put('/:arroba/objetos/comunidades/:comunidadeId'), async (req, res, next) => {
-	try {
-		const habilidades = req.body;
-		const serviceResult = await serviceObjetosPessoais.editComunidadePessoal(req.params.arroba, req.params.comunidadeId, habilidades);
-		res.json(serviceResult);
-	} catch (erro) {
-		next(erro);
-	}
-}; */
-
 module.exports = router;
