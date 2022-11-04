@@ -60,29 +60,20 @@ exports.postRegistro = async function (dados) {
 		<div id="container">
 
 
-		<div>
-		<h2>@${pessoaId}</h2>
-		<img src="http://localhost:4000/pessoas/${pessoaId}/objetos/avatar">
-		
-		</div>
-		
-		<p>Oi! Acabei de chegar na maloca!</p>
+		<m-cartao-de-visita></m-cartao-de-visita>
 		<br>
-		</p><p>~~~</p>
+		<m-comunidades></m-comunidades>
 		<br>
 		<marquee>"${benjor}" - Jorge Ben Jor</marquee>
 		</div>
 		
 		<style>
-		* {
-		font-family: monospace;
-		}
+
 		#container {
 		display: block;
 		max-width: 720px;
 		margin: 0 auto;
 		text-align: center;
-		
 		}
 		
 		</style>

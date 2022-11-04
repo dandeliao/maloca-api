@@ -76,17 +76,11 @@ exports.postComunidade = async function (dados, pessoaId) {
 			html: `
 			<div id="container">
 
-			<header>
-			<img id="avatar" src="http://localhost:4000/comunidades/${dados.comunidade_id}/objetos/avatar">
-			<div>
-			<h1>${dados.nome}</h1>
-			<p>comunidade aberta</p>
-			</div>
-			</header>
+			<m-cartao-de-visita></m-cartao-de-visita>
 
 			<br>
 
-			<p>Em construção...</p>
+			<p>Em construção... <img src="https://localhost:4000/static/default/gifs/construcao-0.gif" /></p>
 
 			<m-bloco>
 			<h2>Pessoas:</h2>
@@ -108,18 +102,14 @@ exports.postComunidade = async function (dados, pessoaId) {
 
 			}
 
-
 			p {
 			margin: 0.5rem 1.3rem;
-
 			}
 
 			main {
-			background-image: url("http://localhost:4000/comunidades/${dados.comunidade_id}/objetos/fundo");
-			background-repeat: repeat;
 			min-height: 60rem;
-			/* padding: 1rem 0; */
 			}
+
 			#container {
 			background-color: #F6F5F4;
 			display: block;
@@ -129,17 +119,6 @@ exports.postComunidade = async function (dados, pessoaId) {
 			min-height: 50rem;
 			padding: 1rem;
 			}
-			header {
-			display: flex;
-			flex-direction: row;
-			justify-content: center;
-			}
-			#avatar {
-			border-radius: 100%;
-			max-width: 7rem;
-			max-height: 7rem;
-			}
-			</style>
 			`
 		};
 		await servicePaginasComunitarias.createPaginaComunitaria(dadosPaginaPadrao, pessoaId);
