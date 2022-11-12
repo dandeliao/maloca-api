@@ -25,6 +25,15 @@ CREATE TABLE paginas_pessoais(
     criacao             TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE imagens_pessoais (
+    imagem_pessoal_id   BIGSERIAL PRIMARY KEY NOT NULL,
+    pessoa_id           VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
+    nome_arquivo        VARCHAR(255) NOT NULL,
+    album               VARCHAR(32) NOT NULL,
+    descricao           TEXT NOT NULL,
+    data_criacao        TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE sessoes (
     sid VARCHAR COLLATE "default",
     sess json NOT NULL,

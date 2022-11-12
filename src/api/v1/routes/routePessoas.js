@@ -2,9 +2,12 @@ const express = require('express');
 const router = express.Router();
 const taAutenticade = require('../middlewares/authentication');
 const path = require('path');
+const multer = require('multer');
+const update = multer({ dest: path.join(path.resolve(__dirname, '../../../../static/temp')) });
 const servicePessoas = require('../services/servicePessoas');
 const servicePaginasPessoais = require('../services/servicePaginasPessoais');
 const serviceObjetosPessoais = require('../services/serviceObjetosPessoais');
+const serviceImagensPessoais = require('../services/serviceImagensPessoais');
 
 router.use(taAutenticade);
 
@@ -149,7 +152,6 @@ router.get('/:arroba/objetos/avatar', async (req, res, next) => {
 	try {
 		const dadosDaPessoa = await servicePessoas.getPessoa(req.params.arroba);
 		const nomeDoArquivo = dadosDaPessoa.avatar;
-		console.log('nomeDoArquivo:', nomeDoArquivo);
 		const caminhoDoArquivo = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', req.params.arroba, 'imagens', nomeDoArquivo);
 		res.sendFile(caminhoDoArquivo);
 	} catch (erro) {
@@ -161,7 +163,6 @@ router.get('/:arroba/objetos/fundo', async (req, res, next) => {
 	try {
 		const dadosDaPessoa = await servicePessoas.getPessoa(req.params.arroba);
 		const nomeDoArquivo = dadosDaPessoa.fundo;
-		console.log('nomeDoArquivo:', nomeDoArquivo);
 		const caminhoDoArquivo = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', req.params.arroba, 'imagens', nomeDoArquivo);
 		res.sendFile(caminhoDoArquivo);
 	} catch (erro) {
@@ -198,5 +199,76 @@ router.put('/:arroba/objetos/comunidades/:comunidadeId'), async (req, res, next)
 		next(erro);
 	}
 };
+
+// ---
+// imagens pessoais
+
+router.get('/:arroba/imagens', async (req, res, next) => {
+	try {
+		const imagens = await serviceImagensPessoais.getImagensPessoais(req.params.arroba);
+		res.json(imagens);
+	} catch (erro) {
+		next(erro);
+	}
+	
+});
+
+router.get('/:arroba/:imagemId', async (req, res, next) => {
+	try {
+		const caminhoDoArquivo = await serviceImagensPessoais.getImagemPessoal(req.params.arroba, req.params.imagemId);
+		res.sendFile(caminhoDoArquivo);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+router.post('/:arroba/imagens', update.single('arquivo'), async (req, res, next) => {
+	try {
+
+		const dados = {
+			pessoa_id: req.params.arroba,
+			descricao: req.body.descricao,
+			album: req.body.album
+		};
+
+		const dadosCriados = await serviceImagensPessoais.postImagemPessoal(dados, req.file);
+		res.status(201).json(dadosCriados);
+
+	} catch (erro) {
+		next (erro);
+	}
+});
+
+router.put('/:arroba/:imagemId', async (req, res, next) => {
+	try {
+		const dados = {
+			pessoa_id: req.params.arroba,
+			imagem_pessoal_id: req.params.imagemId,
+			descricao: req.body.descricao,
+			album: req.body.album
+		};
+
+		const dadosModificados = await serviceImagensPessoais.editImagemPessoal(dados);
+		res.status(200).json(dadosModificados);
+
+	} catch (erro) {
+		next (erro);
+	}
+});
+
+router.delete('/:arroba/:imagemId', async (req, res, next) => {
+	try {
+		const dados = {
+			pessoa_id: req.params.arroba,
+			imagem_pessoal_id: req.params.imagemId
+		};
+
+		await serviceImagensPessoais.deleteImagemPessoal(dados);
+		res.status(204).end();
+
+	} catch (erro) {
+		next(erro);
+	}
+});
 
 module.exports = router;
