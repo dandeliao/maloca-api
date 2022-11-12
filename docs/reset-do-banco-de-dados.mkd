@@ -28,4 +28,6 @@ INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-pessoa
 
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-criar-comunidade', 'botão que permite criar uma nova comunidade', true, true);
 
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-adicionar-imagem', 'botão que permite adicionar imagem ao banco de dados pessoal ou comunitário', true, true);
+
 - inserir outros blocos que tenham sido criados
