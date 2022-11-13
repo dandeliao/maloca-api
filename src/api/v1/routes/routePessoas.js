@@ -181,8 +181,6 @@ router.get('/:arroba/objetos/comunidades', async (req, res, next) => {
 
 router.get('/:arroba/objetos/comunidade', async (req, res, next) => { // comunidade?id="valor"
 	try {
-		console.log('entrou na rota pessoacomunidade');
-		console.log('COMUNIDADE ID:', req.params.comunidadeId);
 		const pessoaComunidade = await serviceObjetosPessoais.getComunidadePessoal(req.params.arroba, req.query.id);
 		res.json(pessoaComunidade);
 	} catch (erro) {
@@ -203,7 +201,7 @@ router.put('/:arroba/objetos/comunidades/:comunidadeId'), async (req, res, next)
 // ---
 // imagens pessoais
 
-router.get('/:arroba/imagens', async (req, res, next) => {
+router.get('/:arroba/objetos/imagens', async (req, res, next) => {
 	try {
 		const imagens = await serviceImagensPessoais.getImagensPessoais(req.params.arroba);
 		res.json(imagens);
@@ -213,16 +211,16 @@ router.get('/:arroba/imagens', async (req, res, next) => {
 	
 });
 
-router.get('/:arroba/:imagemId', async (req, res, next) => {
+router.get('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="valor"
 	try {
-		const caminhoDoArquivo = await serviceImagensPessoais.getImagemPessoal(req.params.arroba, req.params.imagemId);
+		const caminhoDoArquivo = await serviceImagensPessoais.getImagemPessoal(req.params.arroba, req.query.id);
 		res.sendFile(caminhoDoArquivo);
 	} catch (erro) {
 		next(erro);
 	}
 });
 
-router.post('/:arroba/imagens', update.single('arquivo'), async (req, res, next) => {
+router.post('/:arroba/objetos/imagens', update.single('arquivo'), async (req, res, next) => {
 	try {
 
 		const dados = {
@@ -239,11 +237,11 @@ router.post('/:arroba/imagens', update.single('arquivo'), async (req, res, next)
 	}
 });
 
-router.put('/:arroba/:imagemId', async (req, res, next) => {
+router.put('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="valor"
 	try {
 		const dados = {
 			pessoa_id: req.params.arroba,
-			imagem_pessoal_id: req.params.imagemId,
+			imagem_pessoal_id: req.query.id,
 			descricao: req.body.descricao,
 			album: req.body.album
 		};
@@ -256,11 +254,11 @@ router.put('/:arroba/:imagemId', async (req, res, next) => {
 	}
 });
 
-router.delete('/:arroba/:imagemId', async (req, res, next) => {
+router.delete('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="valor"
 	try {
 		const dados = {
 			pessoa_id: req.params.arroba,
-			imagem_pessoal_id: req.params.imagemId
+			imagem_pessoal_id: req.query.id
 		};
 
 		await serviceImagensPessoais.deleteImagemPessoal(dados);
