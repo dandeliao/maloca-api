@@ -70,6 +70,16 @@ CREATE TABLE paginas_comunitarias(
     criacao                 TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE imagens_comunitarias (
+    imagem_comunitaria_id   BIGSERIAL PRIMARY KEY NOT NULL,
+    comunidade_id           VARCHAR(32) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
+    pessoa_id               VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE SET NULL,
+    nome_arquivo            VARCHAR(255) NOT NULL,
+    album                   VARCHAR(32) NOT NULL,
+    descricao               TEXT NOT NULL,
+    data_criacao            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE blocos(
     bloco_id            VARCHAR(32) PRIMARY KEY NOT NULL,
     descricao           VARCHAR(500) NOT NULL,

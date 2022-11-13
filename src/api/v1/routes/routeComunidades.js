@@ -2,9 +2,12 @@ const express = require('express');
 const router = express.Router();
 const taAutenticade = require('../middlewares/authentication');
 const path = require('path');
+const multer = require('multer');
+const update = multer({ dest: path.join(path.resolve(__dirname, '../../../../static/temp')) });
 const serviceComunidades = require('../services/serviceComunidades');
 const servicePaginasComunitarias = require('../services/servicePaginasComunitarias');
 const serviceObjetosComunitarios = require('../services/serviceObjetosComunitarios');
+const serviceImagensComunitarias = require('../services/serviceImagensComunitarias');
 
 router.use(taAutenticade);
 
@@ -179,6 +182,80 @@ router.get('/:arroba/objetos/pessoas', async (req, res, next) => {
 	try {
 		const pessoas = await serviceObjetosComunitarios.getPessoasNaComunidade(req.params.arroba);
 		res.json(pessoas); 
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+// ---
+// imagens comunitarias
+
+router.get('/:arroba/objetos/imagens', async (req, res, next) => {
+	try {
+		const imagens = await serviceImagensComunitarias.getImagensComunitarias(req.params.arroba);
+		res.json(imagens);
+	} catch (erro) {
+		next(erro);
+	}
+	
+});
+
+router.get('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="valor"
+	try {
+		const caminhoDoArquivo = await serviceImagensComunitarias.getImagemComunitaria(req.params.arroba, req.query.id);
+		res.sendFile(caminhoDoArquivo);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+router.post('/:arroba/objetos/imagens', update.single('arquivo'), async (req, res, next) => {
+	try {
+
+		const dados = {
+			comunidade_id: 	req.params.arroba,
+			pessoa_id: 		req.user.pessoa_id,
+			descricao: 		req.body.descricao,
+			album: 			req.body.album
+		};
+
+		const dadosCriados = await serviceImagensComunitarias.postImagemComunitaria(dados, req.file);
+		res.status(201).json(dadosCriados);
+
+	} catch (erro) {
+		next (erro);
+	}
+});
+
+router.put('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="valor"
+	try {
+		const dados = {
+			comunidade_id: 			req.params.arroba,
+			imagem_comunitaria_id: 	req.query.id,
+			pessoa_id: 				req.user.pessoa_id,
+			descricao: 				req.body.descricao,
+			album: 					req.body.album
+		};
+
+		const dadosModificados = await serviceImagensComunitarias.editImagemComunitaria(dados);
+		res.status(200).json(dadosModificados);
+
+	} catch (erro) {
+		next (erro);
+	}
+});
+
+router.delete('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="valor"
+	try {
+		const dados = {
+			comunidade_id: 			req.params.arroba,
+			pessoa_id: 				req.user.pessoa_id,
+			imagem_comunitaria_id: 	req.query.id
+		};
+
+		await serviceImagensComunitarias.deleteImagemComunitaria(dados);
+		res.status(204).end();
+
 	} catch (erro) {
 		next(erro);
 	}
