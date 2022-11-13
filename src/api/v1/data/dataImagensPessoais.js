@@ -7,6 +7,13 @@ function getImagensPessoais(pessoaId) {
 	);
 }
 
+function getImagemPessoal(pessoaId, imagemId) {
+	return pool.query(
+		'SELECT * FROM imagens_pessoais WHERE pessoa_id = $1 AND imagem_pessoal_id = $2',
+		[pessoaId, imagemId]
+	);
+}
+
 function createImagemPessoal(dados) {
 	return pool.query(
 		'INSERT INTO imagens_pessoais (pessoa_id, nome_arquivo, descricao, album) VALUES ($1, $2, $3, $4) RETURNING *',
@@ -29,6 +36,7 @@ function deleteImagemPessoal(dados){
 }
 
 exports.getImagensPessoais = getImagensPessoais;
+exports.getImagemPessoal = getImagemPessoal;
 exports.createImagemPessoal = createImagemPessoal;
 exports.editImagemPessoal = editImagemPessoal;
 exports.deleteImagemPessoal = deleteImagemPessoal;
