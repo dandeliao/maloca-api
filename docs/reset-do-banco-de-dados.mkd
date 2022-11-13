@@ -30,4 +30,6 @@ INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-criar-
 
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-adicionar-imagem', 'botão que permite adicionar imagem ao banco de dados pessoal ou comunitário', true, true);
 
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-albuns', 'exibe lista de álbuns e permite navegar por imagens pessoais ou comunitárias', true, true);
+
 - inserir outros blocos que tenham sido criados
