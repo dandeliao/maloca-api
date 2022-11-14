@@ -37,6 +37,10 @@ exports.postRegistro = async function (dados) {
 	if (!fs.existsSync(path.join(pastaPessoal, 'paginas'))){
 		fs.mkdirSync(path.join(pastaPessoal, 'paginas'));
 	}
+	if (!fs.existsSync(path.join(pastaPessoal, 'textos'))){
+		fs.mkdirSync(path.join(pastaPessoal, 'textos'));
+	}
+	
 	
 	// sorteia e copia avatar padrão para pasta pessoal / imagens
 	let pastaDefault = path.join(path.resolve(__dirname, '../../../../static'), 'default', 'avatarPessoas');

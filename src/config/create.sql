@@ -30,7 +30,19 @@ CREATE TABLE imagens_pessoais (
     pessoa_id           VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
     nome_arquivo        VARCHAR(255) NOT NULL,
     album               VARCHAR(32) NOT NULL,
-    descricao           TEXT NOT NULL,
+    descricao           TEXT,
+    sensivel            BOOLEAN DEFAULT false,
+    aviso_de_conteudo   VARCHAR(64),
+    data_criacao        TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE textos_pessoais (
+    texto_pessoal_id    BIGSERIAL PRIMARY KEY NOT NULL,
+    pessoa_id           VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
+    blog                VARCHAR(32) NOT NULL,
+    titulo              VARCHAR(64),
+    sensivel            BOOLEAN DEFAULT false,
+    aviso_de_conteudo   VARCHAR(64),
     data_criacao        TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

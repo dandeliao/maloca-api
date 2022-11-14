@@ -8,6 +8,7 @@ const servicePessoas = require('../services/servicePessoas');
 const servicePaginasPessoais = require('../services/servicePaginasPessoais');
 const serviceObjetosPessoais = require('../services/serviceObjetosPessoais');
 const serviceImagensPessoais = require('../services/serviceImagensPessoais');
+const serviceTextosPessoais = require('../services/serviceTextosPessoais');
 
 router.use(taAutenticade);
 
@@ -262,6 +263,79 @@ router.delete('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?i
 		};
 
 		await serviceImagensPessoais.deleteImagemPessoal(dados);
+		res.status(204).end();
+
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+// ---
+// textos pessoais
+
+router.get('/:arroba/objetos/textos', async (req, res, next) => {
+	try {
+		const textos = await serviceTextosPessoais.getTextosPessoais(req.params.arroba);
+		res.json(textos);
+	} catch (erro) {
+		next(erro);
+	}
+	
+});
+
+router.get('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="valor"
+	try {
+		const caminhoDoArquivo = await serviceTextosPessoais.getTextoPessoal(req.params.arroba, req.query.id);
+		res.sendFile(caminhoDoArquivo);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+router.post('/:arroba/objetos/textos', async (req, res, next) => {
+	try {
+
+		const dados = {
+			pessoa_id: 	req.params.arroba,
+			titulo: 	req.body.titulo,
+			blog: 		req.body.blog,
+			texto: 		req.body.texto
+		};
+
+		const dadosCriados = await serviceTextosPessoais.postTextoPessoal(dados);
+		res.status(201).json(dadosCriados);
+
+	} catch (erro) {
+		next (erro);
+	}
+});
+
+router.put('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="valor"
+	try {
+		const dados = {
+			pessoa_id: 			req.params.arroba,
+			texto_pessoal_id: 	req.query.id,
+			titulo: 			req.body.titulo,
+			blog: 				req.body.blog,
+			texto:				req.body.texto
+		};
+
+		const dadosModificados = await serviceTextosPessoais.editTextoPessoal(dados);
+		res.status(200).json(dadosModificados);
+
+	} catch (erro) {
+		next (erro);
+	}
+});
+
+router.delete('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="valor"
+	try {
+		const dados = {
+			pessoa_id: req.params.arroba,
+			texto_pessoal_id: req.query.id
+		};
+
+		await serviceTextosPessoais.deleteTextoPessoal(dados);
 		res.status(204).end();
 
 	} catch (erro) {
