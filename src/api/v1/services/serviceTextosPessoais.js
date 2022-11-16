@@ -10,6 +10,14 @@ exports.getTextosPessoais = async function (pessoaId) {
 	return sortedTextos;
 };
 
+exports.getTextosBlogPessoal = async function (pessoaId, blog) {
+	let objetoTextos = await dataTextosPessoais.getTextosBlogPessoal(pessoaId, blog);
+	const sortedTextos = objetoTextos.rows.sort((a, b) => {
+		return a.data_criacao - b.data_criacao;
+	});
+	return sortedTextos;
+};
+
 exports.getTextoPessoal = async function (pessoaId, textoId) {
 
 	let objetoTexto = await dataTextosPessoais.getTextoPessoal(pessoaId, textoId);

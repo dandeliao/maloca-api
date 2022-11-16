@@ -202,9 +202,15 @@ router.put('/:arroba/objetos/comunidades/:comunidadeId'), async (req, res, next)
 // ---
 // imagens pessoais
 
-router.get('/:arroba/objetos/imagens', async (req, res, next) => {
+router.get('/:arroba/objetos/imagens', async (req, res, next) => { // opcional: imagens?id="album"
 	try {
-		const imagens = await serviceImagensPessoais.getImagensPessoais(req.params.arroba);
+		let imagens;
+		if (req.query.album) {
+			imagens = await serviceImagensPessoais.getImagensAlbumPessoal(req.params.arroba, req.query.album);
+		} else {
+			imagens = await serviceImagensPessoais.getImagensPessoais(req.params.arroba);
+		}
+		
 		res.json(imagens);
 	} catch (erro) {
 		next(erro);
@@ -273,14 +279,19 @@ router.delete('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?i
 // ---
 // textos pessoais
 
-router.get('/:arroba/objetos/textos', async (req, res, next) => {
+router.get('/:arroba/objetos/textos', async (req, res, next) => { // opcional: textos?blog="nome-do-blog"
 	try {
-		const textos = await serviceTextosPessoais.getTextosPessoais(req.params.arroba);
+		let textos;
+		if (req.query.blog) {
+			textos = await serviceTextosPessoais.getTextosBlogPessoal(req.params.arroba, req.query.blog);
+		} else {
+			textos = await serviceTextosPessoais.getTextosPessoais(req.params.arroba);
+		}
+		
 		res.json(textos);
 	} catch (erro) {
 		next(erro);
 	}
-	
 });
 
 router.get('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="valor"

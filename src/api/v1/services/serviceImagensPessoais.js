@@ -10,6 +10,14 @@ exports.getImagensPessoais = async function (pessoaId) {
 	return sortedImagens;
 };
 
+exports.getImagensAlbumPessoal = async function (pessoaId, album) {
+	let objetoImagens= await dataImagensPessoais.getImagensAlbumPessoal(pessoaId, album);
+	const sortedImagens = objetoImagens.rows.sort((a, b) => {
+		return a.data_criacao - b.data_criacao;
+	});
+	return sortedImagens;
+};
+
 exports.getImagemPessoal = async function (pessoaId, imagemId) {
 
 	let objetoImagem = await dataImagensPessoais.getImagemPessoal(pessoaId, imagemId);

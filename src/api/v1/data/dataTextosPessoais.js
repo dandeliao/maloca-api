@@ -7,6 +7,13 @@ function getTextosPessoais(pessoaId) {
 	);
 }
 
+function getTextosBlogPessoal(pessoaId, blog) {
+	return pool.query(
+		'SELECT * FROM textos_pessoais WHERE pessoa_id = $1 AND blog = $2',
+		[pessoaId, blog]
+	);
+}
+
 function getTextoPessoal(pessoaId, textoId) {
 	return pool.query(
 		'SELECT * FROM textos_pessoais WHERE pessoa_id = $1 AND texto_pessoal_id = $2',
@@ -36,6 +43,7 @@ function deleteTextoPessoal(dados){
 }
 
 exports.getTextosPessoais = getTextosPessoais;
+exports.getTextosBlogPessoal = getTextosBlogPessoal;
 exports.getTextoPessoal = getTextoPessoal;
 exports.createTextoPessoal = createTextoPessoal;
 exports.editTextoPessoal = editTextoPessoal;
