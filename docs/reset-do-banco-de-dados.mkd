@@ -32,8 +32,12 @@ INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-adicio
 
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-albuns', 'exibe lista de álbuns e permite navegar por imagens pessoais ou comunitárias', true, true);
 
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-album', 'exibe imagens de um álbum específico, pessoal ou comunitário', true, true);
+
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-adicionar-texto', 'botão que permite adicionar texto ao banco de dados pessoal ou comunitário', true, true);
 
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-blogs', 'exibe lista de blogs e permite navegar pelos textos pessoais ou comunitários', true, true);
+
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-blog', 'exibe textos de um blog específico, pessoal ou comunitário', true, true);
 
 - inserir outros blocos que tenham sido criados
