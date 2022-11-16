@@ -55,6 +55,9 @@ exports.postComunidade = async function (dados, pessoaId) {
 		if (!fs.existsSync(path.join(pastaComunitaria, 'paginas'))){
 			fs.mkdirSync(path.join(pastaComunitaria, 'paginas'));
 		}
+		if (!fs.existsSync(path.join(pastaComunitaria, 'textos'))){
+			fs.mkdirSync(path.join(pastaComunitaria, 'textos'));
+		}
 		
 		// sorteia e copia avatar padrão para pasta comunitária / imagens
 		let pastaDefault = path.join(path.resolve(__dirname, '../../../../static'), 'default', 'avatarComunidades');

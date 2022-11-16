@@ -88,7 +88,20 @@ CREATE TABLE imagens_comunitarias (
     pessoa_id               VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE SET NULL,
     nome_arquivo            VARCHAR(255) NOT NULL,
     album                   VARCHAR(32) NOT NULL,
-    descricao               TEXT NOT NULL,
+    descricao               TEXT,
+    sensivel                BOOLEAN DEFAULT false,
+    aviso_de_conteudo       VARCHAR(64),
+    data_criacao            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE textos_comunitarios (
+    texto_comunitario_id    BIGSERIAL PRIMARY KEY NOT NULL,
+    comunidade_id           VARCHAR(32) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
+    pessoa_id               VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE SET NULL,
+    blog                    VARCHAR(32) NOT NULL,
+    titulo                  VARCHAR(64),
+    sensivel                BOOLEAN DEFAULT false,
+    aviso_de_conteudo       VARCHAR(64),
     data_criacao            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -8,6 +8,7 @@ const serviceComunidades = require('../services/serviceComunidades');
 const servicePaginasComunitarias = require('../services/servicePaginasComunitarias');
 const serviceObjetosComunitarios = require('../services/serviceObjetosComunitarios');
 const serviceImagensComunitarias = require('../services/serviceImagensComunitarias');
+const serviceTextosComunitarios = require('../services/serviceTextosComunitarios');
 
 router.use(taAutenticade);
 
@@ -254,6 +255,85 @@ router.delete('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?i
 		};
 
 		await serviceImagensComunitarias.deleteImagemComunitaria(dados);
+		res.status(204).end();
+
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+// ---
+// textos comunitários
+
+router.get('/:arroba/objetos/textos', async (req, res, next) => { // opcional: textos?blog="nome-do-blog"
+	try {
+		let textos;
+		if (req.query.blog) {
+			textos = await serviceTextosComunitarios.getTextosBlogComunitario(req.params.arroba, req.query.blog);
+		} else {
+			textos = await serviceTextosComunitarios.getTextosComunitarios(req.params.arroba);
+		}
+		
+		res.json(textos);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+router.get('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="valor"
+	try {
+		const caminhoDoArquivo = await serviceTextosComunitarios.getTextoComunitario(req.params.arroba, req.query.id);
+		res.sendFile(caminhoDoArquivo);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+router.post('/:arroba/objetos/textos', async (req, res, next) => {
+	try {
+
+		const dados = {
+			comunidade_id: 	req.params.arroba,
+			pessoa_id:		req.user.pessoa_id,
+			titulo: 		req.body.titulo,
+			blog: 			req.body.blog,
+			texto: 			req.body.texto
+		};
+
+		const dadosCriados = await serviceTextosComunitarios.postTextoComunitario(dados);
+		res.status(201).json(dadosCriados);
+
+	} catch (erro) {
+		next (erro);
+	}
+});
+
+router.put('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="valor"
+	try {
+		const dados = {
+			comunidade_id: 			req.params.arroba,
+			texto_comunitario_id: 	req.query.id,
+			titulo: 				req.body.titulo,
+			blog: 					req.body.blog,
+			texto:					req.body.texto
+		};
+
+		const dadosModificados = await serviceTextosComunitarios.editTextoComunitario(dados);
+		res.status(200).json(dadosModificados);
+
+	} catch (erro) {
+		next (erro);
+	}
+});
+
+router.delete('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="valor"
+	try {
+		const dados = {
+			comunidade_id:			req.params.arroba,
+			texto_comunitario_id: 	req.query.id
+		};
+
+		await serviceTextosComunitarios.deleteTextoComunitario(dados);
 		res.status(204).end();
 
 	} catch (erro) {
