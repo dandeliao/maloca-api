@@ -201,10 +201,17 @@ router.get('/:arroba/objetos/imagens', async (req, res, next) => {
 	
 });
 
-router.get('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="valor"
+router.get('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id=valor&info=true (info é opcional)
 	try {
-		const caminhoDoArquivo = await serviceImagensComunitarias.getImagemComunitaria(req.params.arroba, req.query.id);
-		res.sendFile(caminhoDoArquivo);
+
+		if (req.query.info) {
+			const info = await serviceImagensComunitarias.getInfoImagemComunitaria(req.params.arroba, req.query.id);
+			res.json(info);
+		} else {
+			const caminhoDoArquivo = await serviceImagensComunitarias.getImagemComunitaria(req.params.arroba, req.query.id);
+			res.sendFile(caminhoDoArquivo);
+		}
+
 	} catch (erro) {
 		next(erro);
 	}
@@ -228,7 +235,7 @@ router.post('/:arroba/objetos/imagens', update.single('arquivo'), async (req, re
 	}
 });
 
-router.put('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="valor"
+router.put('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id=valor
 	try {
 		const dados = {
 			comunidade_id: 			req.params.arroba,
@@ -246,7 +253,7 @@ router.put('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="
 	}
 });
 
-router.delete('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="valor"
+router.delete('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id=valor
 	try {
 		const dados = {
 			comunidade_id: 			req.params.arroba,
@@ -265,7 +272,7 @@ router.delete('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?i
 // ---
 // textos comunitários
 
-router.get('/:arroba/objetos/textos', async (req, res, next) => { // opcional: textos?blog="nome-do-blog"
+router.get('/:arroba/objetos/textos', async (req, res, next) => { // opcional: textos?blog=nome-do-blog
 	try {
 		let textos;
 		if (req.query.blog) {
@@ -280,10 +287,20 @@ router.get('/:arroba/objetos/textos', async (req, res, next) => { // opcional: t
 	}
 });
 
-router.get('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="valor"
+router.get('/:arroba/objetos/texto', async (req, res, next) => { // texto?id=valor&info=true
 	try {
-		const caminhoDoArquivo = await serviceTextosComunitarios.getTextoComunitario(req.params.arroba, req.query.id);
-		res.sendFile(caminhoDoArquivo);
+
+		// se a query inclui "info", envia apenas as informações sobre o texto
+		if (req.query.info) {
+			const info = await serviceTextosComunitarios.getInfoTextoComunitario(req.params.arroba, req.query.id);
+			res.json(info);
+
+		// caso contrário, envia o arquivo
+		} else {
+			const caminhoDoArquivo = await serviceTextosComunitarios.getTextoComunitario(req.params.arroba, req.query.id);
+			res.sendFile(caminhoDoArquivo);
+		}
+
 	} catch (erro) {
 		next(erro);
 	}
@@ -308,7 +325,7 @@ router.post('/:arroba/objetos/textos', async (req, res, next) => {
 	}
 });
 
-router.put('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="valor"
+router.put('/:arroba/objetos/texto', async (req, res, next) => { // texto?id=valor
 	try {
 		const dados = {
 			comunidade_id: 			req.params.arroba,
@@ -326,7 +343,7 @@ router.put('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="va
 	}
 });
 
-router.delete('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="valor"
+router.delete('/:arroba/objetos/texto', async (req, res, next) => { // texto?id=valor
 	try {
 		const dados = {
 			comunidade_id:			req.params.arroba,

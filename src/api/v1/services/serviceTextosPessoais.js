@@ -28,6 +28,11 @@ exports.getTextoPessoal = async function (pessoaId, textoId) {
 	return caminho;
 };
 
+exports.getInfoTextoPessoal = async function (pessoaId, textoId) {
+	let objetoTexto = await dataTextosPessoais.getTextoPessoal(pessoaId, textoId);
+	return objetoTexto.rows[0];
+};
+
 exports.postTextoPessoal = async function (dados) {
 
 	const dataResponse = await dataTextosPessoais.createTextoPessoal(dados);

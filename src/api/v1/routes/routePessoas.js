@@ -180,7 +180,7 @@ router.get('/:arroba/objetos/comunidades', async (req, res, next) => {
 	}
 });
 
-router.get('/:arroba/objetos/comunidade', async (req, res, next) => { // comunidade?id="valor"
+router.get('/:arroba/objetos/comunidade', async (req, res, next) => { // comunidade?id=valor
 	try {
 		const pessoaComunidade = await serviceObjetosPessoais.getComunidadePessoal(req.params.arroba, req.query.id);
 		res.json(pessoaComunidade);
@@ -202,7 +202,7 @@ router.put('/:arroba/objetos/comunidades/:comunidadeId'), async (req, res, next)
 // ---
 // imagens pessoais
 
-router.get('/:arroba/objetos/imagens', async (req, res, next) => { // opcional: imagens?id="album"
+router.get('/:arroba/objetos/imagens', async (req, res, next) => { // opcional: imagens?id=album
 	try {
 		let imagens;
 		if (req.query.album) {
@@ -218,10 +218,20 @@ router.get('/:arroba/objetos/imagens', async (req, res, next) => { // opcional: 
 	
 });
 
-router.get('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="valor"
+router.get('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id=valor&info=true (info é opcional)
 	try {
-		const caminhoDoArquivo = await serviceImagensPessoais.getImagemPessoal(req.params.arroba, req.query.id);
-		res.sendFile(caminhoDoArquivo);
+
+		// se a query inclui "info", envia apenas as informações sobre a imagem
+		if (req.query.info) {
+			const info = await serviceImagensPessoais.getInfoImagemPessoal(req.params.arroba, req.query.id);
+			res.json(info);
+
+		// caso contrário, envia o arquivo
+		} else {
+			const caminhoDoArquivo = await serviceImagensPessoais.getImagemPessoal(req.params.arroba, req.query.id);
+			res.sendFile(caminhoDoArquivo);
+		}
+
 	} catch (erro) {
 		next(erro);
 	}
@@ -244,7 +254,7 @@ router.post('/:arroba/objetos/imagens', update.single('arquivo'), async (req, re
 	}
 });
 
-router.put('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="valor"
+router.put('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id=valor
 	try {
 		const dados = {
 			pessoa_id: req.params.arroba,
@@ -261,7 +271,7 @@ router.put('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="
 	}
 });
 
-router.delete('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id="valor"
+router.delete('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id=valor
 	try {
 		const dados = {
 			pessoa_id: req.params.arroba,
@@ -279,7 +289,7 @@ router.delete('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?i
 // ---
 // textos pessoais
 
-router.get('/:arroba/objetos/textos', async (req, res, next) => { // opcional: textos?blog="nome-do-blog"
+router.get('/:arroba/objetos/textos', async (req, res, next) => { // opcional: textos?blog=nome-do-blog
 	try {
 		let textos;
 		if (req.query.blog) {
@@ -294,10 +304,20 @@ router.get('/:arroba/objetos/textos', async (req, res, next) => { // opcional: t
 	}
 });
 
-router.get('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="valor"
+router.get('/:arroba/objetos/texto', async (req, res, next) => { // texto?id=valor&info=true
 	try {
-		const caminhoDoArquivo = await serviceTextosPessoais.getTextoPessoal(req.params.arroba, req.query.id);
-		res.sendFile(caminhoDoArquivo);
+
+		// se a query inclui "info", envia apenas as informações sobre o texto
+		if (req.query.info) {
+			const info = await serviceTextosPessoais.getInfoTextoPessoal(req.params.arroba, req.query.id);
+			res.json(info);
+
+		// caso contrário, envia o arquivo
+		} else {
+			const caminhoDoArquivo = await serviceTextosPessoais.getTextoPessoal(req.params.arroba, req.query.id);
+			res.sendFile(caminhoDoArquivo);
+		}
+
 	} catch (erro) {
 		next(erro);
 	}
@@ -321,7 +341,7 @@ router.post('/:arroba/objetos/textos', async (req, res, next) => {
 	}
 });
 
-router.put('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="valor"
+router.put('/:arroba/objetos/texto', async (req, res, next) => { // texto?id=valor
 	try {
 		const dados = {
 			pessoa_id: 			req.params.arroba,
@@ -339,7 +359,7 @@ router.put('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="va
 	}
 });
 
-router.delete('/:arroba/objetos/texto', async (req, res, next) => { // texto?id="valor"
+router.delete('/:arroba/objetos/texto', async (req, res, next) => { // texto?id=valor
 	try {
 		const dados = {
 			pessoa_id: req.params.arroba,

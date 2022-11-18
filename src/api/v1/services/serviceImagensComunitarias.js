@@ -20,6 +20,12 @@ exports.getImagemComunitaria = async function (comunidadeId, imagemId) {
 	return caminho;
 };
 
+exports.getInfoImagemComunitaria = async function (pessoaId, imagemId) {
+	let objetoImagem = await dataImagensComunitarias.getImagemComunitaria(pessoaId, imagemId);
+	return objetoImagem.rows[0];
+};
+
+
 exports.postImagemComunitaria = async function (dados, dadosArquivo) {
 
 	// falta verificar autorização (pessoas com habilidade 'participar')

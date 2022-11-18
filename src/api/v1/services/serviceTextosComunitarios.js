@@ -28,6 +28,11 @@ exports.getTextoComunitario = async function (comunidadeId, textoId) {
 	return caminho;
 };
 
+exports.getInfoTextoComunitario = async function (comunidadeId, textoId) {
+	let objetoTexto = await dataTextosComunitarios.getTextoComunitario(comunidadeId, textoId);
+	return objetoTexto.rows[0];
+};
+
 exports.postTextoComunitario = async function (dados) {
 
 	const dataResponse = await dataTextosComunitarios.createTextoComunitario(dados);

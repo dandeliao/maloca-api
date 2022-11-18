@@ -28,6 +28,11 @@ exports.getImagemPessoal = async function (pessoaId, imagemId) {
 	return caminho;
 };
 
+exports.getInfoImagemPessoal = async function (pessoaId, imagemId) {
+	let objetoImagem = await dataImagensPessoais.getImagemPessoal(pessoaId, imagemId);
+	return objetoImagem.rows[0];
+};
+
 exports.postImagemPessoal = async function (dados, dadosArquivo) {
 
 	const caminhoTemp = dadosArquivo.path;
