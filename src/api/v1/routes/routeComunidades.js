@@ -9,6 +9,7 @@ const servicePaginasComunitarias = require('../services/servicePaginasComunitari
 const serviceObjetosComunitarios = require('../services/serviceObjetosComunitarios');
 const serviceImagensComunitarias = require('../services/serviceImagensComunitarias');
 const serviceTextosComunitarios = require('../services/serviceTextosComunitarios');
+const serviceComentarios = require('../services/serviceComentarios');
 
 router.use(taAutenticade);
 
@@ -201,12 +202,15 @@ router.get('/:arroba/objetos/imagens', async (req, res, next) => {
 	
 });
 
-router.get('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id=valor&info=true (info é opcional)
+router.get('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?id=valor&info=true&comentarios=true (info e comentarios são opcionais)
 	try {
 
 		if (req.query.info) {
 			const info = await serviceImagensComunitarias.getInfoImagemComunitaria(req.params.arroba, req.query.id);
 			res.json(info);
+		} else if (req.query.comentarios) {
+			const comentarios = await serviceComentarios.getComentariosImagem(req.query.id);
+			res.json(comentarios);
 		} else {
 			const caminhoDoArquivo = await serviceImagensComunitarias.getImagemComunitaria(req.params.arroba, req.query.id);
 			res.sendFile(caminhoDoArquivo);
@@ -287,13 +291,18 @@ router.get('/:arroba/objetos/textos', async (req, res, next) => { // opcional: t
 	}
 });
 
-router.get('/:arroba/objetos/texto', async (req, res, next) => { // texto?id=valor&info=true
+router.get('/:arroba/objetos/texto', async (req, res, next) => { // texto?id=valor&info=true&comentarios=true
 	try {
 
 		// se a query inclui "info", envia apenas as informações sobre o texto
 		if (req.query.info) {
 			const info = await serviceTextosComunitarios.getInfoTextoComunitario(req.params.arroba, req.query.id);
 			res.json(info);
+
+		// se a query inclui "comentarios", envia apenas os comentários do texto
+		} else if (req.query.comentarios) {
+			const comentarios = await serviceComentarios.getComentariosTexto(req.query.id);
+			res.json(comentarios);
 
 		// caso contrário, envia o arquivo
 		} else {
@@ -351,6 +360,43 @@ router.delete('/:arroba/objetos/texto', async (req, res, next) => { // texto?id=
 		};
 
 		await serviceTextosComunitarios.deleteTextoComunitario(dados);
+		res.status(204).end();
+
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+// ---
+// comentários
+
+router.post('/:arroba/objetos/comentarios', async (req, res, next) => { // comentarios?texto=id&imagem=id
+	try {
+
+		const dados = {
+			comunidade_id: 	req.params.arroba,
+			pessoa_id:		req.user.pessoa_id,
+			titulo: 		req.body.titulo,
+		};
+
+		if (req.query.texto) {
+			dados.texto_id = req.query.texto;
+		} else if (req.query.imagem) {
+			dados.imagem_id = req.query.imagem;
+		}
+
+		const dadosCriados = await serviceComentarios.postComentario(dados);
+		res.status(201).json(dadosCriados);
+
+	} catch (erro) {
+		next (erro);
+	}
+});
+
+router.delete('/:arroba/objetos/comentarios', async (req, res, next) => { // comentarios?id=valor
+	try {
+
+		await serviceComentarios.deleteComentario(req.query.id);
 		res.status(204).end();
 
 	} catch (erro) {

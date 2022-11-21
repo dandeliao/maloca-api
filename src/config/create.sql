@@ -126,3 +126,25 @@ CREATE TABLE blocos_paginas_comunitarias(
     bloco_id                        VARCHAR(32) REFERENCES blocos(bloco_id) ON DELETE SET NULL,
     pagina_comunitaria_id           SERIAL REFERENCES paginas_comunitarias(pagina_comunitaria_id) ON DELETE CASCADE
 );
+
+CREATE TABLE comentarios(
+    comentario_id       BIGSERIAL PRIMARY KEY,
+    pessoa_id           VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE SET NULL,
+    comunidade_id       VARCHAR(32) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
+    texto               TEXT NOT NULL,
+    sensivel            BOOLEAN DEFAULT false,
+    aviso_de_conteudo   VARCHAR(64),
+    data_criacao        TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE comentarios_imagens_comunitarias(
+    comentario_id           BIGINT NOT NULL REFERENCES comentarios(comentario_id) ON DELETE CASCADE,
+    imagem_comunitaria_id   BIGINT NOT NULL REFERENCES imagens_comunitarias(imagem_comunitaria_id) ON DELETE CASCADE,
+    PRIMARY KEY (comentario_id, imagem_comunitaria_id)
+);
+
+CREATE TABLE comentarios_textos_comunitarios(
+    comentario_id           BIGINT NOT NULL REFERENCES comentarios(comentario_id) ON DELETE CASCADE,
+    texto_comunitario_id    BIGINT NOT NULL REFERENCES textos_comunitarios(texto_comunitario_id) ON DELETE CASCADE,
+    PRIMARY KEY (comentario_id, texto_comunitario_id)
+);
