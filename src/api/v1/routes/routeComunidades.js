@@ -376,15 +376,16 @@ router.post('/:arroba/objetos/comentarios', async (req, res, next) => { // comen
 		const dados = {
 			comunidade_id: 	req.params.arroba,
 			pessoa_id:		req.user.pessoa_id,
-			titulo: 		req.body.titulo,
+			texto: 			req.body.texto,
 		};
 
 		if (req.query.texto) {
-			dados.texto_id = req.query.texto;
+			dados.texto_comunitario_id = req.query.texto;
 		} else if (req.query.imagem) {
-			dados.imagem_id = req.query.imagem;
+			dados.imagem_comunitaria_id = req.query.imagem;
 		}
 
+		console.log('dados do comentário no router:', dados);
 		const dadosCriados = await serviceComentarios.postComentario(dados);
 		res.status(201).json(dadosCriados);
 

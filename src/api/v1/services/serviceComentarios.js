@@ -24,7 +24,7 @@ exports.getComentariosPessoa = async function (pessoaId) {
 
 exports.getComentariosTexto = async function (textoId) {
 	let objetoComentarios = await dataComentarios.getComentariosTexto(textoId);
-	return objetoComentarios.rows[0];
+	return objetoComentarios.rows;
 };
 
 exports.getComentariosImagem = async function (imagemId) {
@@ -37,9 +37,9 @@ exports.postComentario = async function (dados) {
 	const dataResponse = await dataComentarios.createComentario(dados);
 	dados.comentario_id = dataResponse.rows[0].comentario_id;
 
-	if (dados.texto_id) {
+	if (dados.texto_comunitario_id) {
 		await dataComentarios.createComentarioTexto(dados);
-	} else if (dados.imagem_id) {
+	} else if (dados.imagem_comunitaria_id) {
 		await dataComentarios.createComentarioImagem(dados);
 	}
 	

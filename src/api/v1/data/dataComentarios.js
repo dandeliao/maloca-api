@@ -37,8 +37,8 @@ function getComentariosImagem(imagemId) {
 
 function createComentario(dados) {
 	return pool.query(
-		'INSERT INTO comentarios (pessoa_id, texto, sensivel, aviso_de_conteudo) VALUES ($1, $2, $3, $4) RETURNING *',
-		[dados.pessoa_id, dados.texto, dados.sensivel, dados.aviso_de_conteudo]
+		'INSERT INTO comentarios (comunidade_id, pessoa_id, texto, sensivel, aviso_de_conteudo) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+		[dados.comunidade_id, dados.pessoa_id, dados.texto, dados.sensivel, dados.aviso_de_conteudo]
 	);
 }
 
