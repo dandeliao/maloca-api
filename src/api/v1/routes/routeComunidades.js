@@ -370,6 +370,15 @@ router.delete('/:arroba/objetos/texto', async (req, res, next) => { // texto?id=
 // ---
 // comentários
 
+router.get('/:arroba/objetos/comentarios/:id', async (req, res, next) => {
+	try {
+		const comentario = await serviceComentarios.getComentario(req.params.id);
+		res.json(comentario); 
+	} catch (erro) {
+		next (erro);
+	}
+});
+
 router.post('/:arroba/objetos/comentarios', async (req, res, next) => { // comentarios?texto=id&imagem=id
 	try {
 
