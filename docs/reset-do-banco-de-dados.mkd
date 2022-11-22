@@ -44,4 +44,10 @@ INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-blog',
 
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-texto', 'exibe texto pessoal ou comunitário', true, true);
 
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-comentarios', 'exibe lista de comentários sobre um texto ou imagem (apenas em comunidades)', false, true);
+
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-adicionar-comentario', 'botão que permite adicionar comentário a um texto ou imagem (apenas em comunidades)', false, true);
+
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-comentario', 'exibe um comentário a partir do seu id (atributo numero) (apenas em comunidades)', false, true);
+
 - inserir outros blocos que tenham sido criados
