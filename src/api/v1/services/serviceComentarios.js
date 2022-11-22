@@ -29,7 +29,7 @@ exports.getComentariosTexto = async function (textoId) {
 
 exports.getComentariosImagem = async function (imagemId) {
 	let objetoComentarios = await dataComentarios.getComentariosImagem(imagemId);
-	return objetoComentarios.rows[0];
+	return objetoComentarios.rows;
 };
 
 exports.postComentario = async function (dados) {
