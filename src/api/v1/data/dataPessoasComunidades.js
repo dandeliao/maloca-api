@@ -22,7 +22,6 @@ function getPessoaComunidade(pessoaId, comunidadeId) {
 }
 
 function postPessoaComunidade(pessoaId, comunidadeId, habilidades) {
-	console.log('editar:', habilidades.editar);
 	return pool.query(
 		'INSERT INTO pessoas_comunidades (pessoa_id, comunidade_id, participar, editar, moderar, cuidar) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
 		[pessoaId, comunidadeId, habilidades.participar, habilidades.editar, habilidades.moderar, habilidades.cuidar]
