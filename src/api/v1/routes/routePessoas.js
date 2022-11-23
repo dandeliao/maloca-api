@@ -189,6 +189,24 @@ router.get('/:arroba/objetos/comunidade', async (req, res, next) => { // comunid
 	}
 });
 
+router.post('/:arroba/objetos/comunidade', async (req, res, next) => { // comunidade?id=valor
+	try {
+		const pessoaComunidade = await serviceObjetosPessoais.enterComunidade(req.params.arroba, req.query.id);
+		res.json(pessoaComunidade);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+router.delete('/:arroba/objetos/comunidade', async (req, res, next) => { // comunidade?id=valor
+	try {
+		const pessoaComunidade = await serviceObjetosPessoais.leaveComunidade(req.params.arroba, req.query.id);
+		res.json(pessoaComunidade);
+	} catch (erro) {
+		next (erro);
+	}
+});
+
 router.put('/:arroba/objetos/comunidades/:comunidadeId'), async (req, res, next) => {
 	try {
 		const habilidades = req.body;
