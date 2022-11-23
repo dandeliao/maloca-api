@@ -8,7 +8,18 @@ exports.getComunidadesPessoais = async function (pessoaId) {
 
 exports.getComunidadePessoal = async function (pessoaId, comunidadeId) {
 	const objetoPessoaComunidade = await dataPessoasComunidades.getPessoaComunidade(pessoaId, comunidadeId);
-	return objetoPessoaComunidade.rows;
+	if (objetoPessoaComunidade.rows[0]) {
+		return objetoPessoaComunidade.rows[0];
+	} else {
+		return {
+			pessoa_id: 		pessoaId,
+			comunidade_id:	comunidadeId,
+			participar:		false,
+			editar:			false,
+			moderar: 		false,
+			cuidar:			false
+		};
+	}
 };
 
 exports.editComunidadePessoal = async function (pessoaId, comunidadeId, habilidades) {
@@ -21,9 +32,8 @@ exports.editComunidadePessoal = async function (pessoaId, comunidadeId, habilida
 
 exports.enterComunidade = async function (pessoaId, comunidadeId) {
 	const objetoComunidade = await dataComunidades.getComunidade(comunidadeId);
-	if (objetoComunidade.aberta) {
+	if (objetoComunidade.rows[0].aberta) {
 		const habilidades = {
-			ver: true,
 			participar: true,
 			editar: false,
 			moderar: false,
