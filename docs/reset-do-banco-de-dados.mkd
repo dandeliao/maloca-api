@@ -24,7 +24,7 @@ INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-cartao
 
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-comunidades', 'exibe lista de comunidades conforme o contexto', true, false);
 
-INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-pessoas', 'exibe lista de pessoas conforme o contexto', false, true);
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-participantes', 'exibe lista de participantes conforme o contexto (apenas em comunidades)', false, true);
 
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-criar-comunidade', 'botão que permite criar uma nova comunidade', true, true);
 
@@ -49,5 +49,7 @@ INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-coment
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-adicionar-comentario', 'botão que permite adicionar comentário a um texto ou imagem (apenas em comunidades)', false, true);
 
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-comentario', 'exibe um comentário a partir do seu id (atributo numero) (apenas em comunidades)', false, true);
+
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-participar', 'botão que permite participar ou sair de uma comunidade (apenas em comunidades)', false, true);
 
 - inserir outros blocos que tenham sido criados
