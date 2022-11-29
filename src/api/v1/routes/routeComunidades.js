@@ -192,9 +192,14 @@ router.get('/:arroba/objetos/pessoas', async (req, res, next) => {
 // ---
 // imagens comunitarias
 
-router.get('/:arroba/objetos/imagens', async (req, res, next) => {
+router.get('/:arroba/objetos/imagens', async (req, res, next) => { // opcional: imagens?id=album
 	try {
-		const imagens = await serviceImagensComunitarias.getImagensComunitarias(req.params.arroba);
+		let imagens;
+		if (req.query.album) {
+			imagens = await serviceImagensComunitarias.getImagensAlbumComunitario(req.params.arroba, req.query.album);
+		} else {
+			imagens = await serviceImagensComunitarias.getImagensComunitarias(req.params.arroba);
+		}
 		res.json(imagens);
 	} catch (erro) {
 		next(erro);

@@ -10,6 +10,14 @@ exports.getImagensComunitarias = async function (comunidadeId) {
 	return sortedImagens;
 };
 
+exports.getImagensAlbumComunitario = async function (comunidadeId, album) {
+	let objetoImagens= await dataImagensComunitarias.getImagensAlbumComunitario(comunidadeId, album);
+	const sortedImagens = objetoImagens.rows.sort((a, b) => {
+		return a.data_criacao - b.data_criacao;
+	});
+	return sortedImagens;
+};
+
 exports.getImagemComunitaria = async function (comunidadeId, imagemId) {
 
 	let objetoImagem = await dataImagensComunitarias.getImagemComunitaria(comunidadeId, imagemId);

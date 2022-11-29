@@ -7,6 +7,13 @@ function getImagensComunitarias(comunidadeId) {
 	);
 }
 
+function getImagensAlbumComunitario(comunidadeId, album) {
+	return pool.query(
+		'SELECT * FROM imagens_comunitarias WHERE comunidade_id = $1 AND album = $2',
+		[comunidadeId, album]
+	);
+}
+
 function getImagemComunitaria(comunidadeId, imagemId) {
 	return pool.query(
 		'SELECT * FROM imagens_comunitarias WHERE comunidade_id = $1 AND imagem_comunitaria_id = $2',
@@ -36,6 +43,7 @@ function deleteImagemComunitaria(dados){
 }
 
 exports.getImagensComunitarias = getImagensComunitarias;
+exports.getImagensAlbumComunitario = getImagensAlbumComunitario;
 exports.getImagemComunitaria = getImagemComunitaria;
 exports.createImagemComunitaria = createImagemComunitaria;
 exports.editImagemComunitaria = editImagemComunitaria;
