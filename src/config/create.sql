@@ -27,9 +27,9 @@ CREATE TABLE paginas_pessoais(
 
 CREATE TABLE albuns_pessoais (
     album_pessoal_id    VARCHAR(32) UNIQUE NOT NULL,
-    pessoa_id           VARCHAR(16) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
+    pessoa_id           VARCHAR(16) UNIQUE REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
     PRIMARY KEY (album_pessoal_id, pessoa_id)
-)
+);
 
 CREATE TABLE imagens_pessoais (
     imagem_pessoal_id   BIGSERIAL PRIMARY KEY NOT NULL,
@@ -45,9 +45,9 @@ CREATE TABLE imagens_pessoais (
 
 CREATE TABLE blogs_pessoais (
     blog_pessoal_id     VARCHAR(32) UNIQUE NOT NULL,
-    pessoa_id           VARCHAR(16) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
+    pessoa_id           VARCHAR(16) UNIQUE REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
     PRIMARY KEY (blog_pessoal_id, pessoa_id)
-)
+);
 
 CREATE TABLE textos_pessoais (
     texto_pessoal_id    BIGSERIAL PRIMARY KEY NOT NULL,
@@ -97,9 +97,9 @@ CREATE TABLE paginas_comunitarias(
 
 CREATE TABLE albuns_comunitarios (
     album_comunitario_id    VARCHAR(32) UNIQUE NOT NULL,
-    comunidade_id           VARCHAR(16) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
+    comunidade_id           VARCHAR(16) UNIQUE REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
     PRIMARY KEY (album_comunitario_id, comunidade_id)
-)
+);
 
 CREATE TABLE imagens_comunitarias (
     imagem_comunitaria_id   BIGSERIAL PRIMARY KEY NOT NULL,
@@ -116,9 +116,9 @@ CREATE TABLE imagens_comunitarias (
 
 CREATE TABLE blogs_comunitarios (
     blog_comunitario_id     VARCHAR(32) UNIQUE NOT NULL,
-    comunidade_id           VARCHAR(16) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
+    comunidade_id           VARCHAR(16) UNIQUE REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
     PRIMARY KEY (blog_comunitario_id, comunidade_id)
-)
+);
 
 CREATE TABLE textos_comunitarios (
     texto_comunitario_id    BIGSERIAL PRIMARY KEY NOT NULL,
