@@ -58,28 +58,31 @@ exports.postRegistro = async function (dados) {
 	let benjor = utilRandomGenerator.geraBenJor();
 	const dadosPaginaPadrao = {
 		pessoa_id: pessoaId,
-		titulo: 'página 1',
+		titulo: 'sobre',
 		publica: true,
 		html: `
 		<div id="container">
 
-
 		<m-cartao-de-visita></m-cartao-de-visita>
 		<br>
+		<m-bloco>
+		<h2>Comunidades:</h2>
 		<m-comunidades></m-comunidades>
+		</m-bloco>
 		<br>
 		<marquee>"${benjor}" - Jorge Ben Jor</marquee>
+
 		</div>
 		
 		<style>
 
 		#container {
-		display: block;
-		max-width: 720px;
-		margin: 0 auto;
-		text-align: center;
+			display: block;
+			max-width: 960px;
+			margin: 0 auto;
+			text-align: center;
 		}
-		
+
 		</style>
 		`
 	};

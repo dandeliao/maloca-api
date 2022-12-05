@@ -6,7 +6,7 @@ DROP TABLE blocos_paginas_comunitarias, blocos_paginas_pessoais, blocos, paginas
 
 INSERT INTO comunidades (comunidade_id, nome, descricao) VALUES ('maloca', 'Maloca', 'cabana comunitária');
 
-INSERT INTO paginas_comunitarias (comunidade_id, titulo, publica) VALUES('maloca', 'início', true);
+INSERT INTO paginas_comunitarias (comunidade_id, titulo, publica) VALUES('maloca', 'principal', true);
 
 - criar usuário *seu_nome* pela interface da maloca
 

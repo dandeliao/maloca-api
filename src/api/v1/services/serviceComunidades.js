@@ -74,7 +74,7 @@ exports.postComunidade = async function (dados, pessoaId) {
 		// cria página comunitária padrão
 		const dadosPaginaPadrao = {
 			comunidade_id: arrayNovaComunidade.rows[0].comunidade_id,
-			titulo: 'início',
+			titulo: 'principal',
 			publica: true,
 			html: `
 			<div id="container">
@@ -83,44 +83,20 @@ exports.postComunidade = async function (dados, pessoaId) {
 
 			<br>
 
-			<p>Em construção... <img src="https://localhost:4000/static/default/gifs/construcao-0.gif" /></p>
-
 			<m-bloco>
-			<h2>Pessoas:</h2>
-			<m-pessoas></m-pessoas>
+			<h2>Participantes:</h2>
+			<m-participantes></m-participantes>
 			</m-bloco>
 
 			</div>
 
 
 			<style>
-			h1 {
-			margin: 1.3rem;
-			margin-bottom: 0.3rem;
-			}
-
-			h2 {
-			margin-top: 0.5rem;
-			margin-bottom: 1.5rem;
-
-			}
-
-			p {
-			margin: 0.5rem 1.3rem;
-			}
-
-			main {
-			min-height: 60rem;
-			}
-
 			#container {
-			background-color: #F6F5F4;
-			display: block;
-			max-width: 720px;
-			margin: 0 auto;
-			text-align: center;
-			min-height: 50rem;
-			padding: 1rem;
+				display: block;
+				max-width: 960px;
+				margin: 0 auto;
+				text-align: center;
 			}
 			`
 		};
