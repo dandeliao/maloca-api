@@ -24,7 +24,7 @@ function getTextosComunitarios(comunidadeId) {
 
 function getTextosBlogComunitario(comunidadeId, blog) {
 	return pool.query(
-		'SELECT * FROM textos_comunitarios WHERE comunidade_id = $1 AND blog = $2',
+		'SELECT * FROM textos_comunitarios WHERE comunidade_id = $1 AND blog_comunitario_id = $2',
 		[comunidadeId, blog]
 	);
 }
@@ -38,8 +38,8 @@ function getTextoComunitario(comunidadeId, textoId) {
 
 function createTextoComunitario(dados) {
 	return pool.query(
-		'INSERT INTO textos_comunitarios (comunidade_id, pessoa_id, titulo, blog) VALUES ($1, $2, $3, $4) RETURNING *',
-		[dados.comunidade_id, dados.pessoa_id, dados.titulo, dados.blog]
+		'INSERT INTO textos_comunitarios (comunidade_id, pessoa_id, titulo, blog_comunitario_id) VALUES ($1, $2, $3, $4) RETURNING *',
+		[dados.comunidade_id, dados.pessoa_id, dados.titulo, dados.blog_comunitario_id]
 	);
 }
 

@@ -31,7 +31,7 @@ exports.getTextosBlogComunitario = async function (comunidadeId, blog) {
 exports.getTextoComunitario = async function (comunidadeId, textoId) {
 
 	let objetoTexto = await dataTextosComunitarios.getTextoComunitario(comunidadeId, textoId);
-	const blog = objetoTexto.rows[0].blog;
+	const blog = objetoTexto.rows[0].blog_comunitario_id;
 	const nomeArquivo = `${objetoTexto.rows[0].texto_comunitario_id}.mkd`;
 
 	const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${comunidadeId}`, 'textos', blog, nomeArquivo);
@@ -48,7 +48,7 @@ exports.postTextoComunitario = async function (dados) {
 	const dataResponse = await dataTextosComunitarios.createTextoComunitario(dados);
 	const textoId = dataResponse.rows[0].texto_comunitario_id;
 
-	const diretorioDestino = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${dados.comunidade_id}`, 'textos', dados.blog);
+	const diretorioDestino = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${dados.comunidade_id}`, 'textos', dados.blog_comunitario_id);
 
 	if (!fs.existsSync(diretorioDestino)) {
 		fs.mkdirSync(diretorioDestino);

@@ -31,7 +31,7 @@ exports.getImagensAlbumComunitario = async function (comunidadeId, album) {
 exports.getImagemComunitaria = async function (comunidadeId, imagemId) {
 
 	let objetoImagem = await dataImagensComunitarias.getImagemComunitaria(comunidadeId, imagemId);
-	const album = objetoImagem.rows[0].album;
+	const album = objetoImagem.rows[0].album_comunitario_id;
 	const nomeArquivo = objetoImagem.rows[0].nome_arquivo;
 
 	const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${comunidadeId}`, 'imagens', album, nomeArquivo);
@@ -49,7 +49,7 @@ exports.postImagemComunitaria = async function (dados, dadosArquivo) {
 	// falta verificar autorização (pessoas com habilidade 'participar')
 
 	const caminhoTemp = dadosArquivo.path;
-	const diretorioDestino = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${dados.comunidade_id}`, 'imagens', dados.album);
+	const diretorioDestino = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${dados.comunidade_id}`, 'imagens', dados.album_comunitario_id);
 	const caminhoDestino = path.join(path.resolve(diretorioDestino, dadosArquivo.originalname));
 
 	if (!fs.existsSync(diretorioDestino)){
@@ -83,7 +83,7 @@ exports.deleteImagemComunitaria = async function (dados) {
 
 	const dataResponse = await dataImagensComunitarias.deleteImagemComunitaria(dados);
 	const nomeArquivo = dataResponse.rows[0].nome_arquivo;
-	const album = dataResponse.rows[0].album;
+	const album = dataResponse.rows[0].album_comunitario_id;
 	const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${dados.comunidade_id}`, 'imagens', album, nomeArquivo);
 	fs.unlink(caminho, (err) => {
 		if (err) {

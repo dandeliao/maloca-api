@@ -23,7 +23,7 @@ function getTextosPessoais(pessoaId) {
 
 function getTextosBlogPessoal(pessoaId, blog) {
 	return pool.query(
-		'SELECT * FROM textos_pessoais WHERE pessoa_id = $1 AND blog = $2',
+		'SELECT * FROM textos_pessoais WHERE pessoa_id = $1 AND blog_pessoal_id = $2',
 		[pessoaId, blog]
 	);
 }
@@ -37,8 +37,8 @@ function getTextoPessoal(pessoaId, textoId) {
 
 function createTextoPessoal(dados) {
 	return pool.query(
-		'INSERT INTO textos_pessoais (pessoa_id, titulo, blog) VALUES ($1, $2, $3) RETURNING *',
-		[dados.pessoa_id, dados.titulo, dados.blog]
+		'INSERT INTO textos_pessoais (pessoa_id, titulo, blog_pessoal_id) VALUES ($1, $2, $3) RETURNING *',
+		[dados.pessoa_id, dados.titulo, dados.blog_pessoal_id]
 	);
 }
 

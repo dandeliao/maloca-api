@@ -252,10 +252,11 @@ router.post('/:arroba/objetos/imagens', update.single('arquivo'), async (req, re
 	try {
 
 		const dados = {
-			comunidade_id: 	req.params.arroba,
-			pessoa_id: 		req.user.pessoa_id,
-			descricao: 		req.body.descricao,
-			album: 			req.body.album
+			comunidade_id: 			req.params.arroba,
+			pessoa_id: 				req.user.pessoa_id,
+			descricao: 				req.body.descricao,
+			titulo: 				req.body.titulo,
+			album_comunitario_id: 	req.body.album_comunitario_id
 		};
 
 		const dadosCriados = await serviceImagensComunitarias.postImagemComunitaria(dados, req.file);
@@ -368,11 +369,11 @@ router.post('/:arroba/objetos/textos', async (req, res, next) => {
 	try {
 
 		const dados = {
-			comunidade_id: 	req.params.arroba,
-			pessoa_id:		req.user.pessoa_id,
-			titulo: 		req.body.titulo,
-			blog: 			req.body.blog,
-			texto: 			req.body.texto
+			comunidade_id: 			req.params.arroba,
+			pessoa_id:				req.user.pessoa_id,
+			titulo:		 			req.body.titulo,
+			texto: 					req.body.texto,
+			blog_comunitario_id:	req.body.blog_comunitario_id
 		};
 
 		const dadosCriados = await serviceTextosComunitarios.postTextoComunitario(dados);
@@ -389,7 +390,7 @@ router.put('/:arroba/objetos/texto', async (req, res, next) => { // texto?id=val
 			comunidade_id: 			req.params.arroba,
 			texto_comunitario_id: 	req.query.id,
 			titulo: 				req.body.titulo,
-			blog: 					req.body.blog,
+			blog: 					req.body.blog_comunitario_id,
 			texto:					req.body.texto
 		};
 

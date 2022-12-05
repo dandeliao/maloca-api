@@ -23,7 +23,7 @@ function getImagensComunitarias(comunidadeId) {
 
 function getImagensAlbumComunitario(comunidadeId, album) {
 	return pool.query(
-		'SELECT * FROM imagens_comunitarias WHERE comunidade_id = $1 AND album = $2',
+		'SELECT * FROM imagens_comunitarias WHERE comunidade_id = $1 AND album_comunitario_id = $2',
 		[comunidadeId, album]
 	);
 }
@@ -37,8 +37,8 @@ function getImagemComunitaria(comunidadeId, imagemId) {
 
 function createImagemComunitaria(dados) {
 	return pool.query(
-		'INSERT INTO imagens_comunitarias (comunidade_id, pessoa_id, nome_arquivo, descricao, album) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-		[dados.comunidade_id, dados.pessoa_id, dados.nome_arquivo, dados.descricao, dados.album]
+		'INSERT INTO imagens_comunitarias (comunidade_id, pessoa_id, nome_arquivo, descricao, titulo, album_comunitario_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+		[dados.comunidade_id, dados.pessoa_id, dados.nome_arquivo, dados.descricao, dados.titulo, dados.album_comunitario_id]
 	);
 }
 

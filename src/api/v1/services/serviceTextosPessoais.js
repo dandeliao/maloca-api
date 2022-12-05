@@ -31,7 +31,7 @@ exports.getTextosBlogPessoal = async function (pessoaId, blog) {
 exports.getTextoPessoal = async function (pessoaId, textoId) {
 
 	let objetoTexto = await dataTextosPessoais.getTextoPessoal(pessoaId, textoId);
-	const blog = objetoTexto.rows[0].blog;
+	const blog = objetoTexto.rows[0].blog_pessoal_id;
 	const nomeArquivo = `${objetoTexto.rows[0].texto_pessoal_id}.mkd`;
 
 	const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', `${pessoaId}`, 'textos', blog, nomeArquivo);
@@ -48,7 +48,7 @@ exports.postTextoPessoal = async function (dados) {
 	const dataResponse = await dataTextosPessoais.createTextoPessoal(dados);
 	const textoId = dataResponse.rows[0].texto_pessoal_id;
 
-	const diretorioDestino = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', `${dados.pessoa_id}`, 'textos', dados.blog);
+	const diretorioDestino = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', `${dados.pessoa_id}`, 'textos', dados.blog_pessoal_id);
 
 	if (!fs.existsSync(diretorioDestino)) {
 		fs.mkdirSync(diretorioDestino);

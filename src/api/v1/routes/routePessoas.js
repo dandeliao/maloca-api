@@ -280,9 +280,10 @@ router.post('/:arroba/objetos/imagens', update.single('arquivo'), async (req, re
 	try {
 
 		const dados = {
-			pessoa_id: req.params.arroba,
-			descricao: req.body.descricao,
-			album: req.body.album
+			pessoa_id: 			req.params.arroba,
+			descricao: 			req.body.descricao,
+			titulo: 			req.body.titulo,
+			album_pessoal_id: 	req.body.album_pessoal_id
 		};
 
 		const dadosCriados = await serviceImagensPessoais.postImagemPessoal(dados, req.file);
@@ -388,10 +389,10 @@ router.post('/:arroba/objetos/textos', async (req, res, next) => {
 	try {
 
 		const dados = {
-			pessoa_id: 	req.params.arroba,
-			titulo: 	req.body.titulo,
-			blog: 		req.body.blog,
-			texto: 		req.body.texto
+			pessoa_id: 				req.params.arroba,
+			titulo: 				req.body.titulo,
+			blog: 					req.body.blog,
+			texto_pessoal_id: 		req.body.texto_pessoal_id
 		};
 
 		const dadosCriados = await serviceTextosPessoais.postTextoPessoal(dados);

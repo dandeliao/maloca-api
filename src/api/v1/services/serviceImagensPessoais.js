@@ -31,7 +31,7 @@ exports.getImagensAlbumPessoal = async function (pessoaId, album) {
 exports.getImagemPessoal = async function (pessoaId, imagemId) {
 
 	let objetoImagem = await dataImagensPessoais.getImagemPessoal(pessoaId, imagemId);
-	const album = objetoImagem.rows[0].album;
+	const album = objetoImagem.rows[0].album_pessoal_id;
 	const nomeArquivo = objetoImagem.rows[0].nome_arquivo;
 
 	const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', `${pessoaId}`, 'imagens', album, nomeArquivo);
@@ -46,7 +46,7 @@ exports.getInfoImagemPessoal = async function (pessoaId, imagemId) {
 exports.postImagemPessoal = async function (dados, dadosArquivo) {
 
 	const caminhoTemp = dadosArquivo.path;
-	const diretorioDestino = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', `${dados.pessoa_id}`, 'imagens', dados.album);
+	const diretorioDestino = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', `${dados.pessoa_id}`, 'imagens', dados.album_pessoal_id);
 	const caminhoDestino = path.join(path.resolve(diretorioDestino, dadosArquivo.originalname));
 
 	if (!fs.existsSync(diretorioDestino)){
@@ -75,7 +75,7 @@ exports.editImagemPessoal = async function (dados) {
 exports.deleteImagemPessoal = async function (dados) {
 	const dataResponse = await dataImagensPessoais.deleteImagemPessoal(dados);
 	const nomeArquivo = dataResponse.rows[0].nome_arquivo;
-	const album = dataResponse.rows[0].album;
+	const album = dataResponse.rows[0].album_pessoal_id;
 	const caminho = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', `${dados.pessoa_id}`, 'imagens', album, nomeArquivo);
 	fs.unlink(caminho, (err) => {
 		if (err) {
