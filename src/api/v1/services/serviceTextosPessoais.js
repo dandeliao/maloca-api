@@ -2,6 +2,16 @@ const dataTextosPessoais = require('../data/dataTextosPessoais');
 const path = require('path');
 const fs = require('fs');
 
+exports.getBlogsPessoais = async function (pessoaId) {
+	let objetoBlogs = await dataTextosPessoais.getBlogsPessoais(pessoaId);
+	return objetoBlogs;
+};
+
+exports.postBlogPessoal = async function (dados) {
+	let objetoBlog = await dataTextosPessoais.postBlogPessoal(dados.pessoa_id, dados.blog_pessoal_id);
+	return objetoBlog;
+};
+
 exports.getTextosPessoais = async function (pessoaId) {
 	let objetoTextos = await dataTextosPessoais.getTextosPessoais(pessoaId);
 	const sortedTextos = objetoTextos.rows.sort((a, b) => {

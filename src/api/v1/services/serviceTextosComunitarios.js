@@ -2,6 +2,16 @@ const dataTextosComunitarios = require('../data/dataTextosComunitarios');
 const path = require('path');
 const fs = require('fs');
 
+exports.getBlogsComunitarios = async function (comunidadeId) {
+	let objetoBlogs = await dataTextosComunitarios.getBlogsComunitarios(comunidadeId);
+	return objetoBlogs;
+};
+
+exports.postBlogComunitario = async function (dados) {
+	let objetoBlog = await dataTextosComunitarios.postBlogComunitario(dados.comunidade_id, dados.blog_comunitario_id);
+	return objetoBlog;
+};
+
 exports.getTextosComunitarios = async function (comunidadeId) {
 	let objetoTextos = await dataTextosComunitarios.getTextosComunitarios(comunidadeId);
 	const sortedTextos = objetoTextos.rows.sort((a, b) => {

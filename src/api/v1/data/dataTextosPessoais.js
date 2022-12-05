@@ -1,5 +1,19 @@
 const pool = require('../../../config/database');
 
+function getBlogsPessoais(pessoaId) {
+	return pool.query(
+		'SELECT * FROM blogs_pessoais WHERE pessoa_id = $1',
+		[pessoaId]
+	);
+}
+
+function postBlogPessoal(pessoaId, blogId) {
+	return pool.query(
+		'INSERT INTO blogs_pessoais (pessoa_id, blog_pessoal_id) VALUES ($1, $2) RETURNING *',
+		[pessoaId, blogId]
+	);
+}
+
 function getTextosPessoais(pessoaId) {
 	return pool.query(
 		'SELECT * FROM textos_pessoais WHERE pessoa_id = $1',
@@ -42,6 +56,8 @@ function deleteTextoPessoal(dados){
 	);
 }
 
+exports.getBlogsPessoais = getBlogsPessoais;
+exports.postBlogPessoal = postBlogPessoal;
 exports.getTextosPessoais = getTextosPessoais;
 exports.getTextosBlogPessoal = getTextosBlogPessoal;
 exports.getTextoPessoal = getTextoPessoal;

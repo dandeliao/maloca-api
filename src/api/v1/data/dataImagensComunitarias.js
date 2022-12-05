@@ -1,5 +1,19 @@
 const pool = require('../../../config/database');
 
+function getAlbunsComunitarios(comunidadeId) {
+	return pool.query(
+		'SELECT * FROM albuns_comunitarios WHERE comunidade_id = $1',
+		[comunidadeId]
+	);
+}
+
+function postAlbumComunitario(comunidadeId, albumId) {
+	return pool.query(
+		'INSERT INTO albuns_comunitarios (comunidade_id, album_comunitario_id) VALUES ($1, $2) RETURNING *',
+		[comunidadeId, albumId]
+	);
+}
+
 function getImagensComunitarias(comunidadeId) {
 	return pool.query(
 		'SELECT * FROM imagens_comunitarias WHERE comunidade_id = $1',
@@ -42,6 +56,8 @@ function deleteImagemComunitaria(dados){
 	);
 }
 
+exports.getAlbunsComunitarios = getAlbunsComunitarios;
+exports.postAlbumComunitario = postAlbumComunitario;
 exports.getImagensComunitarias = getImagensComunitarias;
 exports.getImagensAlbumComunitario = getImagensAlbumComunitario;
 exports.getImagemComunitaria = getImagemComunitaria;

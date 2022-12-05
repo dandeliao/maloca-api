@@ -1,16 +1,16 @@
 CREATE DATABASE maloca
 
 CREATE TABLE pessoas(
-    pessoa_id       VARCHAR(32) PRIMARY KEY NOT NULL,
-    nome            VARCHAR(64) NOT NULL,
-    descricao       VARCHAR(150),
+    pessoa_id       VARCHAR(16) PRIMARY KEY NOT NULL,
+    nome            VARCHAR(32) NOT NULL,
+    descricao       VARCHAR(500),
     avatar          VARCHAR(255) DEFAULT 'avatar.jpg',
     fundo           VARCHAR(255) DEFAULT 'fundo.jpg',
     data_ingresso   TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE autenticacao(
-    pessoa_id       VARCHAR(32) PRIMARY KEY REFERENCES pessoas(pessoa_id),
+    pessoa_id       VARCHAR(16) PRIMARY KEY REFERENCES pessoas(pessoa_id),
     email           VARCHAR UNIQUE NOT NULL,
     hash            VARCHAR NOT NULL,
     salt            VARCHAR NOT NULL
@@ -18,31 +18,44 @@ CREATE TABLE autenticacao(
 
 CREATE TABLE paginas_pessoais(
     pagina_pessoal_id   BIGSERIAL PRIMARY KEY NOT NULL,
-    pessoa_id           VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
+    pessoa_id           VARCHAR(16) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
     ordem               SERIAL NOT NULL,
-    titulo              VARCHAR(64),
+    titulo              VARCHAR(32),
     publica             BOOLEAN DEFAULT false,
     criacao             TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE albuns_pessoais (
+    album_pessoal_id    VARCHAR(32) UNIQUE NOT NULL,
+    pessoa_id           VARCHAR(16) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
+    PRIMARY KEY (album_pessoal_id, pessoa_id)
+)
+
 CREATE TABLE imagens_pessoais (
     imagem_pessoal_id   BIGSERIAL PRIMARY KEY NOT NULL,
-    pessoa_id           VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
+    album_pessoal_id    VARCHAR(32) REFERENCES albuns_pessoais(album_pessoal_id) ON DELETE CASCADE,
+    pessoa_id           VARCHAR(16) REFERENCES albuns_pessoais(pessoa_id) ON DELETE CASCADE,
     nome_arquivo        VARCHAR(255) NOT NULL,
-    album               VARCHAR(32) NOT NULL,
-    descricao           TEXT,
+    titulo              VARCHAR(150),
+    descricao           VARCHAR(500),
     sensivel            BOOLEAN DEFAULT false,
-    aviso_de_conteudo   VARCHAR(64),
+    aviso_de_conteudo   VARCHAR(150),
     data_criacao        TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE blogs_pessoais (
+    blog_pessoal_id     VARCHAR(32) UNIQUE NOT NULL,
+    pessoa_id           VARCHAR(16) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
+    PRIMARY KEY (blog_pessoal_id, pessoa_id)
+)
+
 CREATE TABLE textos_pessoais (
     texto_pessoal_id    BIGSERIAL PRIMARY KEY NOT NULL,
-    pessoa_id           VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
-    blog                VARCHAR(32) NOT NULL,
-    titulo              VARCHAR(64),
+    blog_pessoal_id     VARCHAR(32) REFERENCES blogs_pessoais(blog_pessoal_id) ON DELETE CASCADE,
+    pessoa_id           VARCHAR(16) REFERENCES blogs_pessoais(pessoa_id) ON DELETE CASCADE,
+    titulo              VARCHAR(150),
     sensivel            BOOLEAN DEFAULT false,
-    aviso_de_conteudo   VARCHAR(64),
+    aviso_de_conteudo   VARCHAR(150),
     data_criacao        TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -55,9 +68,9 @@ CREATE TABLE sessoes (
 CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON sessoes ("expire");
 
 CREATE TABLE comunidades(
-    comunidade_id   VARCHAR(32) PRIMARY KEY NOT NULL,
-    nome            VARCHAR(64) NOT NULL,
-    descricao       VARCHAR(150),
+    comunidade_id   VARCHAR(16) PRIMARY KEY NOT NULL,
+    nome            VARCHAR(32) NOT NULL,
+    descricao       VARCHAR(500),
     avatar          VARCHAR(255) DEFAULT 'avatar_comum.jpg',
     fundo           VARCHAR(255) DEFAULT 'fundo_comum.jpg',
     aberta          BOOLEAN DEFAULT true,
@@ -65,8 +78,8 @@ CREATE TABLE comunidades(
 );
 
 CREATE TABLE pessoas_comunidades(
-    pessoa_id       VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
-    comunidade_id   VARCHAR(32) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
+    pessoa_id       VARCHAR(16) REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
+    comunidade_id   VARCHAR(16) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
     participar      BOOLEAN DEFAULT true,
     editar          BOOLEAN DEFAULT false,
     moderar         BOOLEAN DEFAULT false,
@@ -75,33 +88,46 @@ CREATE TABLE pessoas_comunidades(
 
 CREATE TABLE paginas_comunitarias(
     pagina_comunitaria_id   SERIAL PRIMARY KEY NOT NULL,
-    comunidade_id           VARCHAR(32) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
+    comunidade_id           VARCHAR(16) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
     ordem                   SERIAL NOT NULL,
-    titulo                  VARCHAR(64),
+    titulo                  VARCHAR(32),
     publica                 BOOLEAN DEFAULT false,
     criacao                 TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE albuns_comunitarios (
+    album_comunitario_id    VARCHAR(32) UNIQUE NOT NULL,
+    comunidade_id           VARCHAR(16) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
+    PRIMARY KEY (album_comunitario_id, comunidade_id)
+)
+
 CREATE TABLE imagens_comunitarias (
     imagem_comunitaria_id   BIGSERIAL PRIMARY KEY NOT NULL,
-    comunidade_id           VARCHAR(32) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
-    pessoa_id               VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE SET NULL,
+    album_comunitario_id    VARCHAR(32) REFERENCES albuns_comunitarios(album_comunitario_id) ON DELETE CASCADE,
+    comunidade_id           VARCHAR(16) REFERENCES albuns_comunitarios(comunidade_id) ON DELETE CASCADE,
+    pessoa_id               VARCHAR(16) REFERENCES pessoas(pessoa_id) ON DELETE SET NULL,
     nome_arquivo            VARCHAR(255) NOT NULL,
-    album                   VARCHAR(32) NOT NULL,
-    descricao               TEXT,
+    titulo                  VARCHAR(150),
+    descricao               VARCHAR(500),
     sensivel                BOOLEAN DEFAULT false,
-    aviso_de_conteudo       VARCHAR(64),
+    aviso_de_conteudo       VARCHAR(150),
     data_criacao            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE blogs_comunitarios (
+    blog_comunitario_id     VARCHAR(32) UNIQUE NOT NULL,
+    comunidade_id           VARCHAR(16) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
+    PRIMARY KEY (blog_comunitario_id, comunidade_id)
+)
+
 CREATE TABLE textos_comunitarios (
     texto_comunitario_id    BIGSERIAL PRIMARY KEY NOT NULL,
-    comunidade_id           VARCHAR(32) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
-    pessoa_id               VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE SET NULL,
-    blog                    VARCHAR(32) NOT NULL,
-    titulo                  VARCHAR(64),
+    blog_comunitario_id     VARCHAR(32) REFERENCES blogs_comunitarios(blog_comunitario_id) ON DELETE CASCADE,
+    comunidade_id           VARCHAR(16) REFERENCES blogs_comunitarios(comunidade_id) ON DELETE CASCADE,
+    pessoa_id               VARCHAR(16) REFERENCES pessoas(pessoa_id) ON DELETE SET NULL,
+    titulo                  VARCHAR(150),
     sensivel                BOOLEAN DEFAULT false,
-    aviso_de_conteudo       VARCHAR(64),
+    aviso_de_conteudo       VARCHAR(150),
     data_criacao            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -129,11 +155,11 @@ CREATE TABLE blocos_paginas_comunitarias(
 
 CREATE TABLE comentarios(
     comentario_id       BIGSERIAL PRIMARY KEY,
-    pessoa_id           VARCHAR(32) REFERENCES pessoas(pessoa_id) ON DELETE SET NULL,
-    comunidade_id       VARCHAR(32) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
+    pessoa_id           VARCHAR(16) REFERENCES pessoas(pessoa_id) ON DELETE SET NULL,
+    comunidade_id       VARCHAR(16) REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
     texto               TEXT NOT NULL,
     sensivel            BOOLEAN DEFAULT false,
-    aviso_de_conteudo   VARCHAR(64),
+    aviso_de_conteudo   VARCHAR(150),
     data_criacao        TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

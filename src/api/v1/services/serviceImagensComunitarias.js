@@ -2,6 +2,16 @@ const dataImagensComunitarias = require('../data/dataImagensComunitarias');
 const path = require('path');
 const fs = require('fs');
 
+exports.getAlbunsComunitarios = async function (comunidadeId) {
+	let objetoAlbuns = await dataImagensComunitarias.getAlbunsComunitarios(comunidadeId);
+	return objetoAlbuns;
+};
+
+exports.postAlbumComunitario = async function (dados) {
+	let objetoAlbum = await dataImagensComunitarias.postAlbumComunitario(dados.comunidade_id, dados.album_comunitario_id);
+	return objetoAlbum;
+};
+
 exports.getImagensComunitarias = async function (comunidadeId) {
 	let objetoImagens = await dataImagensComunitarias.getImagensComunitarias(comunidadeId);
 	const sortedImagens = objetoImagens.rows.sort((a, b) => {

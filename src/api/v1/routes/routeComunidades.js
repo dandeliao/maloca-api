@@ -189,8 +189,30 @@ router.get('/:arroba/objetos/pessoas', async (req, res, next) => {
 	}
 });
 
-// ---
-// imagens comunitarias
+// imagens/álbuns comunitarios
+
+router.get('/:arroba/objetos/albuns', async (req, res, next) => {
+	try {
+		let albuns;
+		albuns = await serviceImagensComunitarias.getAlbunsComunitarios(req.params.arroba);
+		res.json(albuns);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+router.post('/:arroba/objetos/album', async (req, res, next) => {
+	try {
+		const dados = {
+			comunidade_id:			req.params.arroba,
+			album_comunitario_id: 	req.body.album_comunitario_id
+		};
+		const dadosCriados = await serviceImagensComunitarias.postAlbumComunitario(dados);
+		res.status(201).json(dadosCriados);
+	} catch (erro) {
+		next(erro);
+	}
+});
 
 router.get('/:arroba/objetos/imagens', async (req, res, next) => { // opcional: imagens?id=album
 	try {
@@ -278,8 +300,30 @@ router.delete('/:arroba/objetos/imagem', async (req, res, next) => { // imagem?i
 	}
 });
 
-// ---
-// textos comunitários
+// textos/blogs comunitários
+
+router.get('/:arroba/objetos/blogs', async (req, res, next) => {
+	try {
+		let blogs;
+		blogs = await serviceTextosComunitarios.getBlogsComunitarios(req.params.arroba);
+		res.json(blogs);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+router.post('/:arroba/objetos/blog', async (req, res, next) => {
+	try {
+		const dados = {
+			comunidade_id: 			req.params.arroba,
+			blog_comunitario_id: 	req.body.blog_comunitario_id
+		};
+		const dadosCriados = await serviceTextosComunitarios.postBlogComunitario(dados);
+		res.status(201).json(dadosCriados);
+	} catch (erro) {
+		next(erro);
+	}
+});
 
 router.get('/:arroba/objetos/textos', async (req, res, next) => { // opcional: textos?blog=nome-do-blog
 	try {

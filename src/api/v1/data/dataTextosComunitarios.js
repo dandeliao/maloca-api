@@ -1,4 +1,19 @@
 const pool = require('../../../config/database');
+const { get } = require('../routes/routePessoas');
+
+function getBlogsComunitarios(comunidadeId) {
+	return pool.query(
+		'SELECT * FROM blogs_comunitarios WHERE comunidade_id = $1',
+		[comunidadeId]
+	);
+}
+
+function postBlogComunitario(comunidadeId, blogId) {
+	return pool.query(
+		'INSERT INTO blogs_comunitarios (comunidade_id, blog_comunitario_id) VALUES ($1, $2) RETURNING *',
+		[comunidadeId, blogId]
+	);
+}
 
 function getTextosComunitarios(comunidadeId) {
 	return pool.query(
@@ -42,6 +57,8 @@ function deleteTextoComunitario(dados){
 	);
 }
 
+exports.getBlogsComunitarios = getBlogsComunitarios;
+exports.postBlogComunitario = postBlogComunitario;
 exports.getTextosComunitarios = getTextosComunitarios;
 exports.getTextosBlogComunitario = getTextosBlogComunitario;
 exports.getTextoComunitario = getTextoComunitario;

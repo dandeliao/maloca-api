@@ -1,5 +1,19 @@
 const pool = require('../../../config/database');
 
+function getAlbunsPessoais(pessoaId) {
+	return pool.query(
+		'SELECT * FROM albuns_pessoais WHERE pessoa_id = $1',
+		[pessoaId]
+	);
+}
+
+function postAlbumPessoal(pessoaId, albumId) {
+	return pool.query(
+		'INSERT INTO albuns_pessoais (pessoa_id, album_pessoal_id) VALUES ($1, $2) RETURNING *',
+		[pessoaId, albumId]
+	);
+}
+
 function getImagensPessoais(pessoaId) {
 	return pool.query(
 		'SELECT * FROM imagens_pessoais WHERE pessoa_id = $1',
@@ -42,6 +56,8 @@ function deleteImagemPessoal(dados){
 	);
 }
 
+exports.getAlbunsPessoais = getAlbunsPessoais;
+exports.postAlbumPessoal = postAlbumPessoal;
 exports.getImagensPessoais = getImagensPessoais;
 exports.getImagensAlbumPessoal = getImagensAlbumPessoal;
 exports.getImagemPessoal = getImagemPessoal;

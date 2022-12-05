@@ -2,6 +2,16 @@ const dataImagensPessoais = require('../data/dataImagensPessoais');
 const path = require('path');
 const fs = require('fs');
 
+exports.getAlbunsPessoais = async function (pessoaId) {
+	let objetoAlbuns = await dataImagensPessoais.getAlbunsPessoais(pessoaId);
+	return objetoAlbuns;
+};
+
+exports.postAlbumPessoal = async function (dados) {
+	let objetoAlbum = await dataImagensPessoais.postAlbumPessoal(dados.pessoa_id, dados.album_pessoal_id);
+	return objetoAlbum;
+};
+
 exports.getImagensPessoais = async function (pessoaId) {
 	let objetoImagens = await dataImagensPessoais.getImagensPessoais(pessoaId);
 	const sortedImagens = objetoImagens.rows.sort((a, b) => {
