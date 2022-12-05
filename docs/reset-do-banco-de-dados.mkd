@@ -64,5 +64,5 @@ INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-partic
 
 - copiar arquivos avatar_comum.jpg e fundo_comum.jpg de /static/default/ para /static/comunidades/maloca/imagens/
 
-UPDATE pessoas_comunidades SET editar = true, moderar = true, cuidar = true WHERE pessoa_id = 'seu_nome';
+UPDATE pessoas_comunidades SET participar = true, editar = true, moderar = true, cuidar = true WHERE pessoa_id = 'seu_nome';
 
