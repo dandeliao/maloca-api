@@ -52,6 +52,10 @@ INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-coment
 
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-participar', 'botão que permite participar ou sair de uma comunidade (apenas em comunidades)', false, true);
 
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-criar-album', 'botão que permite criar álbum de fotos pessoal ou comunitário', true, true);
+
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-criar-blog', 'botão que permite criar blog pessoal ou comunitário', true, true);
+
 - inserir outros blocos que tenham sido criados
 
 - criar usuário *seu_nome* pela interface da maloca
