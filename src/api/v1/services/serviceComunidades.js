@@ -20,7 +20,7 @@ exports.postComunidade = async function (dados, pessoaId) {
 
 	// verifica habilidade de participar no servidor
 	const superHabilidades = await serviceObjetosPessoais.getComunidadePessoal(pessoaId, 'maloca');
-	if (superHabilidades[0].participar) {
+	if (superHabilidades.participar) {
 
 		// verifica se comunidade com esse id já existe
 		const comunidadeExistente = await dataComunidades.getComunidade(dados.comunidade_id);
