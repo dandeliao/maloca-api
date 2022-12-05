@@ -1,16 +1,16 @@
 # Reiniciar banco de dados
 
-DROP TABLE blocos_paginas_comunitarias, blocos_paginas_pessoais, blocos, paginas_comunitarias, pessoas_comunidades, comunidades, sessoes, paginas_pessoais, autenticacao, pessoas;
+DROP TABLE blocos_paginas_comunitarias, blocos_paginas_pessoais, blocos, paginas_comunitarias, pessoas_comunidades, imagens_comunitarias, textos_comunitarios, albuns_comunitarios, blogs_comunitarios, comunidades, sessoes, paginas_pessoais, imagens_pessoais, textos_pessoais, albuns_pessoais, blogs_pessoais, comentarios, comentarios_imagens_comunitarias, comentarios_textos_comunitarios, autenticacao, pessoas CASCADE;
+
+- apagar pastas pessoais em /static/pessoas
+
+- apagar pastas comunitárias em /static/comunidades
 
 - rodar comandos de create.sql, menos o primeiro (create database maloca) pois o banco de dados não foi deletado
 
 INSERT INTO comunidades (comunidade_id, nome, descricao) VALUES ('maloca', 'Maloca', 'cabana comunitária');
 
 INSERT INTO paginas_comunitarias (comunidade_id, titulo, publica) VALUES('maloca', 'principal', true);
-
-- criar usuário *seu_nome* pela interface da maloca
-
-UPDATE pessoas_comunidades SET editar = true, moderar = true, cuidar = true WHERE pessoa_id = 'seu_nome';
 
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-bloco', 'bloco simples, cria uma caixa sombreada para receber qualquer conteúdo', true, true);
 
@@ -53,3 +53,16 @@ INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-coment
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-participar', 'botão que permite participar ou sair de uma comunidade (apenas em comunidades)', false, true);
 
 - inserir outros blocos que tenham sido criados
+
+- criar usuário *seu_nome* pela interface da maloca
+
+- criar pasta /static/comunidades/maloca/
+
+- criar pastas imagens, textos e paginas em /static/comunidades/maloca/
+
+- criar arquivo /static/comunidades/maloca/paginas/1.html
+
+- copiar arquivos avatar_comum.jpg e fundo_comum.jpg de /static/default/ para /static/comunidades/maloca/imagens/
+
+UPDATE pessoas_comunidades SET editar = true, moderar = true, cuidar = true WHERE pessoa_id = 'seu_nome';
+
