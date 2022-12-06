@@ -79,7 +79,7 @@ async function updateBlocosPaginaPessoal (html, pagina_pessoal_id) {
 
 	// lê html e captura lista de blocos com seus bloco_id (do nome da tag) e bloco_pagina_pessoal_id (do atributo "m_id")
 	//const blocoRegex = /<(m-(?:\w+-*)+)(?:\s+(?:\w+="(?:\s*\w*(?:-\w*)*\s*(?::*(?:\s*\w+)+;)?)*")*)*>/g; // regex captura formatos <m-nome-do-bloco> e <m-nome-do-bloco prop1="valor" style="margin: 0 auto; font-family: monospace">
-	const blocoRegex = /<(m-(?:[A-Za-zÀ-ü0-9]+-*)+)(?:\s+(?:[A-Za-zÀ-ü0-9]+="(?:\s*[A-Za-zÀ-ü0-9]*(?:-[A-Za-zÀ-ü0-9]*)*\s*(?::*(?:\s*[A-Za-zÀ-ü0-9]+)+;)?)*")*)*>/g; // regex captura formatos <m-nome-do-bloco> e <m-nome-do-bloco prop1="valor" style="margin: 0 auto; font-family: monospace">
+	const blocoRegex = /<(m-(?:\w+-*)+)(?:\s+(?:\w+="(?:\s*[A-Za-zÀ-ü0-9]*(?:-[A-Za-zÀ-ü0-9]*)*\s*(?::*(?:\s*\w+)+;)?)*")*)*>/g; // regex captura formatos <m-nome-do-bloco> e <m-nome-do-bloco prop1="valor" style="margin: 0 auto; font-family: monospace">
 	let blocos = html.matchAll(blocoRegex);
 	let arrayBlocos = [];
 	for (const bloco of blocos) {
