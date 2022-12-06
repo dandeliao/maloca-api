@@ -7,10 +7,24 @@ function getAlbunsComunitarios(comunidadeId) {
 	);
 }
 
+function getAlbumComunitario(comunidadeId, albumId) {
+	return pool.query(
+		'SELECT * FROM albuns_comunitarios WHERE comunidade_id = $1 AND album_comunitario_id = $2',
+		[comunidadeId, albumId]
+	);
+}
+
 function postAlbumComunitario(comunidadeId, albumId) {
 	return pool.query(
 		'INSERT INTO albuns_comunitarios (comunidade_id, album_comunitario_id) VALUES ($1, $2) RETURNING *',
 		[comunidadeId, albumId]
+	);
+}
+
+function editAlbumComunitario(comunidadeId, albumId, dados) {
+	return pool.query(
+		'UPDATE albuns_comunitarios SET capa_id = $1 WHERE comunidade_id = $2 AND album_comunitario_id = $3 RETURNING *',
+		[dados.capa_id, comunidadeId, albumId]
 	);
 }
 
@@ -57,7 +71,9 @@ function deleteImagemComunitaria(dados){
 }
 
 exports.getAlbunsComunitarios = getAlbunsComunitarios;
+exports.getAlbumComunitario = getAlbumComunitario;
 exports.postAlbumComunitario = postAlbumComunitario;
+exports.editAlbumComunitario = editAlbumComunitario;
 exports.getImagensComunitarias = getImagensComunitarias;
 exports.getImagensAlbumComunitario = getImagensAlbumComunitario;
 exports.getImagemComunitaria = getImagemComunitaria;

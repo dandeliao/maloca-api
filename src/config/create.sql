@@ -28,7 +28,7 @@ CREATE TABLE paginas_pessoais(
 CREATE TABLE albuns_pessoais (
     album_pessoal_id    VARCHAR(32) UNIQUE NOT NULL,
     pessoa_id           VARCHAR(16) UNIQUE REFERENCES pessoas(pessoa_id) ON DELETE CASCADE,
-    PRIMARY KEY (album_pessoal_id, pessoa_id)
+    capa_id             INT
 );
 
 CREATE TABLE imagens_pessoais (
@@ -98,7 +98,7 @@ CREATE TABLE paginas_comunitarias(
 CREATE TABLE albuns_comunitarios (
     album_comunitario_id    VARCHAR(32) UNIQUE NOT NULL,
     comunidade_id           VARCHAR(16) UNIQUE REFERENCES comunidades(comunidade_id) ON DELETE CASCADE,
-    PRIMARY KEY (album_comunitario_id, comunidade_id)
+    capa_id                 INT
 );
 
 CREATE TABLE imagens_comunitarias (

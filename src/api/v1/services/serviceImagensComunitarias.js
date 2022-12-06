@@ -7,6 +7,20 @@ exports.getAlbunsComunitarios = async function (comunidadeId) {
 	return objetoAlbuns;
 };
 
+exports.getCapaAlbumComunitario = async function(comunidadeId, albumId) {
+	let objetoAlbum = await dataImagensComunitarias.getAlbumComunitario(comunidadeId, albumId);
+	let caminho;
+	let existeCapa = objetoAlbum.rows[0].capa_id ? true : false;
+	if (existeCapa) {
+		let objetoImagem = await dataImagensComunitarias.getImagemComunitaria(comunidadeId, objetoAlbum.rows[0].capa_id);
+		let nomeArquivo = objetoImagem.rows[0].nome_arquivo;
+		caminho = path.join(path.resolve(__dirname, '../../../../static'), 'comunidades', `${comunidadeId}`, 'imagens', objetoAlbum.rows[0].album_comunitario_id, nomeArquivo);
+	} else {
+		caminho = path.join(path.resolve(__dirname, '../../../../static'), 'default', 'album.png');
+	}
+	return caminho;
+};
+
 exports.postAlbumComunitario = async function (dados) {
 	let objetoAlbum = await dataImagensComunitarias.postAlbumComunitario(dados.comunidade_id, dados.album_comunitario_id);
 	return objetoAlbum;
@@ -61,8 +75,13 @@ exports.postImagemComunitaria = async function (dados, dadosArquivo) {
 	});
 
 	dados.nome_arquivo = dadosArquivo.originalname;
-
 	const dataResponse = await dataImagensComunitarias.createImagemComunitaria(dados);
+
+	// checa se o álbum possui capa. Caso não possua, a nova imagem se torna a capa.
+	let objetoAlbum = await dataImagensComunitarias.getAlbumComunitario(dados.comunidade_id, dados.album_comunitario_id);
+	if (objetoAlbum.rows[0].capa_id === null) {
+		await dataImagensComunitarias.editAlbumComunitario(dados.comunidade_id, dados.album_comunitario_id, {capa_id: dataResponse.rows[0].imagem_comunitaria_id});
+	}
 
 	return dataResponse.rows[0];
 };

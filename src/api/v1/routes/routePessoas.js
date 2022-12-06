@@ -221,13 +221,26 @@ router.put('/:arroba/objetos/comunidades/:comunidadeId'), async (req, res, next)
 
 router.get('/:arroba/objetos/albuns', async (req, res, next) => {
 	try {
-		let albuns;
-		albuns = await serviceImagensPessoais.getAlbunsPessoais(req.params.arroba);
+		let albuns = await serviceImagensPessoais.getAlbunsPessoais(req.params.arroba);
 		res.json(albuns);
 	} catch (erro) {
 		next(erro);
 	}
 });
+
+router.get('/:arroba/objetos/album', async (req, res, next) => { //album?id=valor&capa=true
+	try {
+		if (req.query.capa) {
+			let caminho = await serviceImagensPessoais.getCapaAlbumPessoal(req.params.arroba, req.query.id);
+			res.sendFile(caminho);
+		} else {
+			res.send('serviço não implementado');
+		}
+	} catch (erro) {
+		next(erro);
+	}
+});
+
 
 router.post('/:arroba/objetos/album', async (req, res, next) => {
 	try {

@@ -7,6 +7,20 @@ exports.getAlbunsPessoais = async function (pessoaId) {
 	return objetoAlbuns;
 };
 
+exports.getCapaAlbumPessoal = async function(pessoaId, albumId) {
+	let objetoAlbum = await dataImagensPessoais.getAlbumPessoal(pessoaId, albumId);
+	let caminho;
+	let existeCapa = objetoAlbum.rows[0].capa_id ? true : false;
+	if (existeCapa) {
+		let objetoImagem = await dataImagensPessoais.getImagemPessoal(pessoaId, objetoAlbum.rows[0].capa_id);
+		let nomeArquivo = objetoImagem.rows[0].nome_arquivo;
+		caminho = path.join(path.resolve(__dirname, '../../../../static'), 'pessoas', `${pessoaId}`, 'imagens', objetoAlbum.rows[0].album_pessoal_id, nomeArquivo);
+	} else {
+		caminho = path.join(path.resolve(__dirname, '../../../../static'), 'default', 'album.png');
+	}
+	return caminho;
+};
+
 exports.postAlbumPessoal = async function (dados) {
 	let objetoAlbum = await dataImagensPessoais.postAlbumPessoal(dados.pessoa_id, dados.album_pessoal_id);
 	return objetoAlbum;
@@ -58,8 +72,13 @@ exports.postImagemPessoal = async function (dados, dadosArquivo) {
 	});
 
 	dados.nome_arquivo = dadosArquivo.originalname;
-
 	const dataResponse = await dataImagensPessoais.createImagemPessoal(dados);
+
+	// checa se o álbum possui capa. Caso não possua, a nova imagem se torna a capa.
+	let objetoAlbum = await dataImagensPessoais.getAlbumPessoal(dados.pessoa_id, dados.album_pessoal_id);
+	if (objetoAlbum.rows[0].capa_id === null) {
+		await dataImagensPessoais.editAlbumPessoal(dados.pessoa_id, dados.album_pessoal_id, {capa_id: dataResponse.rows[0].imagem_pessoal_id});
+	}
 
 	return dataResponse.rows[0];
 };

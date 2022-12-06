@@ -193,9 +193,21 @@ router.get('/:arroba/objetos/pessoas', async (req, res, next) => {
 
 router.get('/:arroba/objetos/albuns', async (req, res, next) => {
 	try {
-		let albuns;
-		albuns = await serviceImagensComunitarias.getAlbunsComunitarios(req.params.arroba);
+		let albuns = await serviceImagensComunitarias.getAlbunsComunitarios(req.params.arroba);
 		res.json(albuns);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+router.get('/:arroba/objetos/album', async (req, res, next) => { //album?id=valor&capa=true
+	try {
+		if (req.query.capa) {
+			let caminho = await serviceImagensComunitarias.getCapaAlbumComunitario(req.params.arroba, req.query.id);
+			res.sendFile(caminho);
+		} else {
+			res.send('serviço não implementado');
+		}
 	} catch (erro) {
 		next(erro);
 	}
@@ -444,7 +456,6 @@ router.post('/:arroba/objetos/comentarios', async (req, res, next) => { // comen
 			dados.imagem_comunitaria_id = req.query.imagem;
 		}
 
-		console.log('dados do comentário no router:', dados);
 		const dadosCriados = await serviceComentarios.postComentario(dados);
 		res.status(201).json(dadosCriados);
 
