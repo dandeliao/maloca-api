@@ -1,5 +1,4 @@
 const pool = require('../../../config/database');
-const { get } = require('../routes/routePessoas');
 
 function getBlogsComunitarios(comunidadeId) {
 	return pool.query(

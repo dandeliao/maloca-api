@@ -35,6 +35,13 @@ function getComentariosImagem(imagemId) {
 	);
 }
 
+function getComentariosTopico(topicoId) {
+	return pool.query(
+		'SELECT * FROM comentarios INNER JOIN comentarios_topicos ON comentarios.comentario_id = comentarios_topicos.comentario_id WHERE comentarios_topicos.topico_id = $1',
+		[topicoId]
+	);
+}
+
 function createComentario(dados) {
 	return pool.query(
 		'INSERT INTO comentarios (comunidade_id, pessoa_id, texto, sensivel, aviso_de_conteudo) VALUES ($1, $2, $3, $4, $5) RETURNING *',
@@ -56,6 +63,13 @@ function createComentarioImagem(dados) {
 	);
 }
 
+function createComentarioTopico(dados) {
+	return pool.query(
+		'INSERT INTO comentarios_topicos (comentario_id, topico_id) VALUES ($1, $2) RETURNING *',
+		[dados.comentario_id, dados.topico_id]
+	);
+}
+
 function deleteComentario(comentarioId){
 	return pool.query(
 		'DELETE FROM comentarios WHERE comentario_id = $1 RETURNING *',
@@ -68,7 +82,9 @@ exports.getComentariosComunidade = getComentariosComunidade;
 exports.getComentariosPessoa = getComentariosPessoa;
 exports.getComentariosTexto = getComentariosTexto;
 exports.getComentariosImagem = getComentariosImagem;
+exports.getComentariosTopico = getComentariosTopico;
 exports.createComentario = createComentario;
 exports.createComentarioTexto = createComentarioTexto;
 exports.createComentarioImagem = createComentarioImagem;
+exports.createComentarioTopico = createComentarioTopico;
 exports.deleteComentario = deleteComentario;

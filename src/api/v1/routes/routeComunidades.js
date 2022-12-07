@@ -9,6 +9,7 @@ const servicePaginasComunitarias = require('../services/servicePaginasComunitari
 const serviceObjetosComunitarios = require('../services/serviceObjetosComunitarios');
 const serviceImagensComunitarias = require('../services/serviceImagensComunitarias');
 const serviceTextosComunitarios = require('../services/serviceTextosComunitarios');
+const serviceForuns = require('../services/serviceForuns');
 const serviceComentarios = require('../services/serviceComentarios');
 
 router.use(taAutenticade);
@@ -429,6 +430,101 @@ router.delete('/:arroba/objetos/texto', async (req, res, next) => { // texto?id=
 	}
 });
 
+// fóruns
+
+router.get('/:arroba/objetos/foruns', async (req, res, next) => {
+	try {
+		let foruns;
+		foruns = await serviceForuns.getForuns(req.params.arroba);
+		res.json(foruns);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+router.post('/:arroba/objetos/foruns', async (req, res, next) => {
+	try {
+		const dados = {
+			comunidade_id: 	req.params.arroba,
+			forum_id: 		req.body.forum_id
+		};
+		const dadosCriados = await serviceForuns.postForum(dados);
+		res.status(201).json(dadosCriados);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+router.get('/:arroba/objetos/topicos', async (req, res, next) => { // topicos?forum=nome-do-forum
+	try {
+		let topicos;
+		topicos = await serviceForuns.getTopicos(req.query.forum);
+		res.json(topicos);
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+router.get('/:arroba/objetos/topico', async (req, res, next) => { // topico?id=valor&comentarios=true
+	try {
+
+		// se a query inclui "comentarios", envia apenas os comentários do topico
+		if (req.query.comentarios) {
+			const comentarios = await serviceComentarios.getComentariosTopico(req.query.id);
+			res.json(comentarios);
+		} else { // caso contrário, envia o tópico em si
+			const topico = await serviceForuns.getTopico(req.query.id);
+			res.json(topico);
+		}
+
+	} catch (erro) {
+		next(erro);
+	}
+});
+
+router.post('/:arroba/objetos/topicos', async (req, res, next) => {
+	try {
+
+		const dados = {
+			forum_id:		req.body.forum_id,
+			pessoa_id:		req.user.pessoa_id,
+			titulo:			req.body.titulo
+		};
+
+		const dadosCriados = await serviceForuns.postTopico(dados);
+		res.status(201).json(dadosCriados);
+
+	} catch (erro) {
+		next (erro);
+	}
+});
+
+router.put('/:arroba/objetos/topico', async (req, res, next) => { // topico?id=valor
+	try {
+		const dados = {
+			topico_id:			 	req.query.id,
+			forum_id: 				req.body.forum_id,
+			titulo: 				req.body.titulo
+		};
+
+		const dadosModificados = await serviceForuns.editTopico(dados);
+		res.status(200).json(dadosModificados);
+
+	} catch (erro) {
+		next (erro);
+	}
+});
+
+router.delete('/:arroba/objetos/topico', async (req, res, next) => { // topico?id=valor
+	try {
+		await serviceForuns.deleteTopico(req.query.id);
+		res.status(204).end();
+
+	} catch (erro) {
+		next(erro);
+	}
+});
+
 // ---
 // comentários
 
@@ -441,7 +537,7 @@ router.get('/:arroba/objetos/comentarios/:id', async (req, res, next) => {
 	}
 });
 
-router.post('/:arroba/objetos/comentarios', async (req, res, next) => { // comentarios?texto=id&imagem=id
+router.post('/:arroba/objetos/comentarios', async (req, res, next) => { // comentarios?texto=id&imagem=id&topico=id
 	try {
 
 		const dados = {
@@ -454,6 +550,8 @@ router.post('/:arroba/objetos/comentarios', async (req, res, next) => { // comen
 			dados.texto_comunitario_id = req.query.texto;
 		} else if (req.query.imagem) {
 			dados.imagem_comunitaria_id = req.query.imagem;
+		} else if (req.query.topico) {
+			dados.topico_id = req.query.topico;
 		}
 
 		const dadosCriados = await serviceComentarios.postComentario(dados);

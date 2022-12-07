@@ -129,6 +129,21 @@ CREATE TABLE textos_comunitarios (
     data_criacao            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE foruns (
+    forum_id                VARCHAR(32) PRIMARY KEY NOT NULL,
+    comunidade_id           VARCHAR(16) NOT NULL REFERENCES comunidades(comunidade_id) ON DELETE CASCADE
+);
+
+CREATE TABLE topicos (
+    topico_id               BIGSERIAL PRIMARY KEY NOT NULL,
+    forum_id                VARCHAR(32) REFERENCES foruns(forum_id) ON DELETE CASCADE,
+    pessoa_id               VARCHAR(16) REFERENCES pessoas(pessoa_id) ON DELETE SET NULL,
+    titulo                  VARCHAR(150) NOT NULL,
+    sensivel                BOOLEAN DEFAULT false,
+    aviso_de_conteudo       VARCHAR(150),
+    data_criacao            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE blocos(
     bloco_id            VARCHAR(32) PRIMARY KEY NOT NULL,
     descricao           VARCHAR(500) NOT NULL,
@@ -171,4 +186,10 @@ CREATE TABLE comentarios_textos_comunitarios(
     comentario_id           BIGINT NOT NULL REFERENCES comentarios(comentario_id) ON DELETE CASCADE,
     texto_comunitario_id    BIGINT NOT NULL REFERENCES textos_comunitarios(texto_comunitario_id) ON DELETE CASCADE,
     PRIMARY KEY (comentario_id, texto_comunitario_id)
+);
+
+CREATE TABLE comentarios_topicos(
+    comentario_id           BIGINT NOT NULL REFERENCES comentarios(comentario_id) ON DELETE CASCADE,
+    topico_id               BIGINT NOT NULL REFERENCES topicos(topico_id) ON DELETE CASCADE,
+    PRIMARY KEY (comentario_id, topico_id)
 );

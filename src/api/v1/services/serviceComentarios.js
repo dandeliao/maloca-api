@@ -32,6 +32,11 @@ exports.getComentariosImagem = async function (imagemId) {
 	return objetoComentarios.rows;
 };
 
+exports.getComentariosTopico = async function (topicoId) {
+	let objetoComentarios = await dataComentarios.getComentariosTopico(topicoId);
+	return objetoComentarios.rows;
+};
+
 exports.postComentario = async function (dados) {
 
 	const dataResponse = await dataComentarios.createComentario(dados);
@@ -41,6 +46,8 @@ exports.postComentario = async function (dados) {
 		await dataComentarios.createComentarioTexto(dados);
 	} else if (dados.imagem_comunitaria_id) {
 		await dataComentarios.createComentarioImagem(dados);
+	} else if (dados.topico_id) {
+		await dataComentarios.createComentarioTopico(dados);
 	}
 	
 	return dados;
