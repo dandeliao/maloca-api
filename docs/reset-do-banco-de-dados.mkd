@@ -66,6 +66,8 @@ INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-adicio
 
 INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-topico', 'exibe um tópico a partir do seu id (atributo numero) (apenas em comunidades)', false, true);
 
+INSERT INTO blocos (bloco_id, descricao, pessoal, comunitario) VALUES ('m-fundo', 'exibe a imagem de fundo da pessoa ou da comunidade', true, true);
+
 - inserir outros blocos que tenham sido criados
 
 - criar usuário *seu_nome* pela interface da maloca
