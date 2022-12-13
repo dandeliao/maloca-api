@@ -30,15 +30,15 @@ exports.getTopico = function (topicoId) {
 
 exports.createTopico = function (dados) {
 	return pool.query(
-		'INSERT INTO topicos (pessoa_id, titulo, forum_id) VALUES ($1, $2, $3) RETURNING *',
-		[dados.pessoa_id, dados.titulo, dados.forum_id]
+		'INSERT INTO topicos (pessoa_id, forum_id, titulo, texto) VALUES ($1, $2, $3, $4) RETURNING *',
+		[dados.pessoa_id, dados.forum_id, dados.titulo, dados.texto]
 	);
 };
 
 exports.editTopico = function (dados){
 	return pool.query(
-		'UPDATE topicos SET titulo = $1, forum_id = $2 WHERE topico_id = $3 RETURNING *',
-		[dados.titulo, dados.forum_id, dados.topico_id]	
+		'UPDATE topicos SET forum_id = $1, titulo = $2, texto = $3 WHERE topico_id = $4 RETURNING *',
+		[dados.forum_id, dados.titulo, dados.texto, dados.topico_id]	
 	);
 };
 

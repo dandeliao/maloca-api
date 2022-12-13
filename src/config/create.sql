@@ -139,6 +139,8 @@ CREATE TABLE topicos (
     forum_id                VARCHAR(32) REFERENCES foruns(forum_id) ON DELETE CASCADE,
     pessoa_id               VARCHAR(16) REFERENCES pessoas(pessoa_id) ON DELETE SET NULL,
     titulo                  VARCHAR(150) NOT NULL,
+    texto                   TEXT,
+    fixado                  BOOLEAN DEFAULT false,
     sensivel                BOOLEAN DEFAULT false,
     aviso_de_conteudo       VARCHAR(150),
     data_criacao            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP

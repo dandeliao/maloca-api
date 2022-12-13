@@ -488,7 +488,8 @@ router.post('/:arroba/objetos/topicos', async (req, res, next) => {
 		const dados = {
 			forum_id:		req.body.forum_id,
 			pessoa_id:		req.user.pessoa_id,
-			titulo:			req.body.titulo
+			titulo:			req.body.titulo,
+			texto:			req.body.texto
 		};
 
 		const dadosCriados = await serviceForuns.postTopico(dados);
@@ -504,7 +505,8 @@ router.put('/:arroba/objetos/topico', async (req, res, next) => { // topico?id=v
 		const dados = {
 			topico_id:			 	req.query.id,
 			forum_id: 				req.body.forum_id,
-			titulo: 				req.body.titulo
+			titulo: 				req.body.titulo,
+			texto: 					req.boty.texto
 		};
 
 		const dadosModificados = await serviceForuns.editTopico(dados);
